@@ -3,7 +3,6 @@
   <component name="TypeScriptCompiler">
     <option name="isCompilerEnabled" value="true" />
     <option name="typeScriptServiceDirectory" value="S:\_Public\Projekt\Fast KS Notenlist Administration Cloud Master Panel\TypeScript\node_modules\typescript\lib" />
-    <option name="scopeName" value="Module 'ks_notenliste'" />
     <option name="useConfig" value="true" />
     <option name="versionType" value="SERVICE_DIRECTORY" />
   </component>
