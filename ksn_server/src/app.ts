@@ -3,6 +3,7 @@
  */
 import * as express from "express";
 import * as path from "path";
+import masterData = require('./router/masterData');
 
 /**
  * The server.
@@ -23,10 +24,11 @@ class Server {
     constructor() {
         //create expressjs application
         this.app = express();
-        this.app.use(express.static(path.join(__dirname,'../../ksn_client')));
+        this.app.use(express.static(path.join(__dirname, '../../ksn_client')));
         this.app.get("/bob", function (req, res) {
             res.send("Bob Details!");
         });
+        this.app.use('/masterData', masterData);
 
         //configure application
     }
