@@ -19,12 +19,25 @@
 </head>
 <!-- 3. Display the application -->
 <body>
-<fieldset>
-    <legend>Noten Typ</legend>
-    <input type="radio" name="gradeType" value="SoMi Note" />SoMi-Note<br />
-    <input type="radio" name="gradeType" value="Klausurnote" />Klausurnote<br />
-    Gewichtung: <input type="text"/>
-</fieldset>
+    <fieldset>
+        <legend>Noten Typ</legend>
+        <input type="radio" name="gradeType" value="SoMi Note" checked/>SoMi-Note<br />
+        <input type="radio" name="gradeType" value="Klausurnote" />Klausurnote<br />
+        Gewichtung: <input type="text"/>
+    </fieldset>
 
+    <table align="bottom" height="70%" width="100%">
+        <tr>
+            <td>Eingabe:</td>
+        </tr>
+        <tr>
+            <td><input type="file" accept=".csv" /></td>
+        </tr>
+
+
+    </table>
+
+    Eingabe:<br/>
+    <input type="file" accept=".csv" />
 </body>
 </html>
