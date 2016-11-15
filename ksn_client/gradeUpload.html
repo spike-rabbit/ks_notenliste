@@ -9,24 +9,34 @@
 
     <br/><br/>
 
-    <table>
-        <tr>
+    <div>
+        <div>
             <th><label for="rawGrades">Eingabe:</label></th>
             <th>Vorschau:</th>
-        </tr>
-        <tr>
-            <td>
+        </div>
+        <div>
+            <div>
                 <textarea id="rawGrades" #rawGrades></textarea>
                 <button (click)="convertGradeList(rawGrades.value)">Übernehmen</button>
-            </td>
-            <td>Name</td>
-            <td>Note</td>
-        </tr>
-    </table>
+            </div>
+            <table>
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Note
+                    </th>
+                </tr>
+                <tr *ngFor="let item of parsedList">
+                    <td>{{item.vorname.concat(" ", item.nachname)}}</td>
+                    <td>{{item.note}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
     {{klasse}}
-
     <br/><br/><br/><br/>
-    {{test}}
     <button type="button">Speichern</button>
     <button type="button">Abbrechen</button>
 </form>

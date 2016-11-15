@@ -11,18 +11,25 @@ import './rxjs-operators';
     templateUrl: '../gradeUpload.html',
     moduleId: module.id,
     providers: [UploadService],
-    inputs : ['klasse']
+    inputs: ['klasse'],
+    outputs: ['parsedList']
 })
 export class UploadComponent {
     constructor(private uploadService: UploadService) {
     }
 
     type: GradeType;
-    @Input()
-    klasse : string;
-    test : any;
+    klasse: string;
+    parsedList: EinzelNote[];
 
-    convertGradeList(list : string) {
-        this.uploadService.convertGrades(list,this.klasse).subscribe(res => this.test = res);
+    public convertGradeList(list: string) {
+        this.uploadService.convertGrades(list, this.klasse).subscribe(res => this.parsedList = (<EinzelNote []> res));
     }
+}
+
+interface EinzelNote {
+    vorname: string;
+    nachname: string;
+    id: number;
+    note: number;
 }

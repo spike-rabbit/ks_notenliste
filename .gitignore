@@ -29,6 +29,7 @@ build/Release
 # Dependency directories
 */node_modules
 /ksn_server/bin/*.js*
+/ksn_client/app/*/*.js*
 /ksn_client/app/*.js*
 jspm_packages
 

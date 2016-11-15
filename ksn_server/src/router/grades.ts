@@ -21,7 +21,7 @@ class Grade {
     constructor() {
         this.router = express.Router();
         this.router.get("/listFachnoten", listFachnoten);
-        this.router.post("/convertGrades",)
+        this.router.post("/convertGrades", convertGrades)
     }
 }
 
@@ -40,8 +40,23 @@ function listFachnoten(req: express.Request, res: express.Response): void {
     });
 }
 
-function convertGrades(req: express.Request, res: express.Response):void {
-    res.send('Yeah!');
+function convertGrades(req: express.Request, res: express.Response): void {
+    let rawList = (<string> req.body.list);
+    let rawRows = rawList.split('\n');
+    let parsedList: EinzelNote[] = [];
+    for (let row of rawRows) {
+        if (row != "") {
+            let rawColumn = row.split('\t');
+            parsedList.push({
+                vorname: rawColumn[0],
+                nachname: rawColumn[1],
+                id: 0,
+                note: parseInt(rawColumn[2])
+            });
+        }
+    }
+    console.log(parsedList);
+    res.send({data: parsedList});
 }
 
 function addNotenliste(req: express.Request, res: express.Response): void {
@@ -51,12 +66,18 @@ function addNotenliste(req: express.Request, res: express.Response): void {
             fachnotenlisteID: req.body.fachnotenliste,
             gewichtung: req.body.gewichtung,
             typ: req.body.type,
-            stundenanzahl : req.body.stundenanzahl,
-            lehrer : req.body.lehrer
+            stundenanzahl: req.body.stundenanzahl,
+            lehrer: req.body.lehrer
         }).then();
     });
 }
 
+interface EinzelNote{
+    vorname: string;
+    nachname: string;
+    id: number;
+    note: number;
+}
 
 let grade = new Grade();
 export = grade.router;
