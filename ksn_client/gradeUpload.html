@@ -14,38 +14,46 @@
     <!-- 2. Configure SystemJS -->
     <script src="systemjs.config.js"></script>
     <script>
-        System.import('app').catch(function(err){ console.error(err); });
+        System.import('app').catch(function (err) {
+            console.error(err);
+        });
     </script>
 </head>
 <!-- 3. Display the application -->
 <body>
-    <fieldset>
-        <legend>Noten Typ</legend>
-        <input type="radio" name="gradeType" value="SoMi Note" checked/>SoMi-Note
-        <input type="radio" name="gradeType" value="Klausurnote"/>Klausurnote <br/>
-        Gewichtung: <input type="text"/>
-    </fieldset>
+<fieldset>
+    <legend>Noten Typ</legend>
+    <input type="radio" name="gradeType" value="SoMi Note" checked/>SoMi-Note
+    <input type="radio" name="gradeType" value="Klausurnote"/>Klausurnote <br/>
+    Gewichtung: <input type="text"/>
+</fieldset>
 
-    <br/><br/>
+<br/><br/>
 
-    <table>
-        <tr>
-            <td>Eingabe:</td>
-            <td/><td/><td/>
-            <td>Vorschau:</td>
-        </tr>
-        <tr>
-            <td><inputarea/></td>
-            <td/><td/><td/>
-            <td>Name</td>
-            <td>Note</td>
-        </tr>
-    </table>
+<table>
+    <tr>
+        <td>Eingabe:</td>
+        <td/>
+        <td/>
+        <td/>
+        <td>Vorschau:</td>
+    </tr>
+    <tr>
+        <td>
+            <textarea></textarea>
+        </td>
+        <td/>
+        <td/>
+        <td/>
+        <td>Name</td>
+        <td>Note</td>
+    </tr>
+</table>
 
-    <br/><br/><br/><br/>
+<br/><br/><br/><br/>
 
-    <button type="button">Speichern</button>
-    <button type="button">Abbrechen</button>
+<button type="button">Speichern</button>
+<button type="button">Abbrechen</button>
 
 </body>
 </html>
