@@ -36,6 +36,17 @@
     }
     window.addEventListener("load", updateTime);
 </script>
+<script>
+    function updateInternG(){
+        var gew = document.getElementById('gewichtung').value;
+        //var wochenstd = document.getElementById('wochenS').value;
+        var intGew = gew*7/100;
+
+        document.getElementById('intern1').innerHTML = intGew;
+        setTimeout(updateInternG, 4);
+    }
+    window.addEventListener("load", updateInternG);
+</script>
 <head>
     <style>
 
@@ -75,7 +86,7 @@
         </tr>
 
         <tr>
-            <th align="left">
+            <th align="left" id="wochenS">
                 Wochenstunden
             </th>
             <td>7</td>
@@ -90,7 +101,7 @@
                 Gewichtung
             </th>
             <td>
-                <input type="text" value="40"  size="3" />
+                <input type="number" value="40"  size="3" id="gewichtung"/>
             </td>
             <td>
                 <input type="text" value="60" size="3" />
@@ -101,7 +112,7 @@
             <th align="left">
                 Interne Gewichtung
             </th>
-            <td>2,8</td>
+            <td><div id="intern1"></div></td>
             <td>4,2</td>
         </tr>
     </thead>
