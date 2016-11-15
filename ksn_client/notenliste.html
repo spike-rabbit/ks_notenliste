@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Angular QuickStart</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="styles.css">
+    <!-- 1. Load libraries -->
+    <!-- Polyfill for older browsers -->
+    <script src="node_modules/core-js/client/shim.min.js"></script>
+    <script src="node_modules/zone.js/dist/zone.js"></script>
+    <script src="node_modules/reflect-metadata/Reflect.js"></script>
+    <script src="node_modules/systemjs/dist/system.src.js"></script>
+    <!-- 2. Configure SystemJS -->
+    <script src="systemjs.config.js"></script>
+    <script>
+        System.import('app').catch(function (err) {
+            console.error(err);
+        });
+    </script>
+</head>
+<!-- 3. Display the application -->
+<body>
+<script type="text/javascript">
+    function updateTime() {
+        var date = new Date();
+        var tag = date.getDate();
+        var monatDesJahres = date.getMonth();
+        var jahr = date.getFullYear();
+        var monat = new Array("Januar", "Februar", "M&auml;rz", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember");
+
+        var datum = tag + ". " + monat[monatDesJahres] + " " + jahr;
+
+        document.getElementById('time').innerHTML = datum;
+        setTimeout(updateTime, 60000);
+    }
+    window.addEventListener("load", updateTime);
+</script>
+
+
+
+
+    <table  border="3">
+        <tr>
+            <td>(Unter-)Fach</td>
+            <td>
+                Fachbezeichnung
+            </td>
+        </tr>
+
+        <tr>
+            <td></td>
+            <td>
+                Block 1
+            </td>
+
+        </tr>
+
+        <tr>
+            <td>Datum</td>
+            <td>
+                <div id="time"></div>
+            </td>
+        </tr>
+
+        <tr>
+            <td>Lehrer</td>
+            <td>
+                Lehrername
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                Wochenstunden
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                Gewichtung
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                Interne Gewichtung
+            </td>
+        </tr>
+    </table>
+
+</body>
+</html>
