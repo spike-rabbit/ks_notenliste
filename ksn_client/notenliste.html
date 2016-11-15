@@ -37,62 +37,97 @@
     window.addEventListener("load", updateTime);
 </script>
 
-
-
-
-    <table  border="3">
+    <table>
+        <thead border="3">
         <tr>
-            <td>(Unter-)Fach</td>
-            <td>
+            <th align="left">(Unter-)Fach</th>
+            <td colspan="2">
                 <input type="text" value="Fachbezeichnung"/>
             </td>
         </tr>
 
         <tr>
-            <td>Blocknummer</td>
-            <td>
+            <th align="left">Blocknummer</th>
+            <td  colspan="2">
                 Block 1
             </td>
 
         </tr>
 
         <tr>
-            <td>Datum</td>
-            <td>
+            <th align="left">Datum</th>
+            <td  colspan="2">
                 <div id="time"></div>
             </td>
         </tr>
 
         <tr>
-            <td>Lehrer</td>
-            <td>
+            <th align="left">Lehrer</th>
+            <td colspan="2">
                 <input type="text" value="Lehrername"/>
             </td>
         </tr>
 
         <tr>
-            <td>
+            <th align="left">
                 Wochenstunden
-            </td>
-            <td>7</td>
+            </th>
+            <td colspan="2">7</td>
         </tr>
 
         <tr>
-            <td>
+            <th align="left">
                 Gewichtung
-            </td>
+            </th>
             <td>
                 <input type="text" value="40"/>
             </td>
+            <td>
+                <input type="text" value="60"/>
+            </td>
         </tr>
 
         <tr>
-            <td>
+            <th align="left">
                 Interne Gewichtung
-            </td>
-            <td>0,7</td>
+            </th>
+            <td>2,8</td>
+            <td>4,2</td>
+        </tr>
+        </thead>
+
+        <tr/><tr/><tr/>
+
+            <tr>
+                <th align="left">
+                    Name
+                </th>
+                <th align="left">
+                    Klausur
+                </th>
+                <th align="left">
+                    SoMi
+                </th>
+                <th align="left">
+                    Vorschlag
+                </th>
+                <th align="left">
+                    Note
+                </th>
+            </tr>
+        <tr>
+            <td>Max Mustermann</td>
+            <td>3,3</td>
+            <td>2,7</td>
+            <td>3</td>
+            <td><input type="text"/></td>
         </tr>
     </table>
+<button type="button">+</button>
+
+    <br/>
+<button type="button">Edit</button>
+
 
 </body>
 </html>
