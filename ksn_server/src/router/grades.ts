@@ -21,7 +21,7 @@ class Grade {
     constructor() {
         this.router = express.Router();
         this.router.get("/listFachnoten", listFachnoten);
-        this.router.post("/addNotenliste",)
+        this.router.post("/convertGrades",)
     }
 }
 
@@ -38,6 +38,10 @@ function listFachnoten(req: express.Request, res: express.Response): void {
             }
         }, [req.query.klasse, req.query.fach, req.query.block]);
     });
+}
+
+function convertGrades(req: express.Request, res: express.Response):void {
+    res.send('Yeah!');
 }
 
 function addNotenliste(req: express.Request, res: express.Response): void {

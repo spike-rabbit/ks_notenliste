@@ -1,59 +1,32 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Angular QuickStart</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="styles.css">
-    <!-- 1. Load libraries -->
-    <!-- Polyfill for older browsers -->
-    <script src="node_modules/core-js/client/shim.min.js"></script>
-    <script src="node_modules/zone.js/dist/zone.js"></script>
-    <script src="node_modules/reflect-metadata/Reflect.js"></script>
-    <script src="node_modules/systemjs/dist/system.src.js"></script>
-    <!-- 2. Configure SystemJS -->
-    <script src="systemjs.config.js"></script>
-    <script>
-        System.import('app').catch(function (err) {
-            console.error(err);
-        });
-    </script>
-</head>
-<!-- 3. Display the application -->
-<body>
-<fieldset>
-    <legend>Noten Typ</legend>
-    <input type="radio" name="gradeType" value="SoMi Note" checked/>SoMi-Note
-    <input type="radio" name="gradeType" value="Klausurnote"/>Klausurnote <br/>
-</fieldset>
-Gewichtung: <input type="text"/>
+<form #f="ngForm">
+    <fieldset>
+        <legend>Noten Typ</legend>
+        <input id="SoMi" type="radio" name="gradeType" value="SoMi" [(ngModel)]="gradeType" checked/><label for="SoMi">SoMi-Note</label>
+        <input id="Klausur" type="radio" name="gradeType" value="Klausur" [(ngModel)]="gradeType"/><label for="Klausur">Klausurnote</label>
+        <br>
+        <label for="weight">Gewichtung: </label><input id="weight" type="text"/>
+    </fieldset>
 
-<br/><br/>
+    <br/><br/>
 
-<table>
-    <tr>
-        <td>Eingabe:</td>
-        <td/>
-        <td/>
-        <td/>
-        <td>Vorschau:</td>
-    </tr>
-    <tr>
-        <td>
-            <textarea></textarea>
-        </td>
-        <td/>
-        <td/>
-        <td/>
-        <td>Name</td>
-        <td>Note</td>
-    </tr>
-</table>
+    <table>
+        <tr>
+            <th><label for="rawGrades">Eingabe:</label></th>
+            <th>Vorschau:</th>
+        </tr>
+        <tr>
+            <td>
+                <textarea id="rawGrades" #rawGrades></textarea>
+                <button (click)="convertGradeList(rawGrades.value)">Übernehmen</button>
+            </td>
+            <td>Name</td>
+            <td>Note</td>
+        </tr>
+    </table>
+    {{klasse}}
 
-<br/><br/><br/><br/>
-
-<button type="button">Speichern</button>
-<button type="button">Abbrechen</button>
-
-</body>
-</html>
+    <br/><br/><br/><br/>
+    {{test}}
+    <button type="button">Speichern</button>
+    <button type="button">Abbrechen</button>
+</form>

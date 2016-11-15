@@ -6,4 +6,6 @@ import { Component } from '@angular/core';
     selector: 'ksn-app',
     templateUrl: '../menu.html'
 })
-export class AppComponent { }
+export class AppComponent {
+    klasse : string = "FS141";
+}
