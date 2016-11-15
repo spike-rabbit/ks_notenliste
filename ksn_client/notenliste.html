@@ -36,13 +36,23 @@
     }
     window.addEventListener("load", updateTime);
 </script>
+<head>
+    <style>
+        thead {color:blue;}
+        tbody {color:black;}
+
+        th {
+            border: 1px solid black;
+        }
+    </style>
+</head>
 
     <table>
         <thead border="3">
         <tr>
             <th align="left">(Unter-)Fach</th>
             <td colspan="2">
-                <input type="text" value="Fachbezeichnung"/>
+                <input type="text" value="Fachbezeichnung" size="10" />
             </td>
         </tr>
 
@@ -64,7 +74,7 @@
         <tr>
             <th align="left">Lehrer</th>
             <td colspan="2">
-                <input type="text" value="Lehrername"/>
+                <input type="text" value="Lehrername"  size="15" />
             </td>
         </tr>
 
@@ -80,10 +90,10 @@
                 Gewichtung
             </th>
             <td>
-                <input type="text" value="40"/>
+                <input type="text" value="40"  size="3" />
             </td>
             <td>
-                <input type="text" value="60"/>
+                <input type="text" value="60" size="3" />
             </td>
         </tr>
 
@@ -96,8 +106,9 @@
         </tr>
         </thead>
 
-        <tr/><tr/><tr/>
 
+
+        <tbody>
             <tr>
                 <th align="left">
                     Name
@@ -114,20 +125,29 @@
                 <th align="left">
                     Note
                 </th>
+                <td>
+                    <button type="button">+</button>
+                </td>
             </tr>
         <tr>
             <td>Max Mustermann</td>
             <td>3,3</td>
             <td>2,7</td>
             <td>3</td>
-            <td><input type="text"/></td>
+            <td><input type="text" size="5" maxlength="4"/></td>
         </tr>
+
+        <tr>
+            <td></td>
+            <td><button type="button">Edit</button></td>
+            <td><button type="button">Edit</button></td>
+        </tr>
+        </tbody>
     </table>
-<button type="button">+</button>
 
-    <br/>
-<button type="button">Edit</button>
+<br/><br/><br/>
 
-
+<button type="button">Speichern</button>
+<button type="button">Abbrechen</button>
 </body>
 </html>
