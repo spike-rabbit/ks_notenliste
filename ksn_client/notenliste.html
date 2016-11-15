@@ -38,43 +38,39 @@
 </script>
 <head>
     <style>
-        thead {color:blue;}
-        tbody {color:black;}
 
-        th {
-            border: 1px solid black;
-        }
+        thead{ color:darkgrey;}
+
     </style>
 </head>
 
-    <table>
-        <thead border="3">
+    <table border="3" bgcolor=e2e2e2>
         <tr>
             <th align="left">(Unter-)Fach</th>
-            <td colspan="2">
-                <input type="text" value="Fachbezeichnung" size="10" />
+            <td>
+                Fachbezeichnung
             </td>
         </tr>
 
         <tr>
             <th align="left">Blocknummer</th>
-            <td  colspan="2">
-                Block 1
+            <td>
+               1
             </td>
 
         </tr>
 
         <tr>
             <th align="left">Datum</th>
-            <td  colspan="2">
+            <td>
                 <div id="time"></div>
             </td>
         </tr>
 
         <tr>
             <th align="left">Lehrer</th>
-            <td colspan="2">
-                <input type="text" value="Lehrername"  size="15" />
+            <td>
+                Lehrername
             </td>
         </tr>
 
@@ -82,9 +78,13 @@
             <th align="left">
                 Wochenstunden
             </th>
-            <td colspan="2">7</td>
+            <td>7</td>
         </tr>
+    </table>
 
+<br/><br/><br/>
+<table>
+    <thead>
         <tr>
             <th align="left">
                 Gewichtung
@@ -104,25 +104,21 @@
             <td>2,8</td>
             <td>4,2</td>
         </tr>
-        </thead>
-
-
-
-        <tbody>
+    </thead>
             <tr>
-                <th align="left">
+                <th align="left" bgcolor=e2e2e2>
                     Name
                 </th>
-                <th align="left">
+                <th align="left" bgcolor=e2e2e2>
                     Klausur
                 </th>
-                <th align="left">
+                <th align="left" bgcolor=e2e2e2>
                     SoMi
                 </th>
-                <th align="left">
+                <th align="left" bgcolor=e2e2e2>
                     Vorschlag
                 </th>
-                <th align="left">
+                <th align="left" bgcolor=e2e2e2>
                     Note
                 </th>
                 <td>
@@ -142,7 +138,6 @@
             <td><button type="button">Edit</button></td>
             <td><button type="button">Edit</button></td>
         </tr>
-        </tbody>
     </table>
 
 <br/><br/><br/>
