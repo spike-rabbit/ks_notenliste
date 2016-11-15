@@ -21,24 +21,52 @@
 </head>
 <!-- 3. Display the application -->
 <body>
-    <table>
+<script type="text/javascript">
+    function updateTime() {
+        var date = new Date();
+        var tag = date.getDate();
+        var monatDesJahres = date.getMonth();
+        var jahr = date.getFullYear();
+        var monat = new Array("Januar", "Februar", "M&auml;rz", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember");
+
+        var datum = tag + ". " + monat[monatDesJahres] + " " + jahr;
+
+        document.getElementById('time').innerHTML = datum;
+        setTimeout(updateTime, 60000);
+    }
+    window.addEventListener("load", updateTime);
+</script>
+
+
+
+
+    <table  border="3">
         <tr>
+            <td>(Unter-)Fach</td>
             <td>
-                (Unter-)Fach
+                Fachbezeichnung
             </td>
         </tr>
 
-        <tr></tr>
+        <tr>
+            <td></td>
+            <td>
+                Block 1
+            </td>
+
+        </tr>
 
         <tr>
+            <td>Datum</td>
             <td>
-                Datum
+                <div id="time"></div>
             </td>
         </tr>
 
         <tr>
+            <td>Lehrer</td>
             <td>
-                Lehrer
+                Lehrername
             </td>
         </tr>
 
