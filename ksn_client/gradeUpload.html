@@ -1,55 +1,68 @@
-<form #f="ngForm" class="form-group panel panel-default">
-        <div class="panel-body">
-    <fieldset>
-        <legend>Noten Typ</legend>
-        <div class="radio-inline">
-            <input id="SoMi" type="radio" name="gradeType" value="SoMi" [(ngModel)]="gradeType" checked/>
-            <label for="SoMi">SoMi-Note</label>
-        </div>
-        <div class="radio-inline">
-            <input id="Klausur" type="radio" name="gradeType" value="Klausur" [(ngModel)]="gradeType"/>
-            <label for="Klausur">Klausurnote</label>
-        </div>
-        <br/>
-    </fieldset>
-        </div>
-    <label for="weight">Gewichtung: </label><input id="weight" type="text"/>
-</form>
+<div class="container-fluid">
 
+    <div class="panel panel-default col-md-12">
+        <div class="panel-heading">Notenlisten Einstellungen</div>
+        <form #f="ngForm" class="form-group panel panel-default">
+            <div class="row">
+                <fieldset>
+                    <div class="panel-body form-check">
+                        <div class="radio-inline">
+                            <input id="SoMi" type="radio" name="gradeType" value="SoMi" [(ngModel)]="gradeType"
+                                   checked/>
+                            <label for="SoMi">SoMi-Note</label>
+                        </div>
+                        <div class="radio-inline">
+                            <input id="Klausur" type="radio" name="gradeType" value="Klausur" [(ngModel)]="gradeType"/>
+                            <label for="Klausur">Klausurnote</label>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <div class="row"><div class="form-group col-md-4">
+                <label for="weight">Gewichtung</label><input class="form-control" id="weight" type="text"/>
+            </div>
+            </div>
+        </form>
+
+    </div>
     <br/><br/>
 
-    <div>
-        <div>
-            <div>
-                <h3 class="h3">Eingabe</h3>
+    <div class="row">
+        <div class="panel panel-default col-md-6" style="  min-width: 200px">
+            <div class="panel-heading">Eingabe</div>
+            <div class="panel-body">
                 <textarea id="rawGrades" #rawGrades class="form-control" rows="8"></textarea>
                 <button (click)="convertGradeList(rawGrades.value)">Übernehmen</button>
             </div>
-            <div class="table-responsive">
-                <h3 class="h3">Vorschau</h3>
-            <table class="table">
-                <tr>
-                    <th>
-                        Vorname
-                    </th>
-                    <th>
-                        Nachname
-                    </th>
-                    <th>
-                        Note
-                    </th>
-                </tr>
-                <tr *ngFor="let item of parsedList">
-                    <td>{{item.vorname}}</td>
-                    <td>{{ item.nachname}}</td>
-                    <td>{{item.note}}</td>
-                </tr>
-            </table>
-                </div>
+        </div>
+        <div class="table-responsive panel panel-default col-md-6">
+            <div class="panel-heading">Vorschau</div>
+            <div class="panel-body">
+                <table class="table">
+                    <tr>
+                        <th>
+                            Vorname
+                        </th>
+                        <th>
+                            Nachname
+                        </th>
+                        <th>
+                            Note
+                        </th>
+                    </tr>
+                    <tr *ngFor="let item of parsedList">
+                        <td>{{item.vorname}}</td>
+                        <td>{{ item.nachname}}</td>
+                        <td>{{item.note}}</td>
+                    </tr>
+                </table>
+            </div>
         </div>
     </div>
-    {{klasse}}
-    <br/><br/><br/><br/>
-    <button type="button">Speichern</button>
-    <button type="button">Abbrechen</button>
-    <button type="button">Löschen</button>
+    <div class="row">{{klasse}}</div>
+    <div class="btn-group row" style="align-content: center; width: 100%">
+        <button class="btn btn-default col-md-4" type="button">Speichern</button>
+        <button class="btn btn-default col-md-4" type="button">Abbrechen</button>
+        <button class="btn btn-default col-md-4" type="button">Löschen</button>
+    </div>
+</div>
