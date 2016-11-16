@@ -20,10 +20,14 @@ export class UploadComponent {
 
     type: GradeType;
     klasse: string;
-    parsedList: EinzelNote[];
+    accepted: EinzelNote[];
+    notFound: EinzelNote[];
 
     public convertGradeList(list: string) {
-        this.uploadService.convertGrades(list, this.klasse).subscribe(res => this.parsedList = (<EinzelNote []> res));
+        this.uploadService.convertGrades(list, this.klasse).subscribe(res => {
+            this.accepted = res.accepted;
+            this.notFound = res.notFound
+        });
     }
 }
 

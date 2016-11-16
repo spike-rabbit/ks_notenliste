@@ -58,7 +58,6 @@ function listFaecher(req: express.Request, res: express.Response): void {
 
 function listBloecke(req: express.Request, res: express.Response): void {
     let db = masterData.ksnDB;
-    console.log(req.query.fach + " " + req.query.klasse);
     db.ready(() => {
        db.query("select block from fachnotenliste where unterrichtsfach = ? and klasse = ?", (err, response) => {
            if (err) {

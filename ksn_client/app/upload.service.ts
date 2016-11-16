@@ -11,7 +11,7 @@ export class UploadService {
     constructor(private http: Http) {
     }
 
-    convertGrades(list: string, klasse: string): Observable<any []> {
+    convertGrades(list: string, klasse: string): Observable<any> {
         return this.http.post(this.convertURL, {
             list: list,
             klasse: klasse

@@ -41,6 +41,7 @@ function listFachnoten(req: express.Request, res: express.Response): void {
 }
 
 function convertGrades(req: express.Request, res: express.Response): void {
+    let db = grade.ksnDB;
     let rawList = (<string> req.body.list);
     let rawRows = rawList.split('\n');
     let parsedList: EinzelNote[] = [];
@@ -55,8 +56,28 @@ function convertGrades(req: express.Request, res: express.Response): void {
             });
         }
     }
-    console.log(parsedList);
-    res.send({data: parsedList});
+
+
+    let acceptedList: EinzelNote[] = [];
+    let notFound: EinzelNote[] = [];
+    db.ready(() => {
+       db.table("schueler").find({klasse : req.body.klasse}).then(result => {
+           for(let schueler of (<Schueler[]>result)) {
+               for(let einzelNote of parsedList) {
+                   if(schueler.vorname == einzelNote.vorname && schueler.nachname == einzelNote.nachname) {
+                       einzelNote.id = schueler.id;
+                       acceptedList.push(einzelNote);
+                       break;
+                   }
+                   notFound.push(einzelNote);
+               }
+           }
+           res.send({data: {
+               accepted : acceptedList,
+               notFound : notFound
+           }});
+       });
+    });
 }
 
 function addNotenliste(req: express.Request, res: express.Response): void {
@@ -72,11 +93,14 @@ function addNotenliste(req: express.Request, res: express.Response): void {
     });
 }
 
-interface EinzelNote{
+interface EinzelNote extends Schueler{
+    note: number;
+}
+
+interface Schueler {
     vorname: string;
     nachname: string;
     id: number;
-    note: number;
 }
 
 let grade = new Grade();

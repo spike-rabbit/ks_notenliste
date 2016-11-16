@@ -25,5 +25,45 @@
 <!-- 3. Display the application -->
 <body>
 <ksn-app>Loading...</ksn-app>
+<script type="text/javascript">
+
+    function updateTime() {
+        var date = new Date();
+        var tag = date.getDate();
+        var monatDesJahres = date.getMonth();
+        var jahr = date.getFullYear();
+        var monat = new Array("Januar", "Februar", "M&auml;rz", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember");
+
+        var datum = tag + ". " + monat[monatDesJahres] + " " + jahr;
+
+        document.getElementById('time').innerHTML = datum;
+        setTimeout(updateTime, 60000);
+    }
+
+    function updateInternG1(){
+        var gew = document.getElementById('gewichtung').value;
+        var wochenstd = 7;
+        var intGew = gew*wochenstd/100;
+
+        document.getElementById('intern1').innerHTML = intGew;
+        document.getElementById('wochenS').innerHTML = wochenstd;
+
+        setTimeout(updateInternG1, 4);
+    }
+
+    function updateInternG2(){
+        var gew = document.getElementById('gewichtung2').value;
+        var wochenstd = 7;
+        var intGew = gew*wochenstd/100;
+
+        document.getElementById('intern2').innerHTML = intGew;
+
+        setTimeout(updateInternG2, 4);
+    }
+
+    window.addEventListener("load", updateTime);
+    window.addEventListener("load", updateInternG1);
+    window.addEventListener("load", updateInternG2);
+</script>
 </body>
 </html>

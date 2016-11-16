@@ -1,75 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Angular QuickStart</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="styles.css">
-    <!-- 1. Load libraries -->
-    <!-- Polyfill for older browsers -->
-    <script src="node_modules/core-js/client/shim.min.js"></script>
-    <script src="node_modules/zone.js/dist/zone.js"></script>
-    <script src="node_modules/reflect-metadata/Reflect.js"></script>
-    <script src="node_modules/systemjs/dist/system.src.js"></script>
-    <!-- 2. Configure SystemJS -->
-    <script src="systemjs.config.js"></script>
-    <script>
-        System.import('app').catch(function (err) {
-            console.error(err);
-        });
-    </script>
-</head>
-<!-- 3. Display the application -->
-<body>
-<script type="text/javascript">
-
-    function updateTime() {
-        var date = new Date();
-        var tag = date.getDate();
-        var monatDesJahres = date.getMonth();
-        var jahr = date.getFullYear();
-        var monat = new Array("Januar", "Februar", "M&auml;rz", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember");
-
-        var datum = tag + ". " + monat[monatDesJahres] + " " + jahr;
-
-        document.getElementById('time').innerHTML = datum;
-        setTimeout(updateTime, 60000);
-    }
-
-    function updateInternG1(){
-        var gew = document.getElementById('gewichtung').value;
-        var wochenstd = 7;
-        var intGew = gew*wochenstd/100;
-
-        document.getElementById('intern1').innerHTML = intGew;
-        document.getElementById('wochenS').innerHTML = wochenstd;
-
-        setTimeout(updateInternG1, 4);
-    }
-
-    function updateInternG2(){
-        var gew = document.getElementById('gewichtung2').value;
-        var wochenstd = 7;
-        var intGew = gew*wochenstd/100;
-
-        document.getElementById('intern2').innerHTML = intGew;
-
-        setTimeout(updateInternG2, 4);
-    }
-
-    window.addEventListener("load", updateTime);
-    window.addEventListener("load", updateInternG1);
-    window.addEventListener("load", updateInternG2);
-</script>
-
-<head>
-    <style>
-
-        thead{ color:darkgrey;}
-
-    </style>
-</head>
-
+<div>
     <table border="3" bgcolor=e2e2e2>
         <tr>
             <th align="left">(Unter-)Fach</th>
@@ -81,7 +10,7 @@
         <tr>
             <th align="left">Blocknummer</th>
             <td>
-               1
+                1
             </td>
 
         </tr>
@@ -104,13 +33,13 @@
             <th align="left">
                 Wochenstunden
             </th>
-            <td  id="wochenS">7</td>
+            <td id="wochenS">7</td>
         </tr>
     </table>
 
-<br/><br/><br/>
-<table>
-    <thead>
+    <br/><br/><br/>
+    <table>
+        <thead>
         <tr>
             <th align="left">
                 Gewichtung
@@ -127,31 +56,35 @@
             <th align="left">
                 Interne Gewichtung
             </th>
-            <td><div id="intern1"></div></td>
-            <td><div id="intern2"></div></td>
+            <td>
+                <div id="intern1"></div>
+            </td>
+            <td>
+                <div id="intern2"></div>
+            </td>
 
         </tr>
-    </thead>
-            <tr>
-                <th align="left" bgcolor=e2e2e2>
-                    Name
-                </th>
-                <th align="left" bgcolor=e2e2e2>
-                    Klausur
-                </th>
-                <th align="left" bgcolor=e2e2e2>
-                    SoMi
-                </th>
-                <th align="left" bgcolor=e2e2e2>
-                    Vorschlag
-                </th>
-                <th align="left" bgcolor=e2e2e2>
-                    Note
-                </th>
-                <td>
-                    <button type="button"> +</button>
-                </td>
-            </tr>
+        </thead>
+        <tr>
+            <th align="left" bgcolor=e2e2e2>
+                Name
+            </th>
+            <th align="left" bgcolor=e2e2e2>
+                Klausur
+            </th>
+            <th align="left" bgcolor=e2e2e2>
+                SoMi
+            </th>
+            <th align="left" bgcolor=e2e2e2>
+                Vorschlag
+            </th>
+            <th align="left" bgcolor=e2e2e2>
+                Note
+            </th>
+            <td>
+                <button type="button"> +</button>
+            </td>
+        </tr>
         <tr>
             <td>Max Mustermann</td>
             <td>3,3</td>
@@ -162,14 +95,17 @@
 
         <tr>
             <td></td>
-            <td><button type="button">Edit</button></td>
-            <td><button type="button">Edit</button></td>
+            <td>
+                <button type="button">Edit</button>
+            </td>
+            <td>
+                <button type="button">Edit</button>
+            </td>
         </tr>
     </table>
 
-<br/><br/><br/>
+    <br/><br/><br/>
 
-<button type="button">Speichern</button>
-<button type="button">Abbrechen</button>
-</body>
-</html>
+    <button type="button">Speichern</button>
+    <button type="button">Abbrechen</button>
+</div>

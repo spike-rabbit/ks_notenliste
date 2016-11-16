@@ -34,5 +34,6 @@
         <button (click)="showUpload = true">Upload</button>
     </div>
     <!-- Add divs -->
+    <ksn-grades *ngIf="!showUpload"></ksn-grades>
     <ksn-upload *ngIf="showUpload" [klasse]="klasse"></ksn-upload>
 </div>
