@@ -6,6 +6,7 @@ import * as path from "path";
 import * as bodyparser from "body-parser";
 import masterData = require('./router/masterData');
 import grades = require('./router/grades');
+import bodyParser = require("body-parser");
 
 /**
  * The server.

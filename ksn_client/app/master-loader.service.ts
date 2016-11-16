@@ -11,6 +11,7 @@ import {Observable} from "rxjs/Observable";
 export class MasterLoaderService {
     private listKLassenURL = "/masterData/listKlassen";
     private listFaecherURL = "/masterData/listFaecher";
+    private listBloeckeURL = "/masterData/listBloecke";
 
     constructor(private http: Http) {
     }
@@ -23,6 +24,13 @@ export class MasterLoaderService {
         let params = new URLSearchParams();
         params.set("klasse", klasse);
         return this.http.get(this.listFaecherURL,{search : params}).map(res => res.json()).catch(this.handleError);
+    }
+
+    loadBloecke(klasse: string, fach : string) {
+        let params = new URLSearchParams();
+        params.set("fach", fach);
+        params.set("klasse", klasse);
+        return this.http.get(this.listBloeckeURL,{search : params}).map(res => res.json()).catch(this.handleError);
     }
 
     private extractData(res: Response) {

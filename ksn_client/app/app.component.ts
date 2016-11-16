@@ -12,7 +12,10 @@ export class AppComponent implements OnInit {
     klasse: string;
     klassen: string [];
     @Output()
+    fach: string;
     faecher: string [];
+    @Output()
+    bloecke: string[];
     showUpload: boolean = false;
 
     constructor(private masterLoader: MasterLoaderService) {
@@ -24,6 +27,9 @@ export class AppComponent implements OnInit {
 
     updateFaecher() {
         this.masterLoader.loadFaecher(this.klasse).subscribe(res => this.faecher = res);
+    }
 
+    updateBloecke() {
+        this.masterLoader.loadBloecke(this.klasse, this.fach).subscribe(res => this.bloecke = res);
     }
 }
