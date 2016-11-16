@@ -2,7 +2,7 @@
  * Created by maximilian.koeller on 15.11.2016.
  */
 import {Injectable} from "@angular/core";
-import {Http, Response} from "@angular/http";
+import {Http, Response, URLSearchParams} from "@angular/http";
 import {Observable} from "rxjs/Observable";
 /**
  * Created by maximilian.koeller on 15.11.2016.
@@ -10,12 +10,19 @@ import {Observable} from "rxjs/Observable";
 @Injectable()
 export class MasterLoaderService {
     private listKLassenURL = "/masterData/listKlassen";
+    private listFaecherURL = "/masterData/listFaecher";
 
     constructor(private http: Http) {
     }
 
     loadClasses(): Observable<any []> {
-        return this.http.get(this.listKLassenURL).map(this.extractData).catch(this.handleError);
+        return this.http.get(this.listKLassenURL).map(res => res.json()).catch(this.handleError);
+    }
+
+    loadFaecher(klasse : string) {
+        let params = new URLSearchParams();
+        params.set("klasse", klasse);
+        return this.http.get(this.listFaecherURL,{search : params}).map(res => res.json()).catch(this.handleError);
     }
 
     private extractData(res: Response) {

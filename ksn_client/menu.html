@@ -5,12 +5,17 @@
             <div id="navbar" class="nav navbar-nav navbar-collapse">
                 <form class="navbar-form navbar-left">
                     <div class="form-group">
-                        <input type="search" list="Klasse" placeholder="Klasse">
+                        <input type="search" list="Klasse" placeholder="Klasse" name="klasse"
+                               (change)="updateFaecher()"
+                               [(ngModel)]="klasse">
                         <datalist id="Klasse">
-                            <option *ngFor="let item of klassen" [value]="item">
-                            <option value="Meise">
-                            <option value="Spatz">
-                            <option value="Specht">
+                            <option *ngFor="let item of klassen" [value]="item.Kuerzel">
+                        </datalist>
+                    </div>
+                    <div class="form-group">
+                        <input type="search" list="Fach" placeholder="Fach">
+                        <datalist id="Fach">
+                            <option *ngFor="let item of faecher" [value]="item.fach">
                         </datalist>
                     </div>
                     <div class="form-group">
@@ -27,20 +32,6 @@
                             <option value="9">
                         </datalist>
                     </div>
-                    <div class="form-group">
-                        <input type="search" list="Fach" placeholder="Fach">
-                        <datalist id="Fach">
-                            <option value="AEW">
-                            <option value="ITS">
-                            <option value="ITN">
-                            <option value="WGP">
-                            <option value="ENG">
-                            <option value="POL">
-                            <option value="SPO">
-                            <option value="ITE">
-                            <option value="DEU">
-                        </datalist>
-                    </div>
                     <button type="submit" class="btn btn-default">View</button>
                 </form>
             </div>
@@ -49,5 +40,6 @@
         <br>
         <button (click)="showUpload = true">Upload</button>
     </div>
+    <!-- Add divs -->
     <ksn-upload *ngIf="showUpload" [klasse]="klasse"></ksn-upload>
 </div>
