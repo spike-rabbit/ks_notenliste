@@ -1,6 +1,6 @@
 <div>
-    <div >
-        <nav class="navbar navbar-fixed-top navbar-dark bg-inverse">
+    <div>
+        <nav class="navbar navbar-static-top navbar-dark bg-inverse">
             <a class="navbar-brand" href="#">KS Notenliste</a>
             <div id="navbar" class="nav navbar-nav navbar-collapse">
                 <form class="navbar-form navbar-left">
@@ -13,8 +13,8 @@
                         </datalist>
                     </div>
                     <div class="form-group">
-                        <input type="search" list="Fach" placeholder="Fach" name="fach" (change)="updateBloecke()" 
-                        [(ngModel)]="fach">
+                        <input type="search" list="Fach" placeholder="Fach" name="fach" (change)="updateBloecke()"
+                               [(ngModel)]="fach">
                         <datalist id="Fach">
                             <option *ngFor="let item of faecher" [value]="item.fach">
                         </datalist>
@@ -29,10 +29,10 @@
                 </form>
             </div>
         </nav>
-        <br>
-        <br>
         <button (click)="showUpload = true">Upload</button>
     </div>
     <!-- Add divs -->
-    <ksn-upload *ngIf="showUpload" [klasse]="klasse"></ksn-upload>
+    <div style="margin: 20px 20px 20px 20px ">
+        <ksn-upload *ngIf="showUpload" [klasse]="klasse"></ksn-upload>
+    </div>
 </div>

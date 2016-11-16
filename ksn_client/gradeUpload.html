@@ -18,15 +18,20 @@
                     </div>
                 </fieldset>
             </div>
-            <div class="row"><div class="form-group col-md-4">
-                <label for="weight">Gewichtung</label><input class="form-control" id="weight" type="text"/>
-            </div>
+            <div class="row">
+                <div class="form-group col-md-4">
+                    <label for="weight">Gewichtung</label><input class="form-control" id="weight" type="text"/>
+                </div>
             </div>
         </form>
 
     </div>
     <br/><br/>
-
+    <div class="btn-group row panel panel-default panel-body" style="align-content: center; width: 100%">
+        <button class="btn btn-default col-md-4" type="button">Speichern</button>
+        <button class="btn btn-default col-md-4" type="button">Abbrechen</button>
+        <button class="btn btn-default col-md-4" type="button">Löschen</button>
+    </div>
     <div class="row">
         <div class="panel panel-default col-md-6" style="  min-width: 200px">
             <div class="panel-heading">Eingabe</div>
@@ -35,6 +40,7 @@
                 <button (click)="convertGradeList(rawGrades.value)">Übernehmen</button>
             </div>
         </div>
+
         <div class="table-responsive panel panel-default col-md-6">
             <div class="panel-heading">Vorschau</div>
             <div class="panel-body">
@@ -49,20 +55,20 @@
                         <th>
                             Note
                         </th>
+                        <th>
+                            Status
+                        </th>
                     </tr>
                     <tr *ngFor="let item of parsedList">
                         <td>{{item.vorname}}</td>
                         <td>{{ item.nachname}}</td>
                         <td>{{item.note}}</td>
+                        <td>Platzhalter</td>
                     </tr>
                 </table>
             </div>
         </div>
     </div>
     <div class="row">{{klasse}}</div>
-    <div class="btn-group row" style="align-content: center; width: 100%">
-        <button class="btn btn-default col-md-4" type="button">Speichern</button>
-        <button class="btn btn-default col-md-4" type="button">Abbrechen</button>
-        <button class="btn btn-default col-md-4" type="button">Löschen</button>
-    </div>
+
 </div>
