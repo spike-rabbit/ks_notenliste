@@ -22,6 +22,7 @@
 <!-- 3. Display the application -->
 <body>
 <script type="text/javascript">
+
     function updateTime() {
         var date = new Date();
         var tag = date.getDate();
@@ -115,10 +116,10 @@
                 Gewichtung
             </th>
             <td>
-                <input type="number" value="40"  size="3" id="gewichtung"/>
+                <input type="number" value="40" min="1" style="width: 7em" id="gewichtung"/>
             </td>
             <td>
-                <input type="number" value="60" size="3" id="gewichtung2"/>
+                <input type="number" value="60" min="1" style="width: 7em" size="3" id="gewichtung2"/>
             </td>
         </tr>
 
@@ -128,6 +129,7 @@
             </th>
             <td><div id="intern1"></div></td>
             <td><div id="intern2"></div></td>
+
         </tr>
     </thead>
             <tr>
@@ -147,7 +149,7 @@
                     Note
                 </th>
                 <td>
-                    <button type="button">+</button>
+                    <button type="button"> +</button>
                 </td>
             </tr>
         <tr>
