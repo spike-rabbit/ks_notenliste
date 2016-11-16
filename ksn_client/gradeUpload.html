@@ -1,42 +1,55 @@
-<form #f="ngForm">
+<form #f="ngForm" class="form-group panel panel-default">
+        <div class="panel-body">
     <fieldset>
         <legend>Noten Typ</legend>
-        <input id="SoMi" type="radio" name="gradeType" value="SoMi" [(ngModel)]="gradeType" checked/><label for="SoMi">SoMi-Note</label>
-        <input id="Klausur" type="radio" name="gradeType" value="Klausur" [(ngModel)]="gradeType"/><label for="Klausur">Klausurnote</label>
-        <br>
-        <label for="weight">Gewichtung: </label><input id="weight" type="text"/>
+        <div class="radio-inline">
+            <input id="SoMi" type="radio" name="gradeType" value="SoMi" [(ngModel)]="gradeType" checked/>
+            <label for="SoMi">SoMi-Note</label>
+        </div>
+        <div class="radio-inline">
+            <input id="Klausur" type="radio" name="gradeType" value="Klausur" [(ngModel)]="gradeType"/>
+            <label for="Klausur">Klausurnote</label>
+        </div>
+        <br/>
     </fieldset>
+        </div>
+    <label for="weight">Gewichtung: </label><input id="weight" type="text"/>
+</form>
 
     <br/><br/>
 
     <div>
         <div>
-            <th><label for="rawGrades">Eingabe:</label></th>
-            <th>Vorschau:</th>
-        </div>
-        <div>
             <div>
-                <textarea id="rawGrades" #rawGrades></textarea>
+                <h3 class="h3">Eingabe</h3>
+                <textarea id="rawGrades" #rawGrades class="form-control" rows="8"></textarea>
                 <button (click)="convertGradeList(rawGrades.value)">Übernehmen</button>
             </div>
-            <table>
+            <div class="table-responsive">
+                <h3 class="h3">Vorschau</h3>
+            <table class="table">
                 <tr>
                     <th>
-                        Name
+                        Vorname
+                    </th>
+                    <th>
+                        Nachname
                     </th>
                     <th>
                         Note
                     </th>
                 </tr>
                 <tr *ngFor="let item of parsedList">
-                    <td>{{item.vorname.concat(" ", item.nachname)}}</td>
+                    <td>{{item.vorname}}</td>
+                    <td>{{ item.nachname}}</td>
                     <td>{{item.note}}</td>
                 </tr>
             </table>
+                </div>
         </div>
     </div>
     {{klasse}}
     <br/><br/><br/><br/>
     <button type="button">Speichern</button>
     <button type="button">Abbrechen</button>
-</form>
+    <button type="button">Löschen</button>
