@@ -1,18 +1,13 @@
 <div>
-    <div>
-        <nav class="navbar navbar-fixed-top navbar-dark bg-inverse" style="display: none">
+    <div *ngIf="!showUpload">
+        <nav class="navbar navbar-fixed-top navbar-dark bg-inverse">
             <a class="navbar-brand" href="#">KS Notenliste</a>
             <div id="navbar" class="nav navbar-nav navbar-collapse">
                 <form class="navbar-form navbar-left">
                     <div class="form-group">
                         <input type="search" list="Klasse" placeholder="Klasse">
                         <datalist id="Klasse">
-                            <option value="FS141">
-                            <option value="FS142">
-                            <option value="FI141">
-                            <option value="FI142">
-                            <option value="FS151">
-                            <option value="FS152">
+                            <option *ngFor="let item of klassen" [value]="item">
                             <option value="Meise">
                             <option value="Spatz">
                             <option value="Specht">
@@ -50,6 +45,9 @@
                 </form>
             </div>
         </nav>
+        <br>
+        <br>
+        <button (click)="showUpload = true">Upload</button>
     </div>
-    <ksn-upload [klasse]="klasse"></ksn-upload>
+    <ksn-upload *ngIf="showUpload" [klasse]="klasse"></ksn-upload>
 </div>
