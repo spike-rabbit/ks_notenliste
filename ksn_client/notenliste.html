@@ -34,19 +34,33 @@
         document.getElementById('time').innerHTML = datum;
         setTimeout(updateTime, 60000);
     }
-    window.addEventListener("load", updateTime);
-</script>
-<script>
-    function updateInternG(){
+
+    function updateInternG1(){
         var gew = document.getElementById('gewichtung').value;
-        //var wochenstd = document.getElementById('wochenS').value;
-        var intGew = gew*7/100;
+        var wochenstd = 7;
+        var intGew = gew*wochenstd/100;
 
         document.getElementById('intern1').innerHTML = intGew;
-        setTimeout(updateInternG, 4);
+        document.getElementById('wochenS').innerHTML = wochenstd;
+
+        setTimeout(updateInternG1, 4);
     }
-    window.addEventListener("load", updateInternG);
+
+    function updateInternG2(){
+        var gew = document.getElementById('gewichtung2').value;
+        var wochenstd = 7;
+        var intGew = gew*wochenstd/100;
+
+        document.getElementById('intern2').innerHTML = intGew;
+
+        setTimeout(updateInternG2, 4);
+    }
+
+    window.addEventListener("load", updateTime);
+    window.addEventListener("load", updateInternG1);
+    window.addEventListener("load", updateInternG2);
 </script>
+
 <head>
     <style>
 
@@ -86,10 +100,10 @@
         </tr>
 
         <tr>
-            <th align="left" id="wochenS">
+            <th align="left">
                 Wochenstunden
             </th>
-            <td>7</td>
+            <td  id="wochenS">7</td>
         </tr>
     </table>
 
@@ -104,7 +118,7 @@
                 <input type="number" value="40"  size="3" id="gewichtung"/>
             </td>
             <td>
-                <input type="text" value="60" size="3" />
+                <input type="number" value="60" size="3" id="gewichtung2"/>
             </td>
         </tr>
 
@@ -113,7 +127,7 @@
                 Interne Gewichtung
             </th>
             <td><div id="intern1"></div></td>
-            <td>4,2</td>
+            <td><div id="intern2"></div></td>
         </tr>
     </thead>
             <tr>
