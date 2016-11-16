@@ -45,14 +45,19 @@ function listKlassen(req: express.Request, res: express.Response): void {
 function listFaecher(req: express.Request, res: express.Response): void {
     let db = masterData.ksnDB;
     db.ready(()=> {
-        db.query("select * from fachnotenliste where klasse = ?", (err, response) => {
+        db.query("select unterrichtsfach as fach from fachnotenliste where klasse = ? group by klasse", (err, response) => {
             if (err) {
                 res.send(err);
             } else {
                 res.send(response);
             }
-        }, [req.query.klasse]);
+        }, [req.params.klasse]);
     });
+}
+
+function listBloecke(req: express.Request, res: express.Response): void {
+    let db = masterData.ksnDB;
+
 }
 
 function listLehrer(req: express.Request, res: express.Response): void {
@@ -77,7 +82,7 @@ function listSchueler(req: express.Request, res: express.Response): void {
             } else {
                 res.send(response);
             }
-        },[req.query.klasse]);
+        }, [req.query.klasse]);
     });
 }
 
