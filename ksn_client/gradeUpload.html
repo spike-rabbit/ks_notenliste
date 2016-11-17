@@ -20,7 +20,9 @@
             </div>
             <div class="row">
                 <div class="form-group col-md-4">
-                    <label for="weight">Gewichtung</label><input class="form-control" id="weight" type="text"/>
+                    <label for="weight">Gewichtung</label>
+                    <input class="form-control" id="weight" name="weight" type="text"
+                           [(ngModel)]="gewichtung"/>
                 </div>
             </div>
         </form>
@@ -28,7 +30,7 @@
     </div>
     <br/><br/>
     <div class="btn-group row panel panel-default panel-body" style="align-content: center; width: 100%">
-        <button class="btn btn-default col-md-4" type="button">Speichern</button>
+        <button class="btn btn-default col-md-4" type="button" name="speichern" (click)="saveGradeList()">Speichern</button>
         <button class="btn btn-default col-md-4" type="button">Abbrechen</button>
         <button class="btn btn-default col-md-4" type="button">Löschen</button>
     </div>
@@ -59,7 +61,7 @@
                             Status
                         </th>
                     </tr>
-                    <tr *ngFor="let item of parsedList">
+                    <tr *ngFor="let item of accepted">
                         <td>{{item.vorname}}</td>
                         <td>{{ item.nachname}}</td>
                         <td>{{item.note}}</td>

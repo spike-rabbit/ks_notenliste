@@ -4,24 +4,29 @@
 import * as mysql from "mysql";
 import * as wrapper from "node-mysql-wrapper";
 import * as express from "express";
+import {error} from "util";
 
 
 class Grade {
 
-    public ksnDB = wrapper.wrap(mysql.createConnection({
+    public connection = mysql.createConnection({
         host: "intranet",
         user: 'FS141_maxi_koel',
         password: 'FS141_maxi_koel',
         database: 'fs141_maximilian_koeller',
         insecureAuth: true
-    }));
+    });
+
+    public ksnDB = wrapper.wrap(this.connection);
 
     public router: express.Router;
 
     constructor() {
         this.router = express.Router();
         this.router.get("/listFachnoten", listFachnoten);
-        this.router.post("/convertGrades", convertGrades)
+        this.router.get("/getSubjectGradeList", getSubjectGradeList);
+        this.router.post("/convertGrades", convertGrades);
+        this.router.post("/saveGrades", saveGrades);
     }
 }
 
@@ -41,7 +46,6 @@ function listFachnoten(req: express.Request, res: express.Response): void {
 }
 
 function convertGrades(req: express.Request, res: express.Response): void {
-    let db = grade.ksnDB;
     let rawList = (<string> req.body.list);
     let rawRows = rawList.split('\n');
     let parsedList: EinzelNote[] = [];
@@ -58,42 +62,82 @@ function convertGrades(req: express.Request, res: express.Response): void {
     }
 
 
+    let db = grade.ksnDB;
     let acceptedList: EinzelNote[] = [];
     let notFound: EinzelNote[] = [];
     db.ready(() => {
-       db.table("schueler").find({klasse : req.body.klasse}).then(result => {
-           for(let schueler of (<Schueler[]>result)) {
-               for(let einzelNote of parsedList) {
-                   if(schueler.vorname == einzelNote.vorname && schueler.nachname == einzelNote.nachname) {
-                       einzelNote.id = schueler.id;
-                       acceptedList.push(einzelNote);
-                       break;
-                   }
-                   notFound.push(einzelNote);
-               }
-           }
-           res.send({data: {
-               accepted : acceptedList,
-               notFound : notFound
-           }});
-       });
+        db.query("select vorname, name as nachname, schuelerID as id from schueler where klasse = ?", (err, result) => {
+            for (let schueler of (<Schueler[]>result)) {
+                for (let einzelNote of parsedList) {
+                    if (schueler.vorname == einzelNote.vorname && schueler.nachname == einzelNote.nachname) {
+                        einzelNote.id = schueler.id;
+                        acceptedList.push(einzelNote);
+                        break;
+                    }
+                    notFound.push(einzelNote);
+                }
+            }
+            res.send({
+                data: {
+                    accepted: acceptedList,
+                    notFound: notFound
+                }
+            });
+        }, [req.body.klasse]);
     });
 }
 
-function addNotenliste(req: express.Request, res: express.Response): void {
+function getSubjectGradeList(req: express.Request, res: express.Response): void {
     let db = grade.ksnDB;
+    db.ready(() => {
+
+        db.query("select * from fachnotenliste where unterrichtsfach = ? and klasse = ? and block = ?", ((error, result) => {
+            res.send({data: result[0]});
+        }), [req.query.fach, req.query.klasse, req.query.block]);
+
+        // db.table("fachnotenliste").findSingle({
+        //     unterrichtsfach: req.query.fach,
+        //     klasse: req.query.klasse,
+        //     block:req.query.block
+        // }).then(result => {
+        //     res.send({data: result});
+        // });
+    })
+}
+
+
+function saveGrades(req: express.Request, res: express.Response): void {
+    let db = grade.ksnDB;
+    let toSave = {
+        fachnotenlisteID: req.body.data.fachNotenListe,
+        gewichtung: req.body.data.gewichtung,
+        typ: req.body.data.type,
+        lehrer: req.body.data.lehrer
+    };
     db.ready(()=> {
-        db.table("einzelnotenliste").save({
-            fachnotenlisteID: req.body.fachnotenliste,
-            gewichtung: req.body.gewichtung,
-            typ: req.body.type,
-            stundenanzahl: req.body.stundenanzahl,
-            lehrer: req.body.lehrer
-        }).then();
+        db.query("insert into einzelnotenliste values(?,?,?,?,?,?)", (err, response) => {
+            for (let note of req.body.data.noten) {
+                note.einzelnotenlisteID = response.insertId;
+            }
+            saveSingelGrade(res, req.body.data.noten);
+
+        }, [null, toSave.fachnotenlisteID, toSave.lehrer, "2016-03-12", toSave.typ, toSave.gewichtung]);
     });
 }
 
-interface EinzelNote extends Schueler{
+function saveSingelGrade(res: express.Response, remaining: any []) {
+    let db = grade.ksnDB;
+    db.ready(() => {
+        let note = remaining.pop();
+        console.log(note)
+        db.query("insert into einzelnote value(?,?,?)", (err, result) => {
+            console.log(result);
+            res.send({data: "done"});
+        }, [note.schuelerID, note.einzelnotenlisteID, note.wert]);
+    });
+}
+
+interface EinzelNote extends Schueler {
     note: number;
 }
 
@@ -101,6 +145,10 @@ interface Schueler {
     vorname: string;
     nachname: string;
     id: number;
+}
+
+interface FachnotenListe {
+    fachnotenlisteID: number;
 }
 
 let grade = new Grade();

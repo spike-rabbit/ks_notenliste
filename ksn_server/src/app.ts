@@ -33,7 +33,7 @@ class Server {
             res.send("Bob Details!");
         });
         this.app.use('/masterData', masterData);
-        this.app.use("/grades", grades);
+        this.app.use("/noten", grades);
 
 
         //configure application

@@ -1,12 +1,16 @@
 import {Injectable} from "@angular/core";
-import {Http, Response} from "@angular/http";
+import {Http, Response, URLSearchParams} from "@angular/http";
 import {Observable} from "rxjs/Observable";
+import {SingleGrades} from "./Data/SingleGrades";
+import {SubjectGradeList} from "./Data/SubjectGradeList";
 /**
  * Created by maximilian.koeller on 15.11.2016.
  */
 @Injectable()
-export class UploadService {
-    private convertURL = "/grades/convertGrades";
+export class GradeLoaderService {
+    private convertURL = "/noten/convertGrades";
+    private saveGradesURL = "/noten/saveGrades";
+    private getSubjectGradeListURL = "/noten/getSubjectGradeList";
 
     constructor(private http: Http) {
     }
@@ -16,6 +20,21 @@ export class UploadService {
             list: list,
             klasse: klasse
         }).map(this.extractData).catch(this.handleError);
+    }
+
+    saveGrades(singleGrades: SingleGrades) {
+        return this.http.post(this.saveGradesURL, {
+            data: singleGrades
+        }).map(this.extractData).catch(this.handleError);
+    }
+
+    getSubjectGradeList(klasse: string, fach: string, block: string) : Observable<SubjectGradeList> {
+        let params = new URLSearchParams();
+        params.set("klasse", klasse);
+        params.set("fach", fach);
+        params.set("block", block);
+        return (<Observable<SubjectGradeList>> this.http.get(this.getSubjectGradeListURL, {search: params})
+            .map(this.extractData).catch(this.handleError));
     }
 
     private extractData(res: Response) {

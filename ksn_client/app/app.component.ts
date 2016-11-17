@@ -3,22 +3,32 @@
  */
 import {Component, OnInit, Output} from '@angular/core';
 import {MasterLoaderService} from "./master-loader.service";
+import {GradeLoaderService} from "./grades-loader.service";
+import {SingleGrades} from "./Data/SingleGrades";
+import {SubjectGradeList} from "./Data/SubjectGradeList";
 @Component({
     selector: 'ksn-app',
     templateUrl: '../menu.html',
-    providers: [MasterLoaderService]
+    providers: [MasterLoaderService, GradeLoaderService]
 })
 export class AppComponent implements OnInit {
     klasse: string;
     klassen: string [];
+
     @Output()
-    fach: string;
     faecher: string [];
+    fach: string;
+
     @Output()
     bloecke: string[];
+    block: string;
+
+    @Output()
+    subjectGradeList: SubjectGradeList;
+
     showUpload: boolean = false;
 
-    constructor(private masterLoader: MasterLoaderService) {
+    constructor(private masterLoader: MasterLoaderService, private gradeLoader: GradeLoaderService) {
     }
 
     ngOnInit() {
@@ -31,5 +41,12 @@ export class AppComponent implements OnInit {
 
     updateBloecke() {
         this.masterLoader.loadBloecke(this.klasse, this.fach).subscribe(res => this.bloecke = res);
+    }
+
+    updateSubjectGradeList() {
+        this.gradeLoader.getSubjectGradeList(this.klasse, this.fach, this.block).subscribe(res => {
+            this.subjectGradeList = res;
+            console.log(res)
+        });
     }
 }
