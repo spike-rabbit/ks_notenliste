@@ -20,12 +20,13 @@
                         </datalist>
                     </div>
                     <div class="form-group">
-                        <input type="search" list="Block" placeholder="Block" name="block" (change)="updateSubjectGradeList()" [(ngModel)]="block">
+                        <input type="search" list="Block" placeholder="Block" name="block"
+                               (change)="updateSubjectGradeList()" [(ngModel)]="block">
                         <datalist id="Block">
                             <option *ngFor="let item of bloecke" [value]="item.block">
                         </datalist>
                     </div>
-                    <button  class="btn btn-primary" type="submit">View</button>
+                    <button class="btn btn-primary" type="submit">View</button>
                 </form>
             </div>
         </nav>
@@ -33,7 +34,15 @@
     </div>
     <!-- Add divs -->
     <div style="margin: 20px 20px 20px 20px ">
-        <ksn-grades *ngIf="!showUpload"></ksn-grades>
-        <ksn-upload *ngIf="showUpload" [klasse]="klasse" [fachnotenListeID]="subjectGradeList.fachnotenlisteID"></ksn-upload>
+        <ksn-grades *ngIf="!showUpload && subjectGradeList" [fachnotenliste]="subjectGradeList"></ksn-grades>
+        <ksn-upload *ngIf="showUpload" [klasse]="klasse"
+                    [fachnotenListeID]="subjectGradeList.fachnotenlisteID"></ksn-upload>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <ksn-gradesoverview></ksn-gradesoverview>
     </div>
 </div>

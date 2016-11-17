@@ -3,6 +3,7 @@ import {Http, Response, URLSearchParams} from "@angular/http";
 import {Observable} from "rxjs/Observable";
 import {SingleGrades} from "./Data/SingleGrades";
 import {SubjectGradeList} from "./Data/SubjectGradeList";
+import {NoteListenZeile} from "./Data/NoteListenZeile";
 /**
  * Created by maximilian.koeller on 15.11.2016.
  */
@@ -11,6 +12,7 @@ export class GradeLoaderService {
     private convertURL = "/noten/convertGrades";
     private saveGradesURL = "/noten/saveGrades";
     private getSubjectGradeListURL = "/noten/getSubjectGradeList";
+    private getSingleGradeListsURL = "/noten/getSingleGradeLists";
 
     constructor(private http: Http) {
     }
@@ -34,6 +36,14 @@ export class GradeLoaderService {
         params.set("fach", fach);
         params.set("block", block);
         return (<Observable<SubjectGradeList>> this.http.get(this.getSubjectGradeListURL, {search: params})
+            .map(this.extractData).catch(this.handleError));
+    }
+
+    getSingleGradeLists(subjectGradeList: SubjectGradeList) : Observable<NoteListenZeile[]> {
+        let params = new URLSearchParams();
+        params.set("fachnotenlisteID", subjectGradeList.fachnotenlisteID.toString());
+        params.set("klasse", subjectGradeList.klasse);
+        return (<Observable<NoteListenZeile[]>> this.http.get(this.getSingleGradeListsURL, {search: params})
             .map(this.extractData).catch(this.handleError));
     }
 

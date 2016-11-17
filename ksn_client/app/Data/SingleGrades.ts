@@ -7,7 +7,7 @@ export interface SingleGrades {
     fachNotenListe : number;
     lehrer : string;
     datum : string;
-    type : GradeType;
+    typ : GradeType;
     gewichtung : number;
     noten : GradeListType[];
 }

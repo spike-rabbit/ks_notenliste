@@ -228,11 +228,11 @@ if (typeof jQuery === 'undefined') {
 
     if ($parent.length) {
       var $input = this.$element.find('input')
-      if ($input.prop('type') == 'radio') {
+      if ($input.prop('typ') == 'radio') {
         if ($input.prop('checked')) changed = false
         $parent.find('.active').removeClass('active')
         this.$element.addClass('active')
-      } else if ($input.prop('type') == 'checkbox') {
+      } else if ($input.prop('typ') == 'checkbox') {
         if (($input.prop('checked')) !== this.$element.hasClass('active')) changed = false
         this.$element.toggleClass('active')
       }
@@ -283,7 +283,7 @@ if (typeof jQuery === 'undefined') {
     .on('click.bs.button.data-api', '[data-toggle^="button"]', function (e) {
       var $btn = $(e.target).closest('.btn')
       Plugin.call($btn, 'toggle')
-      if (!($(e.target).is('input[type="radio"], input[type="checkbox"]'))) {
+      if (!($(e.target).is('input[typ="radio"], input[typ="checkbox"]'))) {
         // Prevent double click on radios, and the double selections (so cancellation) on checkboxes
         e.preventDefault()
         // The target component still receive the focus

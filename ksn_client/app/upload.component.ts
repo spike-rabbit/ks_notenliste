@@ -42,7 +42,7 @@ export class UploadComponent implements OnInit{
     public saveGradeList() {
         let singleGrade: SingleGrades = {
             fachNotenListe: this.fachnotenListeID,
-            type: this.gradeType,
+            typ: this.gradeType,
             gewichtung: this.gewichtung,
             noten: this.accepted.map((value, index, array)=> {
                 return {

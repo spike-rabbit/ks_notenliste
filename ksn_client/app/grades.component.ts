@@ -1,12 +1,29 @@
-import {Component, Input} from "@angular/core";
+import {Component, Input, OnInit, Output} from "@angular/core";
+import {SubjectGradeList} from "./Data/SubjectGradeList";
+import {SingleGrades} from "./Data/SingleGrades";
+import {GradeLoaderService} from "./grades-loader.service";
 /**
  * Created by maximilian.koeller on 16.11.2016.
  */
 @Component({
-    selector : "ksn-grades",
-    templateUrl : "../notenliste.html"
-    })
-export class GradeComponent {
+    selector: "ksn-grades",
+    templateUrl: "../notenliste.html",
+    moduleId: module.id,
+    providers: [GradeLoaderService]
+})
+export class GradeComponent implements OnInit {
+
     @Input()
-    klasse : string;
+    fachnotenliste: SubjectGradeList;
+    @Output()
+    einzelnotenliste: SingleGrades[];
+
+    constructor(private gradeService : GradeLoaderService) {}
+
+    ngOnInit(): void {
+        this.gradeService.getSingleGradeLists(this.fachnotenliste).subscribe(res => {
+            this.einzelnotenliste = res;
+            console.log(this.einzelnotenliste);
+        });
+    }
 }
