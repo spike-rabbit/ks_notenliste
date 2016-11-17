@@ -53,8 +53,8 @@ function convertGrades(req: express.Request, res: express.Response): void {
         if (row != "") {
             let rawColumn = row.split('\t');
             parsedList.push({
-                vorname: rawColumn[0],
-                nachname: rawColumn[1],
+                vorname: rawColumn[1],
+                nachname: rawColumn[0],
                 id: 0,
                 note: parseInt(rawColumn[2])
             });
