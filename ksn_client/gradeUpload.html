@@ -14,19 +14,8 @@
         document.getElementById("Status").value = '';
     }
 
-    function getDefaultDate(){
-        var now = new Date();
-        var day = ("0" + now.getDate()).slice(-2);
-        var month = ("0" + (now.getMonth() + 1)).slice(-2);
-        var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
-        return today;
-    }
 
 
-    function getDatum(){
-        document.getElementById("Datum").value = getDefaultDate();
-        //$("#Datum").val( getDefaultDate());
-    }
 </script>
 <link rel="stylesheet" type="text/css" href="overlay.css">
 
@@ -64,7 +53,7 @@
                     </div>
                     <div class="col-md-4">
                         <label for="Datum">Datum</label>
-                        <input id="Datum" type="date" class="form-control" name="Datum" onclick="getDatum();">
+                        <input id="Datum" type="date" class="form-control" name="Datum" onload="getDatum();">
                     </div>
                 </div>
             </form>
@@ -98,7 +87,7 @@
                             Status
                         </th>
                     </tr>
-                    <tr *ngFor="let item of accepted">
+                    <tr id="parsedGrades" *ngFor="let item of accepted">
                         <td>{{item.vorname}}</td>
                         <td>{{ item.nachname}}</td>
                         <td>{{item.note}}</td>
@@ -110,11 +99,12 @@
     </div>
     <div class="row">{{klasse}}</div>
     <div class="btn-group" style="align-content: center; width: 100%">
-        <button class="btn btn-default" type="button" name="speichern" onclick="closeOverlay()"
+        <button class="btn btn-default" type="button" name="speichern" onclick="closeOverlay(); resetOverlay()"
                 (click)="saveGradeList(); ">Speichern
         </button>
         <button class="btn btn-default" type="button" onclick="closeOverlay();">Abbrechen</button>
         <button class="btn btn-default" type="button" onclick="resetOverlay();">Löschen</button>
+        <button class="btn btn-default" type="button" onclick="getDatum();">Date</button>
     </div>
 </div>
 
