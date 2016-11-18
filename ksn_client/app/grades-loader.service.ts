@@ -13,6 +13,7 @@ export class GradeLoaderService {
     private saveGradesURL = "/noten/saveGrades";
     private getSubjectGradeListURL = "/noten/getSubjectGradeList";
     private getSingleGradeListsURL = "/noten/loadSingleGrades";
+    private loadZeugnisURL = "/noten/loadZeugnis";
 
     constructor(private http: Http) {
     }
@@ -44,6 +45,15 @@ export class GradeLoaderService {
         params.set("fachnotenlisteID", subjectGradeList.fachnotenlisteID.toString());
         params.set("klasse", subjectGradeList.klasse);
         return (<Observable<NoteListenZeile[]>> this.http.get(this.getSingleGradeListsURL, {search: params})
+            .map(this.extractData).catch(this.handleError));
+    }
+
+    loadZeugnis(subjectGradeList: SubjectGradeList) {
+        let params = new URLSearchParams();
+        params.set("block", subjectGradeList.block.toString());
+        params.set("klasse", subjectGradeList.klasse);
+        params.set("fach", subjectGradeList.unterrichtsfach);
+        return (<Observable<any>> this.http.get(this.loadZeugnisURL, {search: params})
             .map(this.extractData).catch(this.handleError));
     }
 

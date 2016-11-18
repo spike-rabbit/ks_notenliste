@@ -1,6 +1,5 @@
-import {Component, Input, OnInit, Output} from "@angular/core";
+import {Component, Input, OnInit, Output, EventEmitter} from "@angular/core";
 import {SubjectGradeList} from "./Data/SubjectGradeList";
-import {SingleGrades} from "./Data/SingleGrades";
 import {GradeLoaderService} from "./grades-loader.service";
 /**
  * Created by maximilian.koeller on 16.11.2016.
@@ -17,6 +16,8 @@ export class GradeComponent implements OnInit {
     fachnotenliste: SubjectGradeList;
     @Output()
     einzelnotenliste: any[];
+    @Output()
+    showUpload = new EventEmitter<void>();
 
     constructor(private gradeService : GradeLoaderService) {}
 
@@ -25,5 +26,9 @@ export class GradeComponent implements OnInit {
             console.log(res);
             this.einzelnotenliste = res;
         });
+    }
+
+    onAdd() {
+        this.showUpload.emit();
     }
 }

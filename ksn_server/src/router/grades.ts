@@ -4,17 +4,16 @@
 import * as mysql from "mysql";
 import * as wrapper from "node-mysql-wrapper";
 import * as express from "express";
-import {error} from "util";
 
 
 class Grade {
 
     public connection = mysql.createConnection({
-        host: "intranet",
-        user: 'FS141_maxi_koel',
-        password: 'FS141_maxi_koel',
-        database: 'fs141_maximilian_koeller',
-        insecureAuth: true
+        host: "localhost",
+        user: "root",
+        password: "",
+        database: 'test',
+        insecureAuth: true,
     });
 
     public ksnDB = wrapper.wrap(this.connection);
@@ -28,12 +27,13 @@ class Grade {
         this.router.post("/convertGrades", convertGrades);
         this.router.post("/saveGrades", saveGrades);
         this.router.get("/loadSingleGrades", loadSingleGrades);
+        this.router.get("/loadZeugnis", loadZeugnis);
     }
 }
 
 function listFachnoten(req: express.Request, res: express.Response): void {
     let db = grade.ksnDB;
-    db.ready(()=> {
+    db.ready(() => {
         db.query("select * from einzelnotenliste el, einzelnote en, " +
             "fachnotenliste fl where el.einzelnotenlisteID = en.einzelnotenlisteID " +
             "and el.FachnotenlisteID = fl.fachnotenlisteID and klasse = ? and unterrichtsfach = ? and block = ?", (err, response) => {
@@ -164,78 +164,98 @@ function loadZeugnis(req: express.Request, res: express.Response): void {
     let db = grade.ksnDB;
     db.ready(() => {
         db.query("SELECT s.schuelerID, s.vorname, s.name FROM klasse k, schueler s WHERE k.Kuerzel = ? and s.Klasse = k.Kuerzel", (error, response) => {
-            loadZeugnisGrades(res, req.query.fachnotenlisteID, req.query.fach, response);
+            loadZeugnisGrades(res, req.query.block, req.query.fach, response);
         }, [req.query.klasse]);
     });
 }
 
-function loadZeugnisGrades(res: express.Response, block: number, fach: string, toDo: any[]) {
-    let current = toDo.pop();
+function loadZeugnisGrades(res: express.Response, block: number, fachKuerzel: string, toDo: any[]) {
     let db = grade.ksnDB;
     db.ready(() => {
 
         db.query("SELECT * FROM fachnotenliste fl, einzelnotenliste el WHERE fl.unterrichtsfach IN " +
             "(SELECT uf.Kuerzel FROM unterrichtsfach uf WHERE uf.Kuerzel = ? OR uf.istUnterfachvon = ?) " +
-            "and fl.fachnotenlisteID = el.fachnotenlisteID " +
-            "order by fl.unterrichtsfach el.einzelnotenlisteID", (error, einzelnotenlisten) => {
-            let currentFach = null;
+            "and fl.fachnotenlisteID = el.fachnotenlisteID and fl.block = ? " +
+            "order by fl.unterrichtsfach, el.einzelnotenlisteID", (error, einzelnotenlisten) => {
+            let currentFachID = null;
             let faecher = [];
             let result;
+            let kleineEinzelnotenliste = [];
+            let fach = null;
+            let count = 0;
             for (let liste of einzelnotenlisten) {
-                if (currentFach != liste.fachnotenlisteID) {
-                    faecher.push({kurzel: currentFach.kuerzel, stundenzahl: liste.stundenzahl, einzelnotenlisten: []});
-                    currentFach = liste;
+                count++;
+                if (currentFachID != liste.fachnotenlisteID) {
+                    if (fach != null) {
+                        fach.listencount = count;
+                    }
+                    count = 0;
+                    currentFachID = liste.fachnotenlisteID;
+                    faecher.push(fach = {
+                        kuerzel: liste.unterrichtsfach,
+                        block: liste.block,
+                        stundenzahl: liste.stundenzahl,
+                        listencount: 0
+                    });
                 }
-                currentFach.einzelnotenlisten.push({
+                kleineEinzelnotenliste.push({
                     einzelnotenlisteID: liste.einzelnotenlisteID,
                     lehrer: liste.lehrer,
-                    gewichtung: liste.gewichtung
+                    gewichtung: liste.gewichtung,
+                    typ : liste.typ
                 });
-
-
+            }
+            if (fach != null) {
+                fach.listencount = count;
             }
 
-            result = {header : faecher};
-
-            db.query("",null)
-
-
-        }, [fach, fach]);
-    });
-}
-
-function loadFachGrades(res: express.Response, faecher: any[], schuelers: any[], result: any) {
-    let fach = faecher.pop();
-    let db = grade.ksnDB;
-    db.query("SELECT * FROM einzelnotenliste el and fachnotenliste fl where el.fachnotenlisteID = fl.fachnotenlisteID " +
-        "and fl.unterrichtsfach = ? and fl.block = ? and el.einzelnotenlisteID = en.einzelnotenlisteID " +
-        "order by fl.unterrichtsfach, el.einzelnotenlistID", (error, einzelnoten) => {
-        result[fach].einzelnoten = [];
-        for (let schueler of schuelers) {
-            let res = {
-                schueler: schueler,
-                noten: []
+            result = {
+                header: faecher,
+                subheader: kleineEinzelnotenliste,
+                body: []
             };
-            for (let einzelnote of einzelnoten) {
-                if (schueler.id = einzelnote.schuelerID) {
-                    res.noten.push(einzelnote.wert);
-                }
-            }
-            result[fach].einzelnoten.push(res);
-        }
-
-        if (faecher.length == 0) {
-        } else {
-            loadFachGrades(res, faecher, schuelers, result);
-        }
+            loadSchuelerZeugnisNoten(res, block, fachKuerzel, toDo, result);
 
 
-        db.query("SELECT * FROM einzelnote en " +
-            "where en.einzelnotenlisteID = ? and schuelerID = ?", (error, schuelernoten) => {
-        });
+        }, [fachKuerzel, fachKuerzel, block]);
     });
 }
 
+function loadSchuelerZeugnisNoten(res: express.Response, block: number, fach: string, verbleibendeSchueler: any[], zwischenstand: any) {
+    let db = grade.ksnDB;
+    let schueler = verbleibendeSchueler.pop();
+    let bodyRow = {schueler: schueler, noten: []};
+    db.ready(() => {
+        db.query("SELECT * FROM fachnotenliste fl, einzelnotenliste el, einzelnote en WHERE fl.unterrichtsfach IN " +
+            "(SELECT uf.Kuerzel FROM unterrichtsfach uf WHERE uf.Kuerzel = ? OR uf.istUnterfachvon = ?) " +
+            "and fl.fachnotenlisteID = el.fachnotenlisteID and en.schuelerID = ? and fl.block = ? and en.einzelnotenlisteID = el.einzelnotenlisteID " +
+            "order by fl.unterrichtsfach, el.einzelnotenlisteID" +
+            "", (error, einzelnoten) => {
+            for (let einzelnotenIDs of zwischenstand.subheader) {
+                let gefunden = false;
+                for (let einzelnote of einzelnoten) {
+                    if (einzelnote.einzelnotenlisteID == einzelnotenIDs.einzelnotenlisteID) {
+                        bodyRow.noten.push(einzelnote.wert);
+                        gefunden = true;
+                        break;
+                    }
+                }
+
+                if (!gefunden) {
+                    bodyRow.noten.push(-1);
+                }
+
+            }
+
+            zwischenstand.body.push(bodyRow);
+            if (verbleibendeSchueler.length == 0) {
+                res.send({data: zwischenstand});
+            } else {
+                loadSchuelerZeugnisNoten(res, block, fach, verbleibendeSchueler, zwischenstand);
+            }
+        }, [fach, fach, schueler.schuelerID, block]);
+    });
+}
 
 function saveGrades(req: express.Request, res: express.Response): void {
     let db = grade.ksnDB;
@@ -245,7 +265,7 @@ function saveGrades(req: express.Request, res: express.Response): void {
         typ: req.body.data.typ,
         lehrer: req.body.data.lehrer
     };
-    db.ready(()=> {
+    db.ready(() => {
         db.query("insert into einzelnotenliste values(?,?,?,?,?,?)", (err, response) => {
             for (let note of req.body.data.noten) {
                 note.einzelnotenlisteID = response.insertId;
@@ -286,6 +306,3 @@ interface FachnotenListe {
 
 let grade = new Grade();
 export = grade.router;
-
-// SELECT * FROM klasse k, schueler s WHERE k.Kuerzel = 'FS141' and s.Klasse = k.Kuerzel
-//SELECT * FROM fachnotenliste fl, einzelnotenliste el, einzelnote en WHERE el.fachnotenlisteID = fl.fachnotenlisteID and en.einzelnotenlisteID = el.einzelnotenlisteID and en.schuelerID=1 and fl.fachnotenlisteID = 2

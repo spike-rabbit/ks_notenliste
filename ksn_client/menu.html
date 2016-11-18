@@ -9,36 +9,38 @@
                                (change)="updateFaecher()"
                                [(ngModel)]="klasse">
                         <datalist id="Klasse">
-                            <option *ngFor="let item of klassen" [value]="item.Kuerzel">
+                            <option *ngFor="let item of klassen" [value]="item">
                         </datalist>
                     </div>
                     <div class="form-group">
                         <input type="search" list="Fach" placeholder="Fach" name="fach" (change)="updateBloecke()"
+                               [disabled]="!klassen.includes(klasse)"
                                [(ngModel)]="fach">
                         <datalist id="Fach">
-                            <option *ngFor="let item of faecher" [value]="item.fach">
+                            <option *ngFor="let item of faecher" [value]="item">
                         </datalist>
                     </div>
                     <div class="form-group">
                         <input type="search" list="Block" placeholder="Block" name="block"
-                               (change)="updateSubjectGradeList()" [(ngModel)]="block">
+                               [disabled]="!faecher.includes(fach)" (change)="updateSubjectGradeList()"
+                               [(ngModel)]="block">
                         <datalist id="Block">
-                            <option *ngFor="let item of bloecke" [value]="item.block">
-                            <option *ngFor="let item of zeugnisse" [value]="'Zeugnis Block ' + item.block">
+                            <option *ngFor="let item of bloecke" [value]="item">
+                            <option *ngFor="let item of zeugnisse" [value]="'Zeugnis Block ' + item">
                         </datalist>
                     </div>
-                    <button class="btn btn-primary" type="submit">View</button>
                 </form>
             </div>
         </nav>
-        <button (click)="showUpload = true">Upload</button>
     </div>
     <!-- Add divs -->
     <div style="margin: 20px 20px 20px 20px ">
-        <ksn-grades *ngIf="!showUpload && subjectGradeList && !subjectGradeList.iszeugnis"
-                    [fachnotenliste]="subjectGradeList"></ksn-grades>
+        <ksn-grades *ngIf="subjectGradeList && !subjectGradeList.iszeugnis"
+                    [fachnotenliste]="subjectGradeList" (showUpload)="showUploadPopup()"></ksn-grades>
         <ksn-upload *ngIf="showUpload" [klasse]="klasse"
-                    [fachnotenListeID]="subjectGradeList.fachnotenlisteID"></ksn-upload>
-        <ksn-gradesoverview *ngIf="!showUpload && subjectGradeList && subjectGradeList.iszeugnis"></ksn-gradesoverview>
+                    [fachnotenListeID]="subjectGradeList.fachnotenlisteID"
+                    (hideUpload)="hideUploadPopup()"></ksn-upload>
+        <ksn-gradesoverview *ngIf="subjectGradeList && subjectGradeList.iszeugnis"
+                            [fachnotenliste]="subjectGradeList"></ksn-gradesoverview>
     </div>
 </div>

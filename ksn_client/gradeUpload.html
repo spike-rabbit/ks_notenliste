@@ -1,25 +1,4 @@
-<script type="text/javascript">
-    function openOverlay() {
-        document.getElementById("myOverlay").style.height = "100%";
-    }
-
-    function closeOverlay() {
-        document.getElementById("myOverlay").style.height = "0%";
-    }
-
-    function resetOverlay() {
-        document.getElementById("Klausur").value = '';
-        document.getElementById("Lehrer").value = '';
-        document.getElementById("weight").value = '';
-        document.getElementById("Status").value = '';
-    }
-
-
-
-</script>
 <link rel="stylesheet" type="text/css" href="overlay.css">
-
-<span style="font-size:30px;cursor:pointer" onclick="openOverlay()">Open Notenlist</span>
 
 <div id="myOverlay" class=" overlay container-fluid">
 
@@ -99,14 +78,11 @@
     </div>
     <div class="row">{{klasse}}</div>
     <div class="btn-group" style="align-content: center; width: 100%">
-        <button class="btn btn-default" type="button" name="speichern" onclick="closeOverlay(); resetOverlay()"
+        <button class="btn btn-default" type="button" name="speichern"
                 (click)="saveGradeList(); ">Speichern
         </button>
-        <button class="btn btn-default" type="button" onclick="closeOverlay();">Abbrechen</button>
+        <button class="btn btn-default" type="button" (click)="onCancel()">Abbrechen</button>
         <button class="btn btn-default" type="button" onclick="resetOverlay();">Löschen</button>
         <button class="btn btn-default" type="button" onclick="getDatum();">Date</button>
     </div>
 </div>
-
-
-shgshd

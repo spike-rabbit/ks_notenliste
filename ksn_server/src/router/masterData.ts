@@ -9,11 +9,11 @@ import * as express from "express";
 class MasterData {
 
     public ksnDB = wrapper.wrap(mysql.createConnection({
-        host: "intranet",
-        user: 'FS141_maxi_koel',
-        password: 'FS141_maxi_koel',
-        database: 'fs141_maximilian_koeller',
-        insecureAuth: true
+        host: "localhost",
+        user: "root",
+        password: "",
+        database: 'test',
+        insecureAuth: true,
     }));
 
     public router: express.Router;
@@ -33,12 +33,12 @@ let masterData = new MasterData();
 
 function listKlassen(req: express.Request, res: express.Response): void {
     let db = masterData.ksnDB;
-    db.ready(()=> {
-        db.query("select * from klasse", (err, response) => {
+    db.ready(() => {
+        db.query("select kuerzel from klasse", (err, response) => {
             if (err) {
                 res.send(err);
             } else {
-                res.send(response);
+                res.send({data: response.map(v => v.kuerzel)});
             }
         });
     });
@@ -46,12 +46,12 @@ function listKlassen(req: express.Request, res: express.Response): void {
 
 function listFaecher(req: express.Request, res: express.Response): void {
     let db = masterData.ksnDB;
-    db.ready(()=> {
+    db.ready(() => {
         db.query("select unterrichtsfach as fach from fachnotenliste where klasse = ? group by fach", (err, response) => {
             if (err) {
                 res.send(err);
             } else {
-                res.send(response);
+                res.send({data: response.map(v => v.fach)});
             }
         }, [req.query.klasse]);
     });
@@ -64,7 +64,7 @@ function listBloecke(req: express.Request, res: express.Response): void {
             if (err) {
                 res.send(err);
             } else {
-                res.send(response);
+                res.send({data : response.map(v => v.block)});
             }
         }, [req.query.fach, req.query.klasse])
     });
@@ -99,11 +99,11 @@ function listSchueler(req: express.Request, res: express.Response): void {
 function listZeugnisse(req: express.Request, res: express.Response): void {
     let db = masterData.ksnDB;
     db.ready(() => {
-        db.query("SELECT * FROM fachnotenliste WHERE iszeugnis = -1 and unterrichtsfach = ? and klasse = ?", (err, response) => {
+        db.query("SELECT block FROM fachnotenliste WHERE iszeugnis = -1 and unterrichtsfach = ? and klasse = ?", (err, response) => {
             if (err) {
                 res.send(err);
             } else {
-                res.send({data: response});
+                res.send({data: response.map(v => v.block)});
             }
         }, [req.query.fach, req.query.klasse]);
     });

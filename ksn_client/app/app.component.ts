@@ -1,7 +1,7 @@
 /**
  * Created by maximilian.koeller on 11.11.2016.
  */
-import {Component, OnInit, Output} from '@angular/core';
+import {Component, OnInit, Output} from "@angular/core";
 import {MasterLoaderService} from "./master-loader.service";
 import {GradeLoaderService} from "./grades-loader.service";
 import {SubjectGradeList} from "./Data/SubjectGradeList";
@@ -12,16 +12,16 @@ import {SubjectGradeList} from "./Data/SubjectGradeList";
 })
 export class AppComponent implements OnInit {
     klasse: string;
-    klassen: string [];
+    klassen: string [] = [];
 
     @Output()
-    faecher: string [];
-     fach: string;
+    faecher: string [] = [];
+    fach: string;
 
     @Output()
-    bloecke: string[];
+    bloecke: number[] = [];
     @Output()
-    zeugnisse: any[];
+    zeugnisse: number[];
     block: string;
 
     @Output()
@@ -37,28 +37,37 @@ export class AppComponent implements OnInit {
     }
 
     updateFaecher() {
-        this.masterLoader.loadFaecher(this.klasse).subscribe(res => this.faecher = res);
+        if (this.klassen.includes(this.klasse))
+            this.masterLoader.loadFaecher(this.klasse).subscribe(res => this.faecher = res);
     }
 
     updateBloecke() {
-        this.masterLoader.loadBloecke(this.klasse, this.fach).subscribe(res => this.bloecke = res);
-        this.masterLoader.loadZeugnisse(this.klasse, this.fach).subscribe(res => this.zeugnisse = res);
+        if (this.faecher.includes(this.fach)) {
+            this.masterLoader.loadBloecke(this.klasse, this.fach).subscribe(res => this.bloecke = res);
+            this.masterLoader.loadZeugnisse(this.klasse, this.fach).subscribe(res => this.zeugnisse = res);
+        }
     }
 
-    updateSubjectGradeList() {
-        if (!this.block.startsWith("Zeugnis")) {
+    updateSubjectGradeList(newValue: any) {
+        if (!this.block.startsWith("Zeugnis Block ") && this.bloecke.includes(parseInt(this.block))) {
             this.gradeLoader.getSubjectGradeList(this.klasse, this.fach, this.block).subscribe(res => {
                 this.subjectGradeList = res;
                 this.subjectGradeList.iszeugnis = false;
-                console.log(res)
             });
         }
-        else {
+        else if (this.bloecke.includes(parseInt(this.block.substr("Zeugnis Block ".length)))) {
             this.gradeLoader.getSubjectGradeList(this.klasse, this.fach, this.block.substr("Zeugnis Block ".length)).subscribe(res => {
                 this.subjectGradeList = res;
                 this.subjectGradeList.iszeugnis = true;
-                console.log(res)
             });
         }
+    }
+
+    showUploadPopup() {
+        this.showUpload = true;
+    }
+
+    hideUploadPopup() {
+        this.showUpload = false;
     }
 }

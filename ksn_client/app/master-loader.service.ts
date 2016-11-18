@@ -18,21 +18,21 @@ export class MasterLoaderService {
     constructor(private http: Http) {
     }
 
-    loadClasses(): Observable<any []> {
-        return this.http.get(this.listKLassenURL).map(res => res.json()).catch(this.handleError);
+    loadClasses(): Observable<string []> {
+        return this.http.get(this.listKLassenURL).map(this.extractData).catch(this.handleError);
     }
 
     loadFaecher(klasse: string) {
         let params = new URLSearchParams();
         params.set("klasse", klasse);
-        return this.http.get(this.listFaecherURL, {search: params}).map(res => res.json()).catch(this.handleError);
+        return this.http.get(this.listFaecherURL, {search: params}).map(this.extractData).catch(this.handleError);
     }
 
     loadBloecke(klasse: string, fach: string) {
         let params = new URLSearchParams();
         params.set("fach", fach);
         params.set("klasse", klasse);
-        return this.http.get(this.listBloeckeURL, {search: params}).map(res => res.json()).catch(this.handleError);
+        return this.http.get(this.listBloeckeURL, {search: params}).map(this.extractData).catch(this.handleError);
     }
 
     loadZeugnisse(klasse: string, fach: string) {

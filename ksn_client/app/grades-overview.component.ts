@@ -5,19 +5,22 @@ import {GradeLoaderService} from "./grades-loader.service";
  * Created by maximilian.koeller on 17.11.2016.
  */
 @Component({
-    selector : "ksn-gradesoverview",
-    templateUrl : "../gradeview.html",
+    selector: "ksn-gradesoverview",
+    templateUrl: "../gradeview.html",
     moduleId: module.id,
     providers: [GradeLoaderService]
 })
-export class GradesOverviewComponent implements OnInit{
+export class GradesOverviewComponent implements OnInit {
 
     @Input()
     fachnotenliste: SubjectGradeList;
 
-    constructor(gradeService: GradeLoaderService){}
+    zeugnisliste: any;
+
+    constructor(private gradeService: GradeLoaderService) {
+    }
 
     ngOnInit(): void {
-
+        this.gradeService.loadZeugnis(this.fachnotenliste).subscribe(res => this.zeugnisliste = res);
     }
 }
