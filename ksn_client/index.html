@@ -64,10 +64,12 @@
 
     function openOverlay() {
         document.getElementById("myOverlay").style.height = "100%";
+        document.getElementById("myOverlay").style.overflowY = "visible";
     }
 
     function closeOverlay() {
         document.getElementById("myOverlay").style.height = "0%";
+        document.getElementById("myOverlay").style.overflowY = "hidden";
     }
 
 </script>
