@@ -1,4 +1,4 @@
-<div>
+<div *ngIf="einzelnotenliste">
     <script type="text/javascript">
 
 
@@ -98,7 +98,7 @@
         <th align="left" style="padding-top: 7px; padding-bottom: 5px">
             Vorname
         </th>
-        <th *ngFor="let list of einzelnotenliste" align="left" bgcolor=e2e2e2>
+        <th *ngFor="let list of einzelnotenliste.header" align="left" bgcolor=e2e2e2>
             {{list.typ}}
         </th>
         <th align="left" bgcolor=e2e2e2>
@@ -111,77 +111,10 @@
             <button class="btn btn-primary" type="button"><b>+</b></button>
         </td>
         </thead>
-        <tr>
-            <td style="padding-top: 1px; padding-bottom: 1px">Mustermann</td>
-            <td>Max</td>
-            <td>3,0</td>
-            <td>2,7</td>
-            <td>2,85</td>
-            <td><input type="text" size="5" maxlength="4"/></td>
-        </tr>
-        <tr>
-            <td>Mustermann</td>
-            <td>Tim</td>
-            <td>3,3</td>
-            <td>2,7</td>
-            <td>3</td>
-            <td><input type="text" size="5" maxlength="4"/></td>
-        </tr>
-        <tr>
-            <td>Mustermann</td>
-            <td>Matthias-Tobias</td>
-            <td>3,3</td>
-            <td>2,7</td>
-            <td>3</td>
-            <td><input type="text" size="5" maxlength="4"/></td>
-        </tr>
-        <tr>
-            <td>Mustermann</td>
-            <td>Matthias-Tobias</td>
-            <td>3,3</td>
-            <td>2,7</td>
-            <td>3</td>
-            <td><input type="text" size="5" maxlength="4"/></td>
-        </tr>
-        <tr>
-            <td>Mustermann</td>
-            <td>Matthias-Tobias</td>
-            <td>3,3</td>
-            <td>2,7</td>
-            <td>3</td>
-            <td><input type="text" size="5" maxlength="4"/></td>
-        </tr>
-        <tr>
-            <td>Mustermann</td>
-            <td>Matthias-Tobias</td>
-            <td>3,3</td>
-            <td>2,7</td>
-            <td>3</td>
-            <td><input type="text" size="5" maxlength="4"/></td>
-        </tr>
-        <tr>
-            <td>Mustermann</td>
-            <td>Matthias-Tobias</td>
-            <td>3,3</td>
-            <td>2,7</td>
-            <td>3</td>
-            <td><input type="text" size="5" maxlength="4"/></td>
-        </tr>
-        <tr>
-            <td>Mustermann</td>
-            <td>Matthias-Tobias</td>
-            <td>3,3</td>
-            <td>2,7</td>
-            <td>3</td>
-            <td><input type="text" size="5" maxlength="4"/></td>
-        </tr>
-        <tr>
-            <td>Mustermann</td>
-            <td>Matthias-Tobias</td>
-            <td>3,3</td>
-            <td>2,7</td>
-            <td>3</td>
-            <td><input type="text" size="5" maxlength="4"/></td>
+        <tr *ngFor="let item of einzelnotenliste.einzelnoten">
+            <td style="padding-top: 1px; padding-bottom: 1px">{{item.schueler.name}}</td>
+            <td>{{item.schueler.vorname}}</td>
+            <td *ngFor="let note of item.noten">{{note}}</td>
         </tr>
 
         <tr>

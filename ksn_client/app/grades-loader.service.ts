@@ -12,7 +12,7 @@ export class GradeLoaderService {
     private convertURL = "/noten/convertGrades";
     private saveGradesURL = "/noten/saveGrades";
     private getSubjectGradeListURL = "/noten/getSubjectGradeList";
-    private getSingleGradeListsURL = "/noten/getSingleGradeLists";
+    private getSingleGradeListsURL = "/noten/loadSingleGrades";
 
     constructor(private http: Http) {
     }

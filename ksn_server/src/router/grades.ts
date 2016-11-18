@@ -109,33 +109,54 @@ function getSubjectGradeList(req: express.Request, res: express.Response): void 
 function loadSingleGrades(req: express.Request, res: express.Response): void {
     let db = grade.ksnDB;
     db.ready(() => {
-        db.query("SELECT s.SchuelerID, s.Vorname, s.Name FROM klasse k, schueler s WHERE k.Kuerzel = ? and s.Klasse = k.Kuerzel", (error,response) => {
-            loadPupilGrades(res,req.query.fachnotenlisteID,response,[]);
-        },[req.query.klasse]);
+        db.query("SELECT s.schuelerID, s.vorname, s.name FROM klasse k, schueler s WHERE k.Kuerzel = ? and s.Klasse = k.Kuerzel", (error, response) => {
+            loadPupilGrades(res, req.query.fachnotenlisteID, response, []);
+        }, [req.query.klasse]);
     });
 }
 
-function loadPupilGrades(res: express.Response,fachnotenlisteID : number, toDo: any[], results:any[]) {
+function loadPupilGrades(res: express.Response, fachnotenlisteID: number, toDo: any[], results: any[]) {
     let current = toDo.pop();
     let db = grade.ksnDB;
     db.ready(() => {
-        db.query("SELECT el.einzelnotenlisteID, en.wert FROM fachnotenliste fl, einzelnotenliste el, einzelnote en " +
-            "WHERE el.fachnotenlisteID = fl.fachnotenlisteID and " +
-            "en.einzelnotenlisteID = el.einzelnotenlisteID and" +
-            " en.schuelerID=? and fl.fachnotenlisteID = ?", (error,response) => {
-            let result = {schueler: current};
-            for(let row of response) {
-                result[row.einzelnotenlisteID] = row.wert;
-            }
+        db.query("SELECT * FROM einzelnotenliste WHERE fachnotenlisteID = ?", (error, einzelnotenlisten) => {
+            db.query("SELECT el.einzelnotenlisteID, en.wert FROM fachnotenliste fl, einzelnotenliste el, einzelnote en " +
+                "WHERE el.fachnotenlisteID = fl.fachnotenlisteID and " +
+                "en.einzelnotenlisteID = el.einzelnotenlisteID and" +
+                " en.schuelerID=? and fl.fachnotenlisteID = ?", (error, response) => {
 
-            results.push(result);
-            if(toDo.length == 0) {
-                res.send({data:results});
-            } else {
-                loadPupilGrades(res,fachnotenlisteID,toDo,results);
-            }
+                let noten = [];
+                let pushed = false;
+                for (let einzelnotenliste of einzelnotenlisten) {
+                    for (let row of response) {
+                        if (row.einzelnotenlisteID == einzelnotenliste.einzelnotenlisteID) {
+                            noten.push(row.wert);
+                            pushed = true;
+                        }
+                    }
+                    if (!pushed) {
+                        noten.push(-1);
+                    }
+                    pushed = false;
+                }
+                let result = {
+                    schueler: current,
+                    noten: noten
+                };
+                results.push(result);
+                if (toDo.length == 0) {
+                    res.send({
+                        data: {
+                            einzelnoten: results,
+                            header: einzelnotenlisten
+                        }
+                    });
+                } else {
+                    loadPupilGrades(res, fachnotenlisteID, toDo, results);
+                }
 
-        },[current.schuelerID,fachnotenlisteID]);
+            }, [current.schuelerID, fachnotenlisteID]);
+        }, [fachnotenlisteID]);
     });
 }
 
