@@ -8,10 +8,10 @@
     }
 
     function resetOverlay() {
-        document.getElementById("Klausur").value='';
-        document.getElementById("Lehrer").value='';
-        document.getElementById("weight").value='';
-        document.getElementById("Status").value='';
+        document.getElementById("Klausur").value = '';
+        document.getElementById("Lehrer").value = '';
+        document.getElementById("weight").value = '';
+        document.getElementById("Status").value = '';
     }
 </script>
 <link rel="stylesheet" type="text/css" href="overlay.css">
@@ -20,15 +20,15 @@
 
 <div id="myOverlay" class=" overlay container-fluid">
 
-    <div>
-        <div> <h3 class="h3">Notenlisten Einstellungen</h3></div>
-        <form #f="ngForm" class="form-group ">
-
+    <div class="panel panel-default">
+        <div class="panel-heading"><h3 class="h3">Notenlisten Upload/Edit</h3></div>
+        <div class="panel-body">
+            <form #f="ngForm" class="form-group ">
                 <fieldset>
                     <div class="form-check">
                         <div class="radio-inline">
                             <input id="SoMi" type="radio" name="gradeType" value="SoMi" [(ngModel)]="gradeType"
-                                   />
+                            />
                             <label for="SoMi">SoMi-Note</label>
                         </div>
                         <div class="radio-inline">
@@ -37,8 +37,6 @@
                         </div>
                     </div>
                 </fieldset>
-
-
                 <div class="form-group">
                     <label>Lehrer</label>
                     <input id="Lehrer" style="width: 100px" class="form-control" type="text"/>
@@ -48,14 +46,12 @@
                     <br/>
                     <label type="date">11.11.16</label>
                 </div>
-
-        </form>
-
+            </form>
+        </div>
     </div>
-    <br/><br/>
 
     <div class="row">
-        <div class="panel panel-default col-md-6" style="  min-width: 200px">
+        <div class="panel panel-default col-md-6" style="  min-width: 300px">
             <div class="panel-heading">Eingabe</div>
             <div class="panel-body">
                 <textarea id="rawGrades" #rawGrades class="form-control" rows="8"></textarea>
@@ -93,7 +89,9 @@
     </div>
     <div class="row">{{klasse}}</div>
     <div class="btn-group" style="align-content: center; width: 100%">
-        <button class="btn btn-default" type="button" name="speichern" (click)="saveGradeList();closeOverlay();">Speichern</button>
+        <button class="btn btn-default" type="button" name="speichern" onclick="closeOverlay()"
+                (click)="saveGradeList(); ">Speichern
+        </button>
         <button class="btn btn-default" type="button" onclick="closeOverlay();">Abbrechen</button>
         <button class="btn btn-default" type="button" onclick="resetOverlay();closeOverlay();">Löschen</button>
     </div>
