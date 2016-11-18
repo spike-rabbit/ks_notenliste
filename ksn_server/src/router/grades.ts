@@ -195,7 +195,7 @@ function saveGrades(req: express.Request, res: express.Response): void {
     let toSave = {
         fachnotenlisteID: req.body.data.fachNotenListe,
         gewichtung: req.body.data.gewichtung,
-        typ: req.body.data.type,
+        typ: req.body.data.typ,
         lehrer: req.body.data.lehrer
     };
     db.ready(()=> {
@@ -215,8 +215,11 @@ function saveSingelGrade(res: express.Response, remaining: any []) {
         let note = remaining.pop();
         console.log(note);
         db.query("insert into einzelnote value(?,?,?)", (err, result) => {
-            console.log(result);
-            res.send({data: "done"});
+            if (remaining.length == 0) {
+                res.send({data: "done"});
+            } else {
+                saveSingelGrade(res, remaining);
+            }
         }, [note.schuelerID, note.einzelnotenlisteID, note.wert]);
     });
 }
