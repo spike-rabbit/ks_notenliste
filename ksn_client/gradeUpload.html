@@ -6,6 +6,13 @@
     function closeOverlay() {
         document.getElementById("myOverlay").style.height = "0%";
     }
+
+    function resetOverlay() {
+        document.getElementById("Klausur").value='';
+        document.getElementById("Lehrer").value='';
+        document.getElementById("weight").value='';
+        document.getElementById("Status").value='';
+    }
 </script>
 <link rel="stylesheet" type="text/css" href="overlay.css">
 
@@ -34,7 +41,7 @@
 
                 <div class="form-group">
                     <label>Lehrer</label>
-                    <input style="width: 100px" class="form-control" type="text"/>
+                    <input id="Lehrer" style="width: 100px" class="form-control" type="text"/>
                     <label for="weight">Gewichtung</label>
                     <input style="width: 100px" min="1" class="form-control" id="weight" name="weight" type="number"
                            [(ngModel)]="gewichtung"/>
@@ -59,7 +66,7 @@
         <div class="table-responsive panel panel-default col-md-6">
             <div class="panel-heading">Vorschau</div>
             <div class="panel-body">
-                <table class="table">
+                <table class="table" id="Status">
                     <tr>
                         <th>
                             Vorname
@@ -86,9 +93,9 @@
     </div>
     <div class="row">{{klasse}}</div>
     <div class="btn-group" style="align-content: center; width: 100%">
-        <button class="btn btn-default" type="button" name="speichern" (click)="saveGradeList()">Speichern</button>
-        <button class="btn btn-default" type="button" onclick="closeOverlay()">Abbrechen</button>
-        <button class="btn btn-default" type="button">Löschen</button>
+        <button class="btn btn-default" type="button" name="speichern" (click)="saveGradeList();closeOverlay();">Speichern</button>
+        <button class="btn btn-default" type="button" onclick="closeOverlay();">Abbrechen</button>
+        <button class="btn btn-default" type="button" onclick="resetOverlay();closeOverlay();">Löschen</button>
     </div>
 </div>
 
