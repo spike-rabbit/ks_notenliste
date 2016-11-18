@@ -16,14 +16,14 @@ export class GradeComponent implements OnInit {
     @Input()
     fachnotenliste: SubjectGradeList;
     @Output()
-    einzelnotenliste: SingleGrades[];
+    einzelnotenliste: any[];
 
     constructor(private gradeService : GradeLoaderService) {}
 
     ngOnInit(): void {
         this.gradeService.getSingleGradeLists(this.fachnotenliste).subscribe(res => {
+            console.log(res);
             this.einzelnotenliste = res;
-            console.log(this.einzelnotenliste);
         });
     }
 }
