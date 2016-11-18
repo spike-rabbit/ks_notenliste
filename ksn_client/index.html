@@ -64,12 +64,29 @@
 
     function openOverlay() {
         document.getElementById("myOverlay").style.height = "100%";
-        document.getElementById("myOverlay").style.overflowY = "visible";
+        document.getElementById("myOverlay").style.overflowY = "scroll";
     }
 
     function closeOverlay() {
         document.getElementById("myOverlay").style.height = "0%";
         document.getElementById("myOverlay").style.overflowY = "hidden";
+    }
+    function getDatum(){
+        document.getElementById('Datum').valueAsDate = new Date();
+    }
+
+    function resetOverlay() {
+        document.getElementById("Klausur").value = '';
+        document.getElementById("Lehrer").value = '';
+        document.getElementById("weight").value = '';
+        document.getElementById("Datum").value = '';
+        document.getElementById("rawGrades").value = '';
+
+        tbl=document.getElementById('Status');
+        while(tbl.rows.length>1)
+        {
+            tbl.deleteRow(tbl.rows.length-1);
+        }
     }
 
 </script>

@@ -6,6 +6,16 @@
     function closeOverlay() {
         document.getElementById("myOverlay").style.height = "0%";
     }
+
+    function resetOverlay() {
+        document.getElementById("Klausur").value = '';
+        document.getElementById("Lehrer").value = '';
+        document.getElementById("weight").value = '';
+        document.getElementById("Status").value = '';
+    }
+
+
+
 </script>
 <link rel="stylesheet" type="text/css" href="overlay.css">
 
@@ -13,15 +23,15 @@
 
 <div id="myOverlay" class=" overlay container-fluid">
 
-    <div>
-        <div> <h3 class="h3">Notenlisten Einstellungen</h3></div>
-        <form #f="ngForm" class="form-group ">
-
+    <div class="panel panel-default">
+        <div class="panel-heading"><h3 class="h3">Notenlisten Upload/Edit</h3></div>
+        <div class="panel-body">
+            <form #f="ngForm" class="form-group ">
                 <fieldset>
                     <div class="form-check">
                         <div class="radio-inline">
                             <input id="SoMi" type="radio" name="gradeType" value="SoMi" [(ngModel)]="gradeType"
-                                   />
+                            />
                             <label for="SoMi">SoMi-Note</label>
                         </div>
                         <div class="radio-inline">
@@ -30,25 +40,28 @@
                         </div>
                     </div>
                 </fieldset>
+                <div style="padding-top: 10px;" class="form-group row">
+                    <div class="col-md-4">
+                        <label>Lehrer</label>
+                        <input id="Lehrer" style="width: 100px" class="form-control" type="text"/>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="weight">Gewichtung</label>
 
-
-                <div class="form-group">
-                    <label>Lehrer</label>
-                    <input style="width: 100px" class="form-control" type="text"/>
-                    <label for="weight">Gewichtung</label>
-                    <input style="width: 100px" min="1" class="form-control" id="weight" name="weight" type="number"
-                           [(ngModel)]="gewichtung"/>
-                    <br/>
-                    <label type="date">11.11.16</label>
+                        <input style="width: 100px" min="1" class="form-control" id="weight" name="weight" type="number"
+                               [(ngModel)]="gewichtung"/>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="Datum">Datum</label>
+                        <input id="Datum" type="date" class="form-control" name="Datum" onload="getDatum();">
+                    </div>
                 </div>
-
-        </form>
-
+            </form>
+        </div>
     </div>
-    <br/><br/>
 
     <div class="row">
-        <div class="panel panel-default col-md-6" style="  min-width: 200px">
+        <div class="panel panel-default col-md-6" style="  min-width: 300px">
             <div class="panel-heading">Eingabe</div>
             <div class="panel-body">
                 <textarea id="rawGrades" #rawGrades class="form-control" rows="8"></textarea>
@@ -59,7 +72,7 @@
         <div class="table-responsive panel panel-default col-md-6">
             <div class="panel-heading">Vorschau</div>
             <div class="panel-body">
-                <table class="table">
+                <table class="table" id="Status">
                     <tr>
                         <th>
                             Vorname
@@ -74,7 +87,7 @@
                             Status
                         </th>
                     </tr>
-                    <tr *ngFor="let item of accepted">
+                    <tr id="parsedGrades" *ngFor="let item of accepted">
                         <td>{{item.vorname}}</td>
                         <td>{{ item.nachname}}</td>
                         <td>{{item.note}}</td>
@@ -86,9 +99,12 @@
     </div>
     <div class="row">{{klasse}}</div>
     <div class="btn-group" style="align-content: center; width: 100%">
-        <button class="btn btn-default" type="button" name="speichern" (click)="saveGradeList()">Speichern</button>
-        <button class="btn btn-default" type="button" onclick="closeOverlay()">Abbrechen</button>
-        <button class="btn btn-default" type="button">Löschen</button>
+        <button class="btn btn-default" type="button" name="speichern" onclick="closeOverlay(); resetOverlay()"
+                (click)="saveGradeList(); ">Speichern
+        </button>
+        <button class="btn btn-default" type="button" onclick="closeOverlay();">Abbrechen</button>
+        <button class="btn btn-default" type="button" onclick="resetOverlay();">Löschen</button>
+        <button class="btn btn-default" type="button" onclick="getDatum();">Date</button>
     </div>
 </div>
 
