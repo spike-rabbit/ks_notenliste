@@ -33,6 +33,7 @@ export class UploadComponent implements OnInit{
     fachnotenListeID: number;
 
     public convertGradeList(list: string) {
+        list.replace(',','.');
         this.uploadService.convertGrades(list, this.klasse).subscribe(res => {
             this.accepted = res.accepted;
             this.notFound = res.notFound

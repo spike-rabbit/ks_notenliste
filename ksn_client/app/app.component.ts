@@ -4,7 +4,6 @@
 import {Component, OnInit, Output} from '@angular/core';
 import {MasterLoaderService} from "./master-loader.service";
 import {GradeLoaderService} from "./grades-loader.service";
-import {SingleGrades} from "./Data/SingleGrades";
 import {SubjectGradeList} from "./Data/SubjectGradeList";
 @Component({
     selector: 'ksn-app',
@@ -17,10 +16,12 @@ export class AppComponent implements OnInit {
 
     @Output()
     faecher: string [];
-    fach: string;
+     fach: string;
 
     @Output()
     bloecke: string[];
+    @Output()
+    zeugnisse: any[];
     block: string;
 
     @Output()
@@ -41,12 +42,23 @@ export class AppComponent implements OnInit {
 
     updateBloecke() {
         this.masterLoader.loadBloecke(this.klasse, this.fach).subscribe(res => this.bloecke = res);
+        this.masterLoader.loadZeugnisse(this.klasse, this.fach).subscribe(res => this.zeugnisse = res);
     }
 
     updateSubjectGradeList() {
-        this.gradeLoader.getSubjectGradeList(this.klasse, this.fach, this.block).subscribe(res => {
-            this.subjectGradeList = res;
-            console.log(res)
-        });
+        if (!this.block.startsWith("Zeugnis")) {
+            this.gradeLoader.getSubjectGradeList(this.klasse, this.fach, this.block).subscribe(res => {
+                this.subjectGradeList = res;
+                this.subjectGradeList.iszeugnis = false;
+                console.log(res)
+            });
+        }
+        else {
+            this.gradeLoader.getSubjectGradeList(this.klasse, this.fach, this.block.substr("Zeugnis Block ".length)).subscribe(res => {
+                this.subjectGradeList = res;
+                this.subjectGradeList.iszeugnis = true;
+                console.log(res)
+            });
+        }
     }
 }

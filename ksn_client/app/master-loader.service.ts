@@ -12,6 +12,7 @@ export class MasterLoaderService {
     private listKLassenURL = "/masterData/listKlassen";
     private listFaecherURL = "/masterData/listFaecher";
     private listBloeckeURL = "/masterData/listBloecke";
+    private listZeugnisseURL = "/masterData/listZeugnisse";
 
 
     constructor(private http: Http) {
@@ -32,6 +33,13 @@ export class MasterLoaderService {
         params.set("fach", fach);
         params.set("klasse", klasse);
         return this.http.get(this.listBloeckeURL, {search: params}).map(res => res.json()).catch(this.handleError);
+    }
+
+    loadZeugnisse(klasse: string, fach: string) {
+        let params = new URLSearchParams();
+        params.set("fach", fach);
+        params.set("klasse", klasse);
+        return this.http.get(this.listZeugnisseURL, {search: params}).map(this.extractData).catch(this.handleError);
     }
 
 

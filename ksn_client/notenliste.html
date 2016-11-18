@@ -66,30 +66,15 @@
     <table style="text-indent:20px;">
         <thead>
         <tr>
-            <th colspan="2" align="left">
-                Gewichtung
+            <th colspan="2">Gewichtung</th>
+            <th *ngFor="let list of einzelnotenliste.header" align="left">
+                {{list.gewichtung}}
             </th>
-            <td>
-                <input type="number" value="40" min="1" style="width: 7em" id="gewichtung" onchange="updateInternG1()"/>
-            </td>
-            <td>
-                <input type="number" value="60" min="1" style="width: 7em" size="3" id="gewichtung2"
-                       onchange="updateInternG2()"/>
-            </td>
+            <th></th>
+            <th></th>
+            <th></th>
         </tr>
 
-        <tr>
-            <th colspan="2" align="left">
-                Interne Gewichtung
-            </th>
-            <td>
-                <div id="intern1"></div>
-            </td>
-            <td>
-                <div id="intern2"></div>
-            </td>
-
-        </tr>
         </thead>
         <thead bgcolor=e2e2e2>
         <th align="left" style="padding-top: 7px; padding-bottom: 5px">

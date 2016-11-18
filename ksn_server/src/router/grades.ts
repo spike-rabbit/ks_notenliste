@@ -54,8 +54,8 @@ function convertGrades(req: express.Request, res: express.Response): void {
         if (row != "") {
             let rawColumn = row.split('\t');
             parsedList.push({
-                vorname: rawColumn[1],
                 nachname: rawColumn[0],
+                vorname: rawColumn[1],
                 id: 0,
                 note: parseInt(rawColumn[2])
             });
@@ -92,7 +92,7 @@ function getSubjectGradeList(req: express.Request, res: express.Response): void 
     let db = grade.ksnDB;
     db.ready(() => {
 
-        db.query("select * from fachnotenliste where unterrichtsfach = ? and klasse = ? and block = ?", ((error, result) => {
+        db.query("select fachnotenlisteID, unterrichtsfach, klasse, block, stundenzahl from fachnotenliste where unterrichtsfach = ? and klasse = ? and block = ?", ((error, result) => {
             res.send({data: result[0]});
         }), [req.query.fach, req.query.klasse, req.query.block]);
 
@@ -103,7 +103,7 @@ function getSubjectGradeList(req: express.Request, res: express.Response): void 
         // }).then(result => {
         //     res.send({data: result});
         // });
-    })
+    });
 }
 
 function loadSingleGrades(req: express.Request, res: express.Response): void {
@@ -160,32 +160,79 @@ function loadPupilGrades(res: express.Response, fachnotenlisteID: number, toDo: 
     });
 }
 
-function getSingleGradeLists(req: express.Request, res: express.Response): void {
+function loadZeugnis(req: express.Request, res: express.Response): void {
     let db = grade.ksnDB;
     db.ready(() => {
-        db.query("select * from einzelnotenliste where fachnotenlisteID = ?", (error, response) => {
-            if (error) {
-                console.log(error);
-                res.send(error);
-            } else {
-                getGrades(res, response, response.slice());
-            }
-        }, [req.query.fachnotenlisteID]);
+        db.query("SELECT s.schuelerID, s.vorname, s.name FROM klasse k, schueler s WHERE k.Kuerzel = ? and s.Klasse = k.Kuerzel", (error, response) => {
+            loadZeugnisGrades(res, req.query.fachnotenlisteID, req.query.fach, response);
+        }, [req.query.klasse]);
     });
 }
 
-function getGrades(res: express.Response, complete: any[], toDo: any[]) {
+function loadZeugnisGrades(res: express.Response, block: number, fach: string, toDo: any[]) {
     let current = toDo.pop();
     let db = grade.ksnDB;
     db.ready(() => {
-        db.query("select * from einzelnote where einzelnotenlisteID = ?", (error, response) => {
-            current.noten = response;
-            if (toDo.length == 0) {
-                res.send({data: complete});
-            } else {
-                getGrades(res, complete, toDo);
+
+        db.query("SELECT * FROM fachnotenliste fl, einzelnotenliste el WHERE fl.unterrichtsfach IN " +
+            "(SELECT uf.Kuerzel FROM unterrichtsfach uf WHERE uf.Kuerzel = ? OR uf.istUnterfachvon = ?) " +
+            "and fl.fachnotenlisteID = el.fachnotenlisteID " +
+            "order by fl.unterrichtsfach el.einzelnotenlisteID", (error, einzelnotenlisten) => {
+            let currentFach = null;
+            let faecher = [];
+            let result;
+            for (let liste of einzelnotenlisten) {
+                if (currentFach != liste.fachnotenlisteID) {
+                    faecher.push({kurzel: currentFach.kuerzel, stundenzahl: liste.stundenzahl, einzelnotenlisten: []});
+                    currentFach = liste;
+                }
+                currentFach.einzelnotenlisten.push({
+                    einzelnotenlisteID: liste.einzelnotenlisteID,
+                    lehrer: liste.lehrer,
+                    gewichtung: liste.gewichtung
+                });
+
+
             }
-        }, [current.einzelnotenlisteID]);
+
+            result = {header : faecher};
+
+            db.query("",null)
+
+
+        }, [fach, fach]);
+    });
+}
+
+function loadFachGrades(res: express.Response, faecher: any[], schuelers: any[], result: any) {
+    let fach = faecher.pop();
+    let db = grade.ksnDB;
+    db.query("SELECT * FROM einzelnotenliste el and fachnotenliste fl where el.fachnotenlisteID = fl.fachnotenlisteID " +
+        "and fl.unterrichtsfach = ? and fl.block = ? and el.einzelnotenlisteID = en.einzelnotenlisteID " +
+        "order by fl.unterrichtsfach, el.einzelnotenlistID", (error, einzelnoten) => {
+        result[fach].einzelnoten = [];
+        for (let schueler of schuelers) {
+            let res = {
+                schueler: schueler,
+                noten: []
+            };
+            for (let einzelnote of einzelnoten) {
+                if (schueler.id = einzelnote.schuelerID) {
+                    res.noten.push(einzelnote.wert);
+                }
+            }
+            result[fach].einzelnoten.push(res);
+        }
+
+        if (faecher.length == 0) {
+        } else {
+            loadFachGrades(res, faecher, schuelers, result);
+        }
+
+
+        db.query("SELECT * FROM einzelnote en " +
+            "where en.einzelnotenlisteID = ? and schuelerID = ?", (error, schuelernoten) => {
+        });
     });
 }
 
@@ -213,7 +260,6 @@ function saveSingelGrade(res: express.Response, remaining: any []) {
     let db = grade.ksnDB;
     db.ready(() => {
         let note = remaining.pop();
-        console.log(note);
         db.query("insert into einzelnote value(?,?,?)", (err, result) => {
             if (remaining.length == 0) {
                 res.send({data: "done"});

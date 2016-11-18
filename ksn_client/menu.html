@@ -24,6 +24,7 @@
                                (change)="updateSubjectGradeList()" [(ngModel)]="block">
                         <datalist id="Block">
                             <option *ngFor="let item of bloecke" [value]="item.block">
+                            <option *ngFor="let item of zeugnisse" [value]="'Zeugnis Block ' + item.block">
                         </datalist>
                     </div>
                     <button class="btn btn-primary" type="submit">View</button>
@@ -34,15 +35,10 @@
     </div>
     <!-- Add divs -->
     <div style="margin: 20px 20px 20px 20px ">
-        <ksn-grades *ngIf="!showUpload && subjectGradeList" [fachnotenliste]="subjectGradeList"></ksn-grades>
+        <ksn-grades *ngIf="!showUpload && subjectGradeList && !subjectGradeList.iszeugnis"
+                    [fachnotenliste]="subjectGradeList"></ksn-grades>
         <ksn-upload *ngIf="showUpload" [klasse]="klasse"
                     [fachnotenListeID]="subjectGradeList.fachnotenlisteID"></ksn-upload>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <ksn-gradesoverview></ksn-gradesoverview>
+        <ksn-gradesoverview *ngIf="!showUpload && subjectGradeList && subjectGradeList.iszeugnis"></ksn-gradesoverview>
     </div>
 </div>

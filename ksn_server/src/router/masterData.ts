@@ -25,6 +25,7 @@ class MasterData {
         this.router.get("/listLehrer", listLehrer);
         this.router.get("/listSchueler", listSchueler);
         this.router.get("/listBloecke", listBloecke);
+        this.router.get("/listZeugnisse", listZeugnisse);
     }
 }
 
@@ -59,12 +60,12 @@ function listFaecher(req: express.Request, res: express.Response): void {
 function listBloecke(req: express.Request, res: express.Response): void {
     let db = masterData.ksnDB;
     db.ready(() => {
-       db.query("select block from fachnotenliste where unterrichtsfach = ? and klasse = ?", (err, response) => {
-           if (err) {
-               res.send(err);
-           } else {
-               res.send(response);
-           }
+        db.query("select block from fachnotenliste where unterrichtsfach = ? and klasse = ?", (err, response) => {
+            if (err) {
+                res.send(err);
+            } else {
+                res.send(response);
+            }
         }, [req.query.fach, req.query.klasse])
     });
 }
@@ -92,6 +93,19 @@ function listSchueler(req: express.Request, res: express.Response): void {
                 res.send(response);
             }
         }, [req.query.klasse]);
+    });
+}
+
+function listZeugnisse(req: express.Request, res: express.Response): void {
+    let db = masterData.ksnDB;
+    db.ready(() => {
+        db.query("SELECT * FROM fachnotenliste WHERE iszeugnis = -1 and unterrichtsfach = ? and klasse = ?", (err, response) => {
+            if (err) {
+                res.send(err);
+            } else {
+                res.send({data: response});
+            }
+        }, [req.query.fach, req.query.klasse]);
     });
 }
 
