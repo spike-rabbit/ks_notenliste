@@ -13,6 +13,20 @@
         document.getElementById("weight").value = '';
         document.getElementById("Status").value = '';
     }
+
+    function getDefaultDate(){
+        var now = new Date();
+        var day = ("0" + now.getDate()).slice(-2);
+        var month = ("0" + (now.getMonth() + 1)).slice(-2);
+        var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
+        return today;
+    }
+
+
+    function getDatum(){
+        document.getElementById("Datum").value = getDefaultDate();
+        //$("#Datum").val( getDefaultDate());
+    }
 </script>
 <link rel="stylesheet" type="text/css" href="overlay.css">
 
@@ -37,14 +51,21 @@
                         </div>
                     </div>
                 </fieldset>
-                <div class="form-group">
-                    <label>Lehrer</label>
-                    <input id="Lehrer" style="width: 100px" class="form-control" type="text"/>
-                    <label for="weight">Gewichtung</label>
-                    <input style="width: 100px" min="1" class="form-control" id="weight" name="weight" type="number"
-                           [(ngModel)]="gewichtung"/>
-                    <br/>
-                    <label type="date">11.11.16</label>
+                <div style="padding-top: 10px;" class="form-group row">
+                    <div class="col-md-4">
+                        <label>Lehrer</label>
+                        <input id="Lehrer" style="width: 100px" class="form-control" type="text"/>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="weight">Gewichtung</label>
+
+                        <input style="width: 100px" min="1" class="form-control" id="weight" name="weight" type="number"
+                               [(ngModel)]="gewichtung"/>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="Datum">Datum</label>
+                        <input id="Datum" type="date" class="form-control" name="Datum" onclick="getDatum();">
+                    </div>
                 </div>
             </form>
         </div>
@@ -93,7 +114,7 @@
                 (click)="saveGradeList(); ">Speichern
         </button>
         <button class="btn btn-default" type="button" onclick="closeOverlay();">Abbrechen</button>
-        <button class="btn btn-default" type="button" onclick="resetOverlay();closeOverlay();">Löschen</button>
+        <button class="btn btn-default" type="button" onclick="resetOverlay();">Löschen</button>
     </div>
 </div>
 
