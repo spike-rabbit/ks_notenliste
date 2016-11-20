@@ -27,6 +27,19 @@ export class GradeComponent {
         this.showUpload.emit();
     }
 
+    onDelete(einzelnotenliste) {
+        this.gradeService.deleteEinzelnotenliste(einzelnotenliste.einzelnotenlisteID).subscribe((res) => {
+            if (res) {
+                console.log(this.einzelnotenliste);
+                let index = this.einzelnotenliste.header.lastIndexOf(einzelnotenliste);
+                this.einzelnotenliste.header.splice(index, 1);
+                for (let schueler of this.einzelnotenliste.einzelnoten) {
+                    schueler.noten.splice(index, 1);
+                }
+            }
+        });
+    }
+
     get fachnotenliste(): SubjectGradeList {
         return this._fachnotenliste;
     }

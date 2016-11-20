@@ -28,6 +28,7 @@ class Grade {
         this.router.post("/saveGrades", saveGrades);
         this.router.get("/loadSingleGrades", loadSingleGrades);
         this.router.get("/loadZeugnis", loadZeugnis);
+        this.router.get("/deleteEinzelnotenliste", deleteEinzelnotenliste);
     }
 }
 
@@ -299,6 +300,17 @@ function saveSingelGrade(res: express.Response, remaining: any []) {
                 saveSingelGrade(res, remaining);
             }
         }, [note.id, note.einzelnotenlisteID, note.note]);
+    });
+}
+
+function deleteEinzelnotenliste(req: express.Request, res: express.Response) {
+    let db = grade.ksnDB;
+    db.ready(() => {
+        db.query("delete from einzelnote where einzelnotenlisteID = ?", (error, response) => {
+            db.query("delete from einzelnotenliste where einzelnotenlisteID = ?", (error, response) => {
+                res.send({data: !error && response.affectedRows == 1});
+            }, [req.query.einzelnotenlisteID]);
+        }, [req.query.einzelnotenlisteID]);
     });
 }
 

@@ -14,6 +14,7 @@ export class GradeLoaderService {
     private getSubjectGradeListURL = "/noten/getSubjectGradeList";
     private getSingleGradeListsURL = "/noten/loadSingleGrades";
     private loadZeugnisURL = "/noten/loadZeugnis";
+    private deleteEinzelnotenlisteURL = "/noten/deleteEinzelnotenliste"
 
     constructor(private http: Http) {
     }
@@ -101,6 +102,13 @@ export class GradeLoaderService {
                 console.log(liste);
                 return liste;
             }).catch(this.handleError));
+    }
+
+    deleteEinzelnotenliste(einzelnotenlisteID: number) : Observable<boolean> {
+        let params = new URLSearchParams();
+        params.set("einzelnotenlisteID", einzelnotenlisteID.toString());
+        return this.http.get(this.deleteEinzelnotenlisteURL, {search: params})
+            .map(this.extractData).catch(this.handleError);
     }
 
     private extractData(res: Response) {
