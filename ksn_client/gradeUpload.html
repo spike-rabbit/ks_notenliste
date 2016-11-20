@@ -1,4 +1,4 @@
-<form class="form-group " (ngSubmit)="saveGradeList()">
+<form class="form-group " (ngSubmit)="saveGradeList()" #uploadForm="ngForm">
     <div id="myOverlay" class=" overlay container-fluid">
 
         <div class="panel panel-default">
@@ -84,7 +84,7 @@
         </div>
         <div class="row">{{klasse}}</div>
         <div class="form-group" style="align-content: center; width: 100%">
-            <button class="btn btn-default" type="submit">Speichern</button>
+            <button class="btn btn-default" type="submit" [disabled]="!uploadForm.form.valid || !notenlisteOkStatus">Speichern</button>
             <button class="btn btn-default" type="button" (click)="onCancel()">Abbrechen</button>
         </div>
     </div>

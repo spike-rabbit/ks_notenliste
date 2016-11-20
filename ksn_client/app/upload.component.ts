@@ -36,6 +36,8 @@ export class UploadComponent implements AfterViewInit {
     accepted: EinzelNote[] = [];
     @Output()
     notFound: EinzelNote[] = [];
+    @Output()
+    notenlisteOkStatus : false;
     @Input()
     fachnotenListeID: number;
     @Output()
@@ -45,7 +47,8 @@ export class UploadComponent implements AfterViewInit {
         list.replace(',', '.');
         this.uploadService.convertGrades(list, this.klasse).subscribe(res => {
             this.accepted = res.accepted;
-            this.notFound = res.notFound
+            this.notFound = res.notFound;
+            this.notenlisteOkStatus = res.notenlisteOkStatus;
         });
     }
 

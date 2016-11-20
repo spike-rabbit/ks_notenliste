@@ -65,23 +65,28 @@ function convertGrades(req: express.Request, res: express.Response): void {
 
     let db = grade.ksnDB;
     let acceptedList: EinzelNote[] = [];
-    let notFound: EinzelNote[] = [];
+    let notFound: Schueler[] = [];
     db.ready(() => {
         db.query("select vorname, name as nachname, schuelerID as id from schueler where klasse = ?", (err, result) => {
             for (let schueler of (<Schueler[]>result)) {
+                let found = false;
                 for (let einzelNote of parsedList) {
                     if (schueler.vorname == einzelNote.vorname && schueler.nachname == einzelNote.nachname) {
                         einzelNote.id = schueler.id;
                         acceptedList.push(einzelNote);
+                        found = true;
                         break;
                     }
-                    notFound.push(einzelNote);
+                }
+                if (!found) {
+                    notFound.push(schueler);
                 }
             }
             res.send({
                 data: {
                     accepted: acceptedList,
-                    notFound: notFound
+                    notFound: notFound,
+                    notenlisteOkStatus: notFound.length == 0
                 }
             });
         }, [req.body.klasse]);
@@ -276,9 +281,10 @@ function saveGrades(req: express.Request, res: express.Response): void {
                 saveSingelGrade(res, req.body.data.noten);
 
             }, [null, toSave.fachnotenlisteID, toSave.lehrer, "2016-03-12", toSave.typ, toSave.gewichtung]);
-        });}
-        else {
-        res.send({data:{}});
+        });
+    }
+    else {
+        res.send({data: {}});
     }
 }
 
