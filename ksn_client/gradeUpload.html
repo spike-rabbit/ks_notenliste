@@ -1,20 +1,21 @@
-<link rel="stylesheet" type="text/css" href="overlay.css">
+<form class="form-group " (ngSubmit)="saveGradeList()">
+    <div id="myOverlay" class=" overlay container-fluid">
 
-<div id="myOverlay" class=" overlay container-fluid">
+        <div class="panel panel-default">
+            <div class="panel-heading"><h3 class="h3">Notenlisten Upload/Edit</h3></div>
+            <div class="panel-body">
 
-    <div class="panel panel-default">
-        <div class="panel-heading"><h3 class="h3">Notenlisten Upload/Edit</h3></div>
-        <div class="panel-body">
-            <form #f="ngForm" class="form-group ">
                 <fieldset>
                     <div class="form-check">
                         <div class="radio-inline">
-                            <input id="SoMi" type="radio" name="gradeType" value="SoMi" [(ngModel)]="gradeType"
+                            <input id="SoMi" type="radio" name="gradeType" value="SoMi" [(ngModel)]="gradeType" required
                             />
                             <label for="SoMi">SoMi-Note</label>
                         </div>
                         <div class="radio-inline">
-                            <input id="Klausur" type="radio" name="gradeType" value="Klausur" [(ngModel)]="gradeType"/>
+                            <input id="Klausur" type="radio" name="gradeType" value="Klausur" [(ngModel)]="gradeType"
+                                   required
+                            />
                             <label for="Klausur">Klausurnote</label>
                         </div>
                     </div>
@@ -22,67 +23,69 @@
                 <div style="padding-top: 10px;" class="form-group row">
                     <div class="col-md-4">
                         <label>Lehrer</label>
-                        <input id="Lehrer" style="width: 100px" class="form-control" type="text"/>
+                        <input id="Lehrer" style="width: 100px" class="form-control" type="text" required/>
                     </div>
                     <div class="col-md-4">
                         <label for="weight">Gewichtung</label>
-
                         <input style="width: 100px" min="1" class="form-control" id="weight" name="weight" type="number"
+                               required
                                [(ngModel)]="gewichtung"/>
                     </div>
                     <div class="col-md-4">
-                        <label for="Datum">Datum</label>
-                        <input id="Datum" type="date" class="form-control" name="Datum" onload="getDatum();">
+                        <div class="input-group date" id="uploadDate">
+                            <input type="text" class="form-control" [(ngModel)]="datum" name="datum" required>
+                            <div class="input-group-addon">
+                                <span class="glyphicon glyphicon-th"></span>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
-            </form>
-        </div>
-    </div>
 
-    <div class="row">
-        <div class="panel panel-default col-md-6" style="  min-width: 300px">
-            <div class="panel-heading">Eingabe</div>
-            <div class="panel-body">
-                <textarea id="rawGrades" #rawGrades class="form-control" rows="8"></textarea>
-                <button (click)="convertGradeList(rawGrades.value)">Übernehmen</button>
             </div>
         </div>
 
-        <div class="table-responsive panel panel-default col-md-6">
-            <div class="panel-heading">Vorschau</div>
-            <div class="panel-body">
-                <table class="table" id="Status">
-                    <tr>
-                        <th>
-                            Vorname
-                        </th>
-                        <th>
-                            Nachname
-                        </th>
-                        <th>
-                            Note
-                        </th>
-                        <th>
-                            Status
-                        </th>
-                    </tr>
-                    <tr id="parsedGrades" *ngFor="let item of accepted">
-                        <td>{{item.vorname}}</td>
-                        <td>{{ item.nachname}}</td>
-                        <td>{{item.note}}</td>
-                        <td>Platzhalter</td>
-                    </tr>
-                </table>
+        <div class="row">
+            <div class="panel panel-default col-md-6" style="  min-width: 300px">
+                <div class="panel-heading"><label for="rawGrades">Eingabe</label></div>
+                <div class="panel-body">
+                    <textarea id="rawGrades" #rawGrades class="form-control" rows="8"></textarea>
+                    <button type="button" (click)="convertGradeList(rawGrades.value)">Übernehmen</button>
+                </div>
+            </div>
+
+            <div class="table-responsive panel panel-default col-md-6">
+                <div class="panel-heading">Vorschau</div>
+                <div class="panel-body">
+                    <table class="table" id="Status">
+                        <tr>
+                            <th>
+                                Vorname
+                            </th>
+                            <th>
+                                Nachname
+                            </th>
+                            <th>
+                                Note
+                            </th>
+                            <th>
+                                Status
+                            </th>
+                        </tr>
+                        <tr id="parsedGrades" *ngFor="let item of accepted">
+                            <td>{{item.vorname}}</td>
+                            <td>{{ item.nachname}}</td>
+                            <td>{{item.note}}</td>
+                            <td>Platzhalter</td>
+                        </tr>
+                    </table>
+                </div>
             </div>
         </div>
+        <div class="row">{{klasse}}</div>
+        <div class="form-group" style="align-content: center; width: 100%">
+            <button class="btn btn-default" type="submit">Speichern</button>
+            <button class="btn btn-default" type="button" (click)="onCancel()">Abbrechen</button>
+        </div>
     </div>
-    <div class="row">{{klasse}}</div>
-    <div class="btn-group" style="align-content: center; width: 100%">
-        <button class="btn btn-default" type="button" name="speichern"
-                (click)="saveGradeList(); ">Speichern
-        </button>
-        <button class="btn btn-default" type="button" (click)="onCancel()">Abbrechen</button>
-        <button class="btn btn-default" type="button" onclick="resetOverlay();">Löschen</button>
-        <button class="btn btn-default" type="button" onclick="getDatum();">Date</button>
-    </div>
-</div>
+</form>

@@ -130,7 +130,7 @@ function loadPupilGrades(res: express.Response, fachnotenlisteID: number, toDo: 
                 for (let einzelnotenliste of einzelnotenlisten) {
                     for (let row of response) {
                         if (row.einzelnotenlisteID == einzelnotenliste.einzelnotenlisteID) {
-                            noten.push(row.wert);
+                            noten.push(parseFloat(row.wert));
                             pushed = true;
                         }
                     }
@@ -163,7 +163,8 @@ function loadPupilGrades(res: express.Response, fachnotenlisteID: number, toDo: 
 function loadZeugnis(req: express.Request, res: express.Response): void {
     let db = grade.ksnDB;
     db.ready(() => {
-        db.query("SELECT s.schuelerID, s.vorname, s.name FROM klasse k, schueler s WHERE k.Kuerzel = ? and s.Klasse = k.Kuerzel", (error, response) => {
+        db.query("SELECT s.schuelerID, s.vorname, s.name FROM klasse k, schueler s " +
+            "WHERE k.Kuerzel = ? and s.Klasse = k.Kuerzel", (error, response) => {
             loadZeugnisGrades(res, req.query.block, req.query.fach, response);
         }, [req.query.klasse]);
     });
@@ -175,7 +176,7 @@ function loadZeugnisGrades(res: express.Response, block: number, fachKuerzel: st
 
         db.query("SELECT * FROM fachnotenliste fl, einzelnotenliste el WHERE fl.unterrichtsfach IN " +
             "(SELECT uf.Kuerzel FROM unterrichtsfach uf WHERE uf.Kuerzel = ? OR uf.istUnterfachvon = ?) " +
-            "and fl.fachnotenlisteID = el.fachnotenlisteID and fl.block = ? " +
+            "and fl.fachnotenlisteID = el.fachnotenlisteID and (fl.block = ? or fl.block = ? - 1) " +
             "order by fl.unterrichtsfach, el.einzelnotenlisteID", (error, einzelnotenlisten) => {
             let currentFachID = null;
             let faecher = [];
@@ -184,7 +185,6 @@ function loadZeugnisGrades(res: express.Response, block: number, fachKuerzel: st
             let fach = null;
             let count = 0;
             for (let liste of einzelnotenlisten) {
-                count++;
                 if (currentFachID != liste.fachnotenlisteID) {
                     if (fach != null) {
                         fach.listencount = count;
@@ -198,11 +198,12 @@ function loadZeugnisGrades(res: express.Response, block: number, fachKuerzel: st
                         listencount: 0
                     });
                 }
+                count++;
                 kleineEinzelnotenliste.push({
                     einzelnotenlisteID: liste.einzelnotenlisteID,
                     lehrer: liste.lehrer,
                     gewichtung: liste.gewichtung,
-                    typ : liste.typ
+                    typ: liste.typ
                 });
             }
             if (fach != null) {
@@ -217,7 +218,7 @@ function loadZeugnisGrades(res: express.Response, block: number, fachKuerzel: st
             loadSchuelerZeugnisNoten(res, block, fachKuerzel, toDo, result);
 
 
-        }, [fachKuerzel, fachKuerzel, block]);
+        }, [fachKuerzel, fachKuerzel, block, block]);
     });
 }
 
@@ -228,14 +229,15 @@ function loadSchuelerZeugnisNoten(res: express.Response, block: number, fach: st
     db.ready(() => {
         db.query("SELECT * FROM fachnotenliste fl, einzelnotenliste el, einzelnote en WHERE fl.unterrichtsfach IN " +
             "(SELECT uf.Kuerzel FROM unterrichtsfach uf WHERE uf.Kuerzel = ? OR uf.istUnterfachvon = ?) " +
-            "and fl.fachnotenlisteID = el.fachnotenlisteID and en.schuelerID = ? and fl.block = ? and en.einzelnotenlisteID = el.einzelnotenlisteID " +
+            "and fl.fachnotenlisteID = el.fachnotenlisteID and en.schuelerID = ? and (fl.block = ? or fl.block = ? - 1) " +
+            "and en.einzelnotenlisteID = el.einzelnotenlisteID " +
             "order by fl.unterrichtsfach, el.einzelnotenlisteID" +
             "", (error, einzelnoten) => {
             for (let einzelnotenIDs of zwischenstand.subheader) {
                 let gefunden = false;
                 for (let einzelnote of einzelnoten) {
                     if (einzelnote.einzelnotenlisteID == einzelnotenIDs.einzelnotenlisteID) {
-                        bodyRow.noten.push(einzelnote.wert);
+                        bodyRow.noten.push(parseFloat(einzelnote.wert));
                         gefunden = true;
                         break;
                     }
@@ -253,7 +255,7 @@ function loadSchuelerZeugnisNoten(res: express.Response, block: number, fach: st
             } else {
                 loadSchuelerZeugnisNoten(res, block, fach, verbleibendeSchueler, zwischenstand);
             }
-        }, [fach, fach, schueler.schuelerID, block]);
+        }, [fach, fach, schueler.schuelerID, block, block]);
     });
 }
 
@@ -265,15 +267,19 @@ function saveGrades(req: express.Request, res: express.Response): void {
         typ: req.body.data.typ,
         lehrer: req.body.data.lehrer
     };
-    db.ready(() => {
-        db.query("insert into einzelnotenliste values(?,?,?,?,?,?)", (err, response) => {
-            for (let note of req.body.data.noten) {
-                note.einzelnotenlisteID = response.insertId;
-            }
-            saveSingelGrade(res, req.body.data.noten);
+    if (req.body.data.noten.length > 0) {
+        db.ready(() => {
+            db.query("insert into einzelnotenliste values(?,?,?,?,?,?)", (err, response) => {
+                for (let note of req.body.data.noten) {
+                    note.einzelnotenlisteID = response.insertId;
+                }
+                saveSingelGrade(res, req.body.data.noten);
 
-        }, [null, toSave.fachnotenlisteID, toSave.lehrer, "2016-03-12", toSave.typ, toSave.gewichtung]);
-    });
+            }, [null, toSave.fachnotenlisteID, toSave.lehrer, "2016-03-12", toSave.typ, toSave.gewichtung]);
+        });}
+        else {
+        res.send({data:{}});
+    }
 }
 
 function saveSingelGrade(res: express.Response, remaining: any []) {
@@ -286,7 +292,7 @@ function saveSingelGrade(res: express.Response, remaining: any []) {
             } else {
                 saveSingelGrade(res, remaining);
             }
-        }, [note.schuelerID, note.einzelnotenlisteID, note.wert]);
+        }, [note.id, note.einzelnotenlisteID, note.note]);
     });
 }
 

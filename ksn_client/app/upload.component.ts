@@ -1,11 +1,12 @@
 /**
  * Created by maximilian.koeller on 15.11.2016.
  */
-import {Component, Input, Output, OnInit, EventEmitter} from "@angular/core";
+import {Component, Input, Output, EventEmitter, AfterViewInit} from "@angular/core";
 import {GradeType} from "./Data/GradeType";
 import {GradeLoaderService} from "./grades-loader.service";
 import "./rxjs-operators";
 import {SingleGrades} from "./Data/SingleGrades";
+import {DatePipe} from "@angular/common";
 
 @Component({
     selector: 'ksn-upload',
@@ -14,23 +15,27 @@ import {SingleGrades} from "./Data/SingleGrades";
     providers: [GradeLoaderService],
     inputs: ['klasse'],
 })
-export class UploadComponent implements OnInit {
-
-    ngOnInit(): void {
-        console.log(this.fachnotenListeID);
+export class UploadComponent implements AfterViewInit {
+    ngAfterViewInit(): void {
+        (<any>$('#uploadDate')).datepicker({
+            format: "dd.mm.yyyy",
+            autoclose: true,
+            language: "de"
+        });
     }
+
 
     constructor(private uploadService: GradeLoaderService) {
     }
 
-    visible: boolean;
     gradeType: GradeType;
     klasse: string;
     gewichtung: number;
+    datum = new DatePipe("en").transform(Date.now(), "dd.MM.yyyy");
     @Output()
-    accepted: EinzelNote[];
+    accepted: EinzelNote[] = [];
     @Output()
-    notFound: EinzelNote[];
+    notFound: EinzelNote[] = [];
     @Input()
     fachnotenListeID: number;
     @Output()
@@ -49,17 +54,11 @@ export class UploadComponent implements OnInit {
             fachNotenListe: this.fachnotenListeID,
             typ: this.gradeType,
             gewichtung: this.gewichtung,
-            noten: this.accepted.map((value, index, array) => {
-                return {
-                    wert: value.note,
-                    schuelerID: value.id
-                }
-            }),
+            noten: this.accepted,
             lehrer: "BOE",
             datum: "2016-03-01"
         };
         this.uploadService.saveGrades(singleGrade).subscribe(res => {
-            console.log(res);
             this.hideUpload.emit();
         });
     }
@@ -67,6 +66,7 @@ export class UploadComponent implements OnInit {
     onCancel() {
         this.hideUpload.emit();
     }
+
 }
 
 interface EinzelNote {

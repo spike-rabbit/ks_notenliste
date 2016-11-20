@@ -48,7 +48,7 @@ export class AppComponent implements OnInit {
         }
     }
 
-    updateSubjectGradeList(newValue: any) {
+    updateSubjectGradeList() {
         if (!this.block.startsWith("Zeugnis Block ") && this.bloecke.includes(parseInt(this.block))) {
             this.gradeLoader.getSubjectGradeList(this.klasse, this.fach, this.block).subscribe(res => {
                 this.subjectGradeList = res;

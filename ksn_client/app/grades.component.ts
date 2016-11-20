@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, Output, EventEmitter} from "@angular/core";
+import {Component, Output, EventEmitter} from "@angular/core";
 import {SubjectGradeList} from "./Data/SubjectGradeList";
 import {GradeLoaderService} from "./grades-loader.service";
 /**
@@ -8,27 +8,31 @@ import {GradeLoaderService} from "./grades-loader.service";
     selector: "ksn-grades",
     templateUrl: "../notenliste.html",
     moduleId: module.id,
-    providers: [GradeLoaderService]
+    providers: [GradeLoaderService],
+    inputs: ['fachnotenliste']
 })
-export class GradeComponent implements OnInit {
+export class GradeComponent {
 
-    @Input()
-    fachnotenliste: SubjectGradeList;
+    private _fachnotenliste: SubjectGradeList;
     @Output()
-    einzelnotenliste: any[];
+    einzelnotenliste: any;
     @Output()
     showUpload = new EventEmitter<void>();
 
-    constructor(private gradeService : GradeLoaderService) {}
-
-    ngOnInit(): void {
-        this.gradeService.getSingleGradeLists(this.fachnotenliste).subscribe(res => {
-            console.log(res);
-            this.einzelnotenliste = res;
-        });
+    constructor(private gradeService: GradeLoaderService) {
     }
+
 
     onAdd() {
         this.showUpload.emit();
+    }
+
+    get fachnotenliste(): SubjectGradeList {
+        return this._fachnotenliste;
+    }
+
+    set fachnotenliste(value: SubjectGradeList) {
+        this._fachnotenliste = value;
+        this.gradeService.getSingleGradeLists(this._fachnotenliste).subscribe(res => this.einzelnotenliste = res);
     }
 }

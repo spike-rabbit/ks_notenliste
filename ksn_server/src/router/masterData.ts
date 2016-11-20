@@ -29,7 +29,7 @@ class MasterData {
     }
 }
 
-let masterData = new MasterData();
+
 
 function listKlassen(req: express.Request, res: express.Response): void {
     let db = masterData.ksnDB;
@@ -108,5 +108,5 @@ function listZeugnisse(req: express.Request, res: express.Response): void {
         }, [req.query.fach, req.query.klasse]);
     });
 }
-
+let masterData = new MasterData();
 export = masterData.router;

@@ -31,7 +31,7 @@ export class GradeLoaderService {
         }).map(this.extractData).catch(this.handleError);
     }
 
-    getSubjectGradeList(klasse: string, fach: string, block: string) : Observable<SubjectGradeList> {
+    getSubjectGradeList(klasse: string, fach: string, block: string): Observable<SubjectGradeList> {
         let params = new URLSearchParams();
         params.set("klasse", klasse);
         params.set("fach", fach);
@@ -40,12 +40,29 @@ export class GradeLoaderService {
             .map(this.extractData).catch(this.handleError));
     }
 
-    getSingleGradeLists(subjectGradeList: SubjectGradeList) : Observable<NoteListenZeile[]> {
+    getSingleGradeLists(subjectGradeList: SubjectGradeList): Observable<NoteListenZeile[]> {
         let params = new URLSearchParams();
         params.set("fachnotenlisteID", subjectGradeList.fachnotenlisteID.toString());
         params.set("klasse", subjectGradeList.klasse);
         return (<Observable<NoteListenZeile[]>> this.http.get(this.getSingleGradeListsURL, {search: params})
-            .map(this.extractData).catch(this.handleError));
+            .map(this.extractData).map(liste => {
+                if (liste.header.length > 0) {
+                    let gesamtGewicht = liste.header.map(value => value.gewichtung).reduce((prev, curr) => prev + curr);
+                    for (let schueler of liste.einzelnoten) {
+                        let summe = 0;
+                        let abzugsGewicht = 0;
+                        for (let index in schueler.noten) {
+                            if (schueler.noten[index] != -1) {
+                                summe += schueler.noten[index] * liste.header[index].gewichtung;
+                            } else {
+                                abzugsGewicht += liste.header[index].gewichtung;
+                            }
+                        }
+                        schueler.vorschlag = summe / (gesamtGewicht - abzugsGewicht);
+                    }
+                }
+                return liste;
+            }).catch(this.handleError));
     }
 
     loadZeugnis(subjectGradeList: SubjectGradeList) {
@@ -54,7 +71,36 @@ export class GradeLoaderService {
         params.set("klasse", subjectGradeList.klasse);
         params.set("fach", subjectGradeList.unterrichtsfach);
         return (<Observable<any>> this.http.get(this.loadZeugnisURL, {search: params})
-            .map(this.extractData).catch(this.handleError));
+            .map(this.extractData).map(liste => {
+
+                let subheaderIndex = 0;
+                let bearbeiteterBereich = 0;
+                for (let header of liste.header) {
+                    while (subheaderIndex < header.listencount + bearbeiteterBereich) {
+                        liste.subheader[subheaderIndex].interneGewichtung = header.stundenzahl * liste.subheader[subheaderIndex].gewichtung;
+                        subheaderIndex++;
+                    }
+                    bearbeiteterBereich += header.listencount;
+                }
+                console.log(liste);
+                if (liste.subheader.length > 0) {
+                    let gesamtGewicht = liste.subheader.filter(value => value).map(value => value.interneGewichtung).reduce((prev, curr) => prev + curr);
+                    for (let schueler of liste.body) {
+                        let summe = 0;
+                        let abzugsGewicht = 0;
+                        for (let index in schueler.noten) {
+                            if (schueler.noten[index] != -1) {
+                                summe += schueler.noten[index] * liste.subheader[index].interneGewichtung;
+                            } else {
+                                abzugsGewicht += liste.subheader[index].interneGewichtung;
+                            }
+                        }
+                        schueler.vorschlag = summe / (gesamtGewicht - abzugsGewicht);
+                    }
+                }
+                console.log(liste);
+                return liste;
+            }).catch(this.handleError));
     }
 
     private extractData(res: Response) {
