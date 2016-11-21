@@ -9,10 +9,10 @@ import * as express from "express";
 class MasterData {
 
     public ksnDB = wrapper.wrap(mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "",
-        database: 'test',
+        host: "intranet",
+        user: "FS141_maxi_koel",
+        password: "FS141_maxi_koel",
+        database: 'fs141_maximilian_koeller',
         insecureAuth: true,
     }));
 
