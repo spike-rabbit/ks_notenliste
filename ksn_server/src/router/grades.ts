@@ -58,7 +58,7 @@ function convertGrades(req: express.Request, res: express.Response): void {
                 nachname: rawColumn[0],
                 vorname: rawColumn[1],
                 id: 0,
-                note: parseInt(rawColumn[2])
+                note: parseFloat(rawColumn[2].replace(',', '.'))
             });
         }
     }
@@ -83,11 +83,13 @@ function convertGrades(req: express.Request, res: express.Response): void {
                     notFound.push(schueler);
                 }
             }
+            let invalids = validateNotenliste(acceptedList);
             res.send({
                 data: {
                     accepted: acceptedList,
                     notFound: notFound,
-                    notenlisteOkStatus: notFound.length == 0
+                    invalid: invalids,
+                    notenlisteOkStatus: invalids.length == 0
                 }
             });
         }, [req.body.klasse]);
@@ -115,7 +117,7 @@ function getSubjectGradeList(req: express.Request, res: express.Response): void 
 function loadSingleGrades(req: express.Request, res: express.Response): void {
     let db = grade.ksnDB;
     db.ready(() => {
-        db.query("SELECT s.schuelerID, s.vorname, s.name FROM klasse k, schueler s WHERE k.Kuerzel = ? and s.Klasse = k.Kuerzel", (error, response) => {
+        db.query("SELECT s.schuelerID, s.vorname, s.name FROM klasse k, schueler s WHERE k.Kuerzel = ? and s.Klasse = k.Kuerzel order by s.name desc", (error, response) => {
             loadPupilGrades(res, req.query.fachnotenlisteID, response, []);
         }, [req.query.klasse]);
     });
@@ -170,7 +172,7 @@ function loadZeugnis(req: express.Request, res: express.Response): void {
     let db = grade.ksnDB;
     db.ready(() => {
         db.query("SELECT s.schuelerID, s.vorname, s.name FROM klasse k, schueler s " +
-            "WHERE k.Kuerzel = ? and s.Klasse = k.Kuerzel", (error, response) => {
+            "WHERE k.Kuerzel = ? and s.Klasse = k.Kuerzel order by s.name desc", (error, response) => {
             loadZeugnisGrades(res, req.query.block, req.query.fach, response);
         }, [req.query.klasse]);
     });
@@ -299,7 +301,7 @@ function saveSingelGrade(res: express.Response, remaining: any []) {
             } else {
                 saveSingelGrade(res, remaining);
             }
-        }, [note.id, note.einzelnotenlisteID, note.note]);
+        }, [note.id, note.einzelnotenlisteID, note.note.toFixed(1)]);
     });
 }
 
@@ -314,6 +316,20 @@ function deleteEinzelnotenliste(req: express.Request, res: express.Response) {
     });
 }
 
+function validateNotenliste(liste: EinzelNote []) {
+    let validNoten = [1, 1.3, 1.7, 2, 2.3, 2.7, 3, 3.3, 3.7, 4, 4.3, 4.7, 5, 5.3, 5.7, 6];
+    let invalids = [];
+    liste.forEach(value => {
+        if (!(validNoten.indexOf(value.note) > -1)) {
+            invalids.push(value);
+            (<any>value).invalid = true;
+        } else {
+            (<any>value).invalid = false;
+        }
+    });
+    return invalids;
+}
+
 interface EinzelNote extends Schueler {
     note: number;
 }
@@ -322,10 +338,6 @@ interface Schueler {
     vorname: string;
     nachname: string;
     id: number;
-}
-
-interface FachnotenListe {
-    fachnotenlisteID: number;
 }
 
 let grade = new Grade();

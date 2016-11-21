@@ -23,12 +23,13 @@
                 <div style="padding-top: 10px;" class="form-group row">
                     <div class="col-md-4">
                         <label for="weight">Gewichtung</label>
-                        <input style="width: 100px" min="1" class="form-control" id="weight" name="weight" type="number"
+                        <input min="1" class="form-control headerDatenInput" id="weight" name="weight" type="number"
                                required
                                [(ngModel)]="gewichtung"/>
                     </div>
                     <div class="col-md-4">
-                        <div class="input-group date" id="uploadDate">
+                        <label for="uploadDate">Datum</label>
+                        <div class="input-group date headerDatenInput" id="uploadDate" style="width: 150px">
                             <input type="text" class="form-control" [(ngModel)]="datum" name="datum" required>
                             <div class="input-group-addon">
                                 <span class="glyphicon glyphicon-th"></span>
@@ -46,7 +47,7 @@
                 <div class="panel-heading"><label for="rawGrades">Eingabe</label></div>
                 <div class="panel-body">
                     <textarea id="rawGrades" #rawGrades class="form-control" rows="8"></textarea>
-                    <button type="button" (click)="convertGradeList(rawGrades.value)">Übernehmen</button>
+                    <button type="button" (click)="convertGradeList(rawGrades.value)" class="btn btn-default">Übernehmen</button>
                 </div>
             </div>
 
@@ -64,15 +65,11 @@
                             <th>
                                 Note
                             </th>
-                            <th>
-                                Status
-                            </th>
                         </tr>
-                        <tr id="parsedGrades" *ngFor="let item of accepted">
+                        <tr id="parsedGrades" *ngFor="let item of accepted" [class.invalid]="item.invalid" >
                             <td>{{item.vorname}}</td>
                             <td>{{ item.nachname}}</td>
                             <td>{{item.note}}</td>
-                            <td>Platzhalter</td>
                         </tr>
                     </table>
                 </div>
@@ -80,7 +77,7 @@
         </div>
         <div class="row">{{klasse}}</div>
         <div class="form-group" style="align-content: center; width: 100%">
-            <button class="btn btn-default" type="submit" [disabled]="!uploadForm.form.valid || !notenlisteOkStatus">Speichern</button>
+            <button class="btn btn-primary" type="submit" [disabled]="!uploadForm.form.valid || !notenlisteOkStatus">Speichern</button>
             <button class="btn btn-default" type="button" (click)="onCancel()">Abbrechen</button>
         </div>
     </div>

@@ -48,3 +48,11 @@
         right: 35px;
     }
 }
+
+.invalid {
+    color: red;
+}
+
+.headerDatenInput {
+    width: 150px;
+}

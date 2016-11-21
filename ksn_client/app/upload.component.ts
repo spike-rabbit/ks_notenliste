@@ -37,6 +37,8 @@ export class UploadComponent implements AfterViewInit {
     @Output()
     notFound: EinzelNote[] = [];
     @Output()
+    invalids: EinzelNote[] = [];
+    @Output()
     notenlisteOkStatus = false;
     @Input()
     fachnotenListeID: number;
@@ -48,6 +50,7 @@ export class UploadComponent implements AfterViewInit {
         this.uploadService.convertGrades(list, this.klasse).subscribe(res => {
             this.accepted = res.accepted;
             this.notFound = res.notFound;
+            this.invalids = res.invalids;
             this.notenlisteOkStatus = res.notenlisteOkStatus;
         });
     }
@@ -68,6 +71,10 @@ export class UploadComponent implements AfterViewInit {
 
     onCancel() {
         this.hideUpload.emit(false);
+    }
+
+    isValid(en : EinzelNote) {
+        return this.invalids.includes(en).toString();
     }
 
 }
