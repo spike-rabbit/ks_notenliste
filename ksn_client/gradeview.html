@@ -10,8 +10,8 @@
 
         <tr>
             <th colspan="2" align="left">Lehrer</th>
-            <td>
-                TODO
+            <td *ngFor="let item of zeugnisliste.header" [attr.colspan]="item.listencount">
+                {{item.lehrer}}
             </td>
         </tr>
 

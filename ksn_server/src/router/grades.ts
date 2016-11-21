@@ -98,7 +98,7 @@ function getSubjectGradeList(req: express.Request, res: express.Response): void 
     let db = grade.ksnDB;
     db.ready(() => {
 
-        db.query("select fachnotenlisteID, unterrichtsfach, klasse, block, stundenzahl from fachnotenliste where unterrichtsfach = ? and klasse = ? and block = ?", ((error, result) => {
+        db.query("select fachnotenlisteID, unterrichtsfach, klasse, block, stundenzahl, lehrer from fachnotenliste where unterrichtsfach = ? and klasse = ? and block = ?", ((error, result) => {
             res.send({data: result[0]});
         }), [req.query.fach, req.query.klasse, req.query.block]);
 
@@ -180,7 +180,7 @@ function loadZeugnisGrades(res: express.Response, block: number, fachKuerzel: st
     let db = grade.ksnDB;
     db.ready(() => {
 
-        db.query("SELECT * FROM fachnotenliste fl, einzelnotenliste el WHERE fl.unterrichtsfach IN " +
+        db.query("SELECT fl.*, el.einzelnotenlisteID, el.datum, el.typ, el.gewichtung FROM fachnotenliste fl, einzelnotenliste el WHERE fl.unterrichtsfach IN " +
             "(SELECT uf.Kuerzel FROM unterrichtsfach uf WHERE uf.Kuerzel = ? OR uf.istUnterfachvon = ?) " +
             "and fl.fachnotenlisteID = el.fachnotenlisteID and (fl.block = ? or fl.block = ? - 1) " +
             "order by fl.unterrichtsfach, el.einzelnotenlisteID", (error, einzelnotenlisten) => {
@@ -201,13 +201,13 @@ function loadZeugnisGrades(res: express.Response, block: number, fachKuerzel: st
                         kuerzel: liste.unterrichtsfach,
                         block: liste.block,
                         stundenzahl: liste.stundenzahl,
+                        lehrer: liste.lehrer,
                         listencount: 0
                     });
                 }
                 count++;
                 kleineEinzelnotenliste.push({
                     einzelnotenlisteID: liste.einzelnotenlisteID,
-                    lehrer: liste.lehrer,
                     gewichtung: liste.gewichtung,
                     typ: liste.typ
                 });
