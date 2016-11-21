@@ -46,24 +46,26 @@ export class GradeLoaderService {
         params.set("fachnotenlisteID", subjectGradeList.fachnotenlisteID.toString());
         params.set("klasse", subjectGradeList.klasse);
         return (<Observable<NoteListenZeile[]>> this.http.get(this.getSingleGradeListsURL, {search: params})
-            .map(this.extractData).map(liste => {
-                if (liste.header.length > 0) {
-                    let gesamtGewicht = liste.header.map(value => value.gewichtung).reduce((prev, curr) => prev + curr);
-                    for (let schueler of liste.einzelnoten) {
-                        let summe = 0;
-                        let abzugsGewicht = 0;
-                        for (let index in schueler.noten) {
-                            if (schueler.noten[index] != -1) {
-                                summe += schueler.noten[index] * liste.header[index].gewichtung;
-                            } else {
-                                abzugsGewicht += liste.header[index].gewichtung;
-                            }
-                        }
-                        schueler.vorschlag = summe / (gesamtGewicht - abzugsGewicht);
+            .map(this.extractData).map(this.berechneVorschlaege).catch(this.handleError));
+    }
+
+    berechneVorschlaege(liste) {
+        if (liste.header.length > 0) {
+            let gesamtGewicht = liste.header.map(value => value.gewichtung).reduce((prev, curr) => prev + curr);
+            for (let schueler of liste.einzelnoten) {
+                let summe = 0;
+                let abzugsGewicht = 0;
+                for (let index in schueler.noten) {
+                    if (schueler.noten[index] != -1) {
+                        summe += schueler.noten[index] * liste.header[index].gewichtung;
+                    } else {
+                        abzugsGewicht += liste.header[index].gewichtung;
                     }
                 }
-                return liste;
-            }).catch(this.handleError));
+                schueler.vorschlag = summe / (gesamtGewicht - abzugsGewicht);
+            }
+        }
+        return liste;
     }
 
     loadZeugnis(subjectGradeList: SubjectGradeList) {

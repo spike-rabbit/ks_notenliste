@@ -37,6 +37,7 @@ export class GradeComponent {
                     schueler.noten.splice(index, 1);
                 }
             }
+            this.gradeService.berechneVorschlaege(this.einzelnotenliste);
         });
     }
 
