@@ -42,7 +42,7 @@
                     [fachnotenliste]="subjectGradeList" (showUpload)="showUploadPopup()"></ksn-grades>
         <ksn-upload *ngIf="showUpload" [klasse]="klasse"
                     [fachnotenListeID]="subjectGradeList.fachnotenlisteID"
-                    (hideUpload)="hideUploadPopup()"></ksn-upload>
+                    (hideUpload)="hideUploadPopup($event)"></ksn-upload>
         <ksn-gradesoverview *ngIf="subjectGradeList && subjectGradeList.iszeugnis"
                             [fachnotenliste]="subjectGradeList"></ksn-gradesoverview>
     </div>

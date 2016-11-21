@@ -37,11 +37,11 @@ export class UploadComponent implements AfterViewInit {
     @Output()
     notFound: EinzelNote[] = [];
     @Output()
-    notenlisteOkStatus : false;
+    notenlisteOkStatus = false;
     @Input()
     fachnotenListeID: number;
     @Output()
-    hideUpload = new EventEmitter<void>();
+    hideUpload = new EventEmitter<boolean>();
 
     public convertGradeList(list: string) {
         list.replace(',', '.');
@@ -62,12 +62,12 @@ export class UploadComponent implements AfterViewInit {
             datum: "2016-03-01"
         };
         this.uploadService.saveGrades(singleGrade).subscribe(res => {
-            this.hideUpload.emit();
+            this.hideUpload.emit(true);
         });
     }
 
     onCancel() {
-        this.hideUpload.emit();
+        this.hideUpload.emit(false);
     }
 
 }

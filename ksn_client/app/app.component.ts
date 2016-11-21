@@ -23,6 +23,8 @@ export class AppComponent implements OnInit {
     @Output()
     zeugnisse: number[];
     block: string;
+    @Output()
+    reload = 0;
 
     @Output()
     subjectGradeList: SubjectGradeList;
@@ -67,7 +69,9 @@ export class AppComponent implements OnInit {
         this.showUpload = true;
     }
 
-    hideUploadPopup() {
+    hideUploadPopup(reload : boolean) {
         this.showUpload = false;
+        if(reload)
+        this.updateSubjectGradeList();
     }
 }
