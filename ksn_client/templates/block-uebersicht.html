@@ -96,7 +96,7 @@
             <td style="padding-top: 1px; padding-bottom: 1px">{{item.schueler.name}}</td>
             <td>{{item.schueler.vorname}}</td>
             <td *ngFor="let note of item.noten">{{note}}</td>
-            <td>{{item.vorschlag}}</td>
+            <td>{{item.vorschlag | number : '1.0-1'}}</td>
         </tr>
 
         <tr>

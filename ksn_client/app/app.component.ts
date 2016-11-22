@@ -2,13 +2,13 @@
  * Created by maximilian.koeller on 11.11.2016.
  */
 import {Component, OnInit, Output} from "@angular/core";
-import {MasterLoaderService} from "./master-loader.service";
-import {GradeLoaderService} from "./grades-loader.service";
+import {StammdatenLoaderService} from "./stammdaten-loader.service";
+import {NotenLoaderService} from "./noten-loader";
 import {SubjectGradeList} from "./Data/SubjectGradeList";
 @Component({
     selector: 'ksn-app',
-    templateUrl: '../menu.html',
-    providers: [MasterLoaderService, GradeLoaderService]
+    templateUrl: '../templates/app.html',
+    providers: [StammdatenLoaderService, NotenLoaderService]
 })
 export class AppComponent implements OnInit {
     klasse: string;
@@ -31,7 +31,7 @@ export class AppComponent implements OnInit {
 
     showUpload: boolean = false;
 
-    constructor(private masterLoader: MasterLoaderService, private gradeLoader: GradeLoaderService) {
+    constructor(private masterLoader: StammdatenLoaderService, private gradeLoader: NotenLoaderService) {
     }
 
     ngOnInit() {
@@ -52,17 +52,22 @@ export class AppComponent implements OnInit {
 
     updateSubjectGradeList() {
         if (!this.block.startsWith("Zeugnis Block ") && this.bloecke.includes(parseInt(this.block))) {
-            this.gradeLoader.getSubjectGradeList(this.klasse, this.fach, this.block).subscribe(res => {
+            this.gradeLoader.getFachnotenliste(this.klasse, this.fach, this.block).subscribe(res => {
                 this.subjectGradeList = res;
                 this.subjectGradeList.iszeugnis = false;
             });
         }
         else if (this.bloecke.includes(parseInt(this.block.substr("Zeugnis Block ".length)))) {
-            this.gradeLoader.getSubjectGradeList(this.klasse, this.fach, this.block.substr("Zeugnis Block ".length)).subscribe(res => {
+            this.gradeLoader.getFachnotenliste(this.klasse, this.fach, this.block.substr("Zeugnis Block ".length)).subscribe(res => {
                 this.subjectGradeList = res;
                 this.subjectGradeList.iszeugnis = true;
             });
         }
+    }
+
+    isBlockValid() {
+        return !this.block.startsWith("Zeugnis Block ") && this.bloecke.includes(parseInt(this.block)) ||
+            this.zeugnisse.includes(parseInt(this.block.substr("Zeugnis Block ".length)));
     }
 
     showUploadPopup() {

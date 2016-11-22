@@ -1,17 +1,17 @@
 import {Component, Output, EventEmitter} from "@angular/core";
 import {SubjectGradeList} from "./Data/SubjectGradeList";
-import {GradeLoaderService} from "./grades-loader.service";
+import {NotenLoaderService} from "./noten-loader";
 /**
  * Created by maximilian.koeller on 16.11.2016.
  */
 @Component({
     selector: "ksn-grades",
-    templateUrl: "../notenliste.html",
+    templateUrl: "../templates/block-uebersicht.html",
     moduleId: module.id,
-    providers: [GradeLoaderService],
+    providers: [NotenLoaderService],
     inputs: ['fachnotenliste']
 })
-export class GradeComponent {
+export class BlockUebersichtComponent {
 
     private _fachnotenliste: SubjectGradeList;
     @Output()
@@ -19,7 +19,7 @@ export class GradeComponent {
     @Output()
     showUpload = new EventEmitter<void>();
 
-    constructor(private gradeService: GradeLoaderService) {
+    constructor(private gradeService: NotenLoaderService) {
     }
 
 
@@ -47,6 +47,6 @@ export class GradeComponent {
 
     set fachnotenliste(value: SubjectGradeList) {
         this._fachnotenliste = value;
-        this.gradeService.getSingleGradeLists(this._fachnotenliste).subscribe(res => this.einzelnotenliste = res);
+        this.gradeService.loadBlockNoten(this._fachnotenliste).subscribe(res => this.einzelnotenliste = res);
     }
 }

@@ -31,16 +31,12 @@
             <td *ngFor="let item of zeugnisliste.subheader">{{item.gewichtung}}</td>
         </tr>
 
-        <!-- <tr>
-             <th colspan="2" align="left">
-                 Interne Gewichtung
-             </th>
-             <td>0,28</td>
-             <td>0,42</td>
-             <td>70</td>
-             <td>90</td>
-
-         </tr>-->
+        <tr>
+            <th colspan="2" align="left">
+                Interne Gewichtung
+            </th>
+            <td *ngFor="let item of zeugnisliste.subheader">{{item.interneGewichtung | number : '1.0-1'}}</td>
+        </tr>
         </thead>
         <thead bgcolor=e2e2e2>
         <th align="left" style="padding-top: 7px; padding-bottom: 5px">
@@ -56,20 +52,12 @@
         <th align="left" bgcolor=e2e2e2>
             Vorschlag
         </th>
-        <th align="left" bgcolor=e2e2e2>
-            Note
-        </th>
         </thead>
         <tr *ngFor="let item of zeugnisliste.body">
             <td>{{item.schueler.name}}</td>
             <td style="padding-top: 1px; padding-bottom: 1px">{{item.schueler.vorname}}</td>
             <td *ngFor="let note of item.noten">{{note}}</td>
-            <td>{{item.vorschlag}}</td>
+            <td>{{item.vorschlag | number : '1.0-1'}}</td>
         </tr>
     </table>
-
-    <br><br><br>
-
-    <button type="button">Speichern</button>
-    <button type="button">Abbrechen</button>
 </div>

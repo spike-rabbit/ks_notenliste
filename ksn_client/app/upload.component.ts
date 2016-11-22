@@ -3,16 +3,16 @@
  */
 import {Component, Input, Output, EventEmitter, AfterViewInit} from "@angular/core";
 import {GradeType} from "./Data/GradeType";
-import {GradeLoaderService} from "./grades-loader.service";
+import {NotenLoaderService} from "./noten-loader";
 import "./rxjs-operators";
 import {SingleGrades} from "./Data/SingleGrades";
 import {DatePipe} from "@angular/common";
 
 @Component({
     selector: 'ksn-upload',
-    templateUrl: '../gradeUpload.html',
+    templateUrl: '../templates/upload.html',
     moduleId: module.id,
-    providers: [GradeLoaderService],
+    providers: [NotenLoaderService],
     inputs: ['klasse'],
 })
 export class UploadComponent implements AfterViewInit {
@@ -25,7 +25,7 @@ export class UploadComponent implements AfterViewInit {
     }
 
 
-    constructor(private uploadService: GradeLoaderService) {
+    constructor(private uploadService: NotenLoaderService) {
     }
 
     gradeType: GradeType;
@@ -47,7 +47,7 @@ export class UploadComponent implements AfterViewInit {
 
     public convertGradeList(list: string) {
         list.replace(',', '.');
-        this.uploadService.convertGrades(list, this.klasse).subscribe(res => {
+        this.uploadService.convertNoten(list, this.klasse).subscribe(res => {
             this.accepted = res.accepted;
             this.notFound = res.notFound;
             this.invalids = res.invalids;
@@ -64,7 +64,7 @@ export class UploadComponent implements AfterViewInit {
             lehrer: "BOE",
             datum: "2016-03-01"
         };
-        this.uploadService.saveGrades(singleGrade).subscribe(res => {
+        this.uploadService.saveNoten(singleGrade).subscribe(res => {
             this.hideUpload.emit(true);
         });
     }

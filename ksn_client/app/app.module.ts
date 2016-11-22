@@ -7,11 +7,11 @@ import {AppComponent}   from './app.component';
 import {UploadComponent} from "./upload.component";
 import {FormsModule} from "@angular/forms";
 import {HttpModule, JsonpModule} from "@angular/http";
-import {GradeComponent} from "./grades.component";
-import {GradesOverviewComponent} from "./grades-overview.component";
+import {BlockUebersichtComponent} from "./block-uebersicht";
+import {ZeugnisUebersichtComponent} from "./zeugnis-uebersicht.component";
 @NgModule({
     imports: [BrowserModule, FormsModule, HttpModule, JsonpModule],
-    declarations: [AppComponent, UploadComponent, GradeComponent, GradesOverviewComponent],
+    declarations: [AppComponent, UploadComponent, BlockUebersichtComponent, ZeugnisUebersichtComponent],
     bootstrap: [AppComponent]
 })
 export class AppModule {

@@ -8,11 +8,11 @@ import {Observable} from "rxjs/Observable";
  * Created by maximilian.koeller on 15.11.2016.
  */
 @Injectable()
-export class MasterLoaderService {
-    private listKLassenURL = "/masterData/listKlassen";
-    private listFaecherURL = "/masterData/listFaecher";
-    private listBloeckeURL = "/masterData/listBloecke";
-    private listZeugnisseURL = "/masterData/listZeugnisse";
+export class StammdatenLoaderService {
+    private listKLassenURL = "/stammdaten/listKlassen";
+    private listFaecherURL = "/stammdaten/listFaecher";
+    private listBloeckeURL = "/stammdaten/listBloecke";
+    private listZeugnisseURL = "/stammdaten/listZeugnisse";
 
 
     constructor(private http: Http) {

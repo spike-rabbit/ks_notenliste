@@ -8,44 +8,44 @@ import {NoteListenZeile} from "./Data/NoteListenZeile";
  * Created by maximilian.koeller on 15.11.2016.
  */
 @Injectable()
-export class GradeLoaderService {
-    private convertURL = "/noten/convertGrades";
-    private saveGradesURL = "/noten/saveGrades";
-    private getSubjectGradeListURL = "/noten/getSubjectGradeList";
-    private getSingleGradeListsURL = "/noten/loadSingleGrades";
-    private loadZeugnisURL = "/noten/loadZeugnis";
+export class NotenLoaderService {
+    private convertNotenURL = "/noten/convertNoten";
+    private saveNotenURL = "/noten/saveNoten";
+    private getFachnotenlisteURL = "/noten/getFachnotenliste";
+    private getBlockNotenURL = "/noten/loadBlockNoten";
+    private loadZeugnisURL = "/noten/loadZeugnisNoten";
     private deleteEinzelnotenlisteURL = "/noten/deleteEinzelnotenliste"
 
     constructor(private http: Http) {
     }
 
-    convertGrades(list: string, klasse: string): Observable<any> {
-        return this.http.post(this.convertURL, {
+    convertNoten(list: string, klasse: string): Observable<any> {
+        return this.http.post(this.convertNotenURL, {
             list: list,
             klasse: klasse
         }).map(this.extractData).catch(this.handleError);
     }
 
-    saveGrades(singleGrades: SingleGrades) {
-        return this.http.post(this.saveGradesURL, {
+    saveNoten(singleGrades: SingleGrades) {
+        return this.http.post(this.saveNotenURL, {
             data: singleGrades
         }).map(this.extractData).catch(this.handleError);
     }
 
-    getSubjectGradeList(klasse: string, fach: string, block: string): Observable<SubjectGradeList> {
+    getFachnotenliste(klasse: string, fach: string, block: string): Observable<SubjectGradeList> {
         let params = new URLSearchParams();
         params.set("klasse", klasse);
         params.set("fach", fach);
         params.set("block", block);
-        return (<Observable<SubjectGradeList>> this.http.get(this.getSubjectGradeListURL, {search: params})
+        return (<Observable<SubjectGradeList>> this.http.get(this.getFachnotenlisteURL, {search: params})
             .map(this.extractData).catch(this.handleError));
     }
 
-    getSingleGradeLists(subjectGradeList: SubjectGradeList): Observable<NoteListenZeile[]> {
+    loadBlockNoten(subjectGradeList: SubjectGradeList): Observable<NoteListenZeile[]> {
         let params = new URLSearchParams();
         params.set("fachnotenlisteID", subjectGradeList.fachnotenlisteID.toString());
         params.set("klasse", subjectGradeList.klasse);
-        return (<Observable<NoteListenZeile[]>> this.http.get(this.getSingleGradeListsURL, {search: params})
+        return (<Observable<NoteListenZeile[]>> this.http.get(this.getBlockNotenURL, {search: params})
             .map(this.extractData).map(this.berechneVorschlaege).catch(this.handleError));
     }
 
@@ -68,7 +68,7 @@ export class GradeLoaderService {
         return liste;
     }
 
-    loadZeugnis(subjectGradeList: SubjectGradeList) {
+    loadZeugnisNoten(subjectGradeList: SubjectGradeList) {
         let params = new URLSearchParams();
         params.set("block", subjectGradeList.block.toString());
         params.set("klasse", subjectGradeList.klasse);
@@ -77,15 +77,20 @@ export class GradeLoaderService {
             .map(this.extractData).map(liste => {
 
                 let subheaderIndex = 0;
+                let subheaderIndex2 = 0;
                 let bearbeiteterBereich = 0;
                 for (let header of liste.header) {
+                    let subheaderSum = 0;
                     while (subheaderIndex < header.listencount + bearbeiteterBereich) {
-                        liste.subheader[subheaderIndex].interneGewichtung = header.stundenzahl * liste.subheader[subheaderIndex].gewichtung;
+                        subheaderSum += liste.subheader[subheaderIndex].gewichtung;
                         subheaderIndex++;
+                    }
+                    while (subheaderIndex2 < header.listencount + bearbeiteterBereich) {
+                        liste.subheader[subheaderIndex2].interneGewichtung = header.stundenzahl * (liste.subheader[subheaderIndex2].gewichtung / subheaderSum);
+                        subheaderIndex2++;
                     }
                     bearbeiteterBereich += header.listencount;
                 }
-                console.log(liste);
                 if (liste.subheader.length > 0) {
                     let gesamtGewicht = liste.subheader.filter(value => value).map(value => value.interneGewichtung).reduce((prev, curr) => prev + curr);
                     for (let schueler of liste.body) {
@@ -101,12 +106,11 @@ export class GradeLoaderService {
                         schueler.vorschlag = summe / (gesamtGewicht - abzugsGewicht);
                     }
                 }
-                console.log(liste);
                 return liste;
             }).catch(this.handleError));
     }
 
-    deleteEinzelnotenliste(einzelnotenlisteID: number) : Observable<boolean> {
+    deleteEinzelnotenliste(einzelnotenlisteID: number): Observable<boolean> {
         let params = new URLSearchParams();
         params.set("einzelnotenlisteID", einzelnotenlisteID.toString());
         return this.http.get(this.deleteEinzelnotenlisteURL, {search: params})

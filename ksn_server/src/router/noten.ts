@@ -23,11 +23,11 @@ class Grade {
     constructor() {
         this.router = express.Router();
         this.router.get("/listFachnoten", listFachnoten);
-        this.router.get("/getSubjectGradeList", getSubjectGradeList);
-        this.router.post("/convertGrades", convertGrades);
-        this.router.post("/saveGrades", saveGrades);
-        this.router.get("/loadSingleGrades", loadSingleGrades);
-        this.router.get("/loadZeugnis", loadZeugnis);
+        this.router.get("/getFachnotenliste", getFachnotenliste);
+        this.router.post("/convertNoten", convertGrades);
+        this.router.post("/saveNoten", saveGrades);
+        this.router.get("/loadBlockNoten", loadBlockNoten);
+        this.router.get("/loadZeugnisNoten", loadZeugnisNoten);
         this.router.get("/deleteEinzelnotenliste", deleteEinzelnotenliste);
     }
 }
@@ -96,7 +96,7 @@ function convertGrades(req: express.Request, res: express.Response): void {
     });
 }
 
-function getSubjectGradeList(req: express.Request, res: express.Response): void {
+function getFachnotenliste(req: express.Request, res: express.Response): void {
     let db = grade.ksnDB;
     db.ready(() => {
 
@@ -114,7 +114,7 @@ function getSubjectGradeList(req: express.Request, res: express.Response): void 
     });
 }
 
-function loadSingleGrades(req: express.Request, res: express.Response): void {
+function loadBlockNoten(req: express.Request, res: express.Response): void {
     let db = grade.ksnDB;
     db.ready(() => {
         db.query("SELECT s.schuelerID, s.vorname, s.name FROM klasse k, schueler s WHERE k.Kuerzel = ? and s.Klasse = k.Kuerzel order by s.name desc", (error, response) => {
@@ -168,7 +168,7 @@ function loadPupilGrades(res: express.Response, fachnotenlisteID: number, toDo: 
     });
 }
 
-function loadZeugnis(req: express.Request, res: express.Response): void {
+function loadZeugnisNoten(req: express.Request, res: express.Response): void {
     let db = grade.ksnDB;
     db.ready(() => {
         db.query("SELECT s.schuelerID, s.vorname, s.name FROM klasse k, schueler s " +
@@ -185,7 +185,7 @@ function loadZeugnisGrades(res: express.Response, block: number, fachKuerzel: st
         db.query("SELECT fl.*, el.einzelnotenlisteID, el.datum, el.typ, el.gewichtung FROM fachnotenliste fl, einzelnotenliste el WHERE fl.unterrichtsfach IN " +
             "(SELECT uf.Kuerzel FROM unterrichtsfach uf WHERE uf.Kuerzel = ? OR uf.istUnterfachvon = ?) " +
             "and fl.fachnotenlisteID = el.fachnotenlisteID and (fl.block = ? or fl.block = ? - 1) " +
-            "order by fl.unterrichtsfach, el.einzelnotenlisteID", (error, einzelnotenlisten) => {
+            "order by fl.unterrichtsfach, fl.block, fl.fachnotenlisteID, el.einzelnotenlisteID", (error, einzelnotenlisten) => {
             let currentFachID = null;
             let faecher = [];
             let result;
@@ -239,7 +239,7 @@ function loadSchuelerZeugnisNoten(res: express.Response, block: number, fach: st
             "(SELECT uf.Kuerzel FROM unterrichtsfach uf WHERE uf.Kuerzel = ? OR uf.istUnterfachvon = ?) " +
             "and fl.fachnotenlisteID = el.fachnotenlisteID and en.schuelerID = ? and (fl.block = ? or fl.block = ? - 1) " +
             "and en.einzelnotenlisteID = el.einzelnotenlisteID " +
-            "order by fl.unterrichtsfach, el.einzelnotenlisteID" +
+            "order by fl.unterrichtsfach, fl.block, fl.fachnotenlisteID, el.einzelnotenlisteID" +
             "", (error, einzelnoten) => {
             for (let einzelnotenIDs of zwischenstand.subheader) {
                 let gefunden = false;
