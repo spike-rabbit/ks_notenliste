@@ -1,41 +1,41 @@
-<div *ngIf="zeugnisliste">
-    <table>
+<div *ngIf="zeugnisliste" class="col-md-6">
+    <table class="table table-striped table-bordered">
         <thead>
         <tr>
             <th colspan="2" align="left">(Unter-)Fach</th>
-            <td *ngFor="let item of zeugnisliste.header" [attr.colspan]="item.listencount">
+            <th *ngFor="let item of zeugnisliste.header" [attr.colspan]="item.listencount">
                 {{item.kuerzel + " - " + item.block}}
-            </td>
+            </th>
         </tr>
 
         <tr>
             <th colspan="2" align="left">Lehrer</th>
-            <td *ngFor="let item of zeugnisliste.header" [attr.colspan]="item.listencount">
+            <th *ngFor="let item of zeugnisliste.header" [attr.colspan]="item.listencount">
                 {{item.lehrer}}
-            </td>
+            </th>
         </tr>
 
         <tr>
             <th colspan="2" align="left">
                 Wochenstunden
             </th>
-            <td *ngFor="let item of zeugnisliste.header" [attr.colspan]="item.listencount" id="wochenS">
+            <th *ngFor="let item of zeugnisliste.header" [attr.colspan]="item.listencount" id="wochenS">
                 {{item.stundenzahl}}
-            </td>
+            </th>
         </tr>
 
         <tr>
             <th colspan="2" align="left">
                 Gewichtung
             </th>
-            <td *ngFor="let item of zeugnisliste.subheader">{{item.gewichtung}}</td>
+            <th *ngFor="let item of zeugnisliste.subheader">{{item.gewichtung}}</th>
         </tr>
 
         <tr>
             <th colspan="2" align="left">
                 Interne Gewichtung
             </th>
-            <td *ngFor="let item of zeugnisliste.subheader">{{item.interneGewichtung | number : '1.0-1'}}</td>
+            <th *ngFor="let item of zeugnisliste.subheader">{{item.interneGewichtung | number : '1.0-1'}}</th>
         </tr>
         </thead>
         <thead bgcolor=e2e2e2>
