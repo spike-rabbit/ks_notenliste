@@ -7,7 +7,7 @@
                     <div class="form-group">
                         <input type="search" list="Klasse" placeholder="Klasse" name="klasse" class="form-control"
                                (change)="updateFaecher()"
-                               [(ngModel)]="klasse">
+                               [(ngModel)]="klasse" required>
                         <datalist id="Klasse">
                             <option *ngFor="let item of klassen" [value]="item">
                         </datalist>
@@ -15,7 +15,7 @@
                     <div class="form-group">
                         <input type="search" list="Fach" placeholder="Fach" name="fach" (change)="updateBloecke()"
                                class="form-control" [disabled]="!klassen.includes(klasse)"
-                               [(ngModel)]="fach">
+                               [(ngModel)]="fach" required>
                         <datalist id="Fach">
                             <option *ngFor="let item of faecher" [value]="item">
                         </datalist>
@@ -23,7 +23,7 @@
                     <div class="form-group">
                         <input type="search" list="Block" placeholder="Block" name="block" class="form-control"
                                [disabled]="!faecher.includes(fach)"
-                               [(ngModel)]="block">
+                               [(ngModel)]="block" required>
                         <datalist id="Block">
                             <option *ngFor="let item of bloecke" [value]="item">
                             <option *ngFor="let item of zeugnisse" [value]="'Zeugnis Block ' + item">
@@ -40,10 +40,13 @@
     <div style="margin: 20px 20px 20px 20px ">
         <ksn-grades *ngIf="subjectGradeList && !subjectGradeList.iszeugnis"
                     [fachnotenliste]="subjectGradeList" (showUpload)="showUploadPopup()"></ksn-grades>
+        <ksn-gradesoverview *ngIf="subjectGradeList && subjectGradeList.iszeugnis"
+                            [fachnotenliste]="subjectGradeList"></ksn-gradesoverview>
         <ksn-upload *ngIf="showUpload" [klasse]="klasse"
                     [fachnotenListeID]="subjectGradeList.fachnotenlisteID"
                     (hideUpload)="hideUploadPopup($event)"></ksn-upload>
-        <ksn-gradesoverview *ngIf="subjectGradeList && subjectGradeList.iszeugnis"
-                            [fachnotenliste]="subjectGradeList"></ksn-gradesoverview>
+        <div class="alert alert-info" *ngIf="!subjectGradeList">
+            Keine Daten für die akutelle Auswahl gefunden!
+        </div>
     </div>
 </div>

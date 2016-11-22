@@ -62,6 +62,8 @@ export class AppComponent implements OnInit {
                 this.subjectGradeList = res;
                 this.subjectGradeList.iszeugnis = true;
             });
+        } else {
+            this.subjectGradeList = undefined;
         }
     }
 
@@ -74,9 +76,9 @@ export class AppComponent implements OnInit {
         this.showUpload = true;
     }
 
-    hideUploadPopup(reload : boolean) {
+    hideUploadPopup(reload: boolean) {
         this.showUpload = false;
-        if(reload)
-        this.updateSubjectGradeList();
+        if (reload)
+            this.updateSubjectGradeList();
     }
 }
