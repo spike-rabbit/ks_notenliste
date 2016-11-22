@@ -53,6 +53,10 @@
     color: red;
 }
 
+.missing {
+    color: orange;
+}
+
 .headerDatenInput {
     width: 150px;
 }

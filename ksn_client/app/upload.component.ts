@@ -33,11 +33,7 @@ export class UploadComponent implements AfterViewInit {
     gewichtung: number;
     datum = new DatePipe("en").transform(Date.now(), "dd.MM.yyyy");
     @Output()
-    accepted: EinzelNote[] = [];
-    @Output()
-    notFound: EinzelNote[] = [];
-    @Output()
-    invalids: EinzelNote[] = [];
+    parsedListe: EinzelNote[] = [];
     @Output()
     notenlisteOkStatus = false;
     @Input()
@@ -48,9 +44,7 @@ export class UploadComponent implements AfterViewInit {
     public convertGradeList(list: string) {
         list.replace(',', '.');
         this.uploadService.convertNoten(list, this.klasse).subscribe(res => {
-            this.accepted = res.accepted;
-            this.notFound = res.notFound;
-            this.invalids = res.invalids;
+            this.parsedListe = res.body;
             this.notenlisteOkStatus = res.notenlisteOkStatus;
         });
     }
@@ -60,7 +54,7 @@ export class UploadComponent implements AfterViewInit {
             fachNotenListe: this.fachnotenListeID,
             typ: this.gradeType,
             gewichtung: this.gewichtung,
-            noten: this.accepted,
+            noten: this.parsedListe,
             lehrer: "BOE",
             datum: "2016-03-01"
         };
@@ -72,11 +66,6 @@ export class UploadComponent implements AfterViewInit {
     onCancel() {
         this.hideUpload.emit(false);
     }
-
-    isValid(en : EinzelNote) {
-        return this.invalids.includes(en).toString();
-    }
-
 }
 
 interface EinzelNote {
@@ -84,4 +73,5 @@ interface EinzelNote {
     nachname: string;
     id: number;
     note: number;
+    missing: boolean;
 }

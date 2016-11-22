@@ -41,6 +41,11 @@ export class AppComponent implements OnInit {
     updateFaecher() {
         if (this.klassen.includes(this.klasse))
             this.masterLoader.loadFaecher(this.klasse).subscribe(res => this.faecher = res);
+        else
+        {
+            this.fach = undefined;
+            this.faecher = [];
+        }
     }
 
     updateBloecke() {
@@ -48,6 +53,12 @@ export class AppComponent implements OnInit {
             this.masterLoader.loadBloecke(this.klasse, this.fach).subscribe(res => this.bloecke = res);
             this.masterLoader.loadZeugnisse(this.klasse, this.fach).subscribe(res => this.zeugnisse = res);
         }
+        else {
+            this.bloecke = [];
+            this.zeugnisse = [];
+            this.block = undefined;
+        }
+
     }
 
     updateSubjectGradeList() {
@@ -57,7 +68,7 @@ export class AppComponent implements OnInit {
                 this.subjectGradeList.iszeugnis = false;
             });
         }
-        else if (this.bloecke.includes(parseInt(this.block.substr("Zeugnis Block ".length)))) {
+        else if (this.zeugnisse.includes(parseInt(this.block.substr("Zeugnis Block ".length)))) {
             this.gradeLoader.getFachnotenliste(this.klasse, this.fach, this.block.substr("Zeugnis Block ".length)).subscribe(res => {
                 this.subjectGradeList = res;
                 this.subjectGradeList.iszeugnis = true;
@@ -65,6 +76,8 @@ export class AppComponent implements OnInit {
         } else {
             this.subjectGradeList = undefined;
         }
+
+        return false;
     }
 
     isBlockValid() {

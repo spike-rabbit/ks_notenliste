@@ -65,31 +65,36 @@ function convertGrades(req: express.Request, res: express.Response): void {
 
 
     let db = grade.ksnDB;
-    let acceptedList: EinzelNote[] = [];
+    let body: EinzelNote[] = [];
     let notFound: Schueler[] = [];
     db.ready(() => {
-        db.query("select vorname, name as nachname, schuelerID as id from schueler where klasse = ?", (err, result) => {
+        db.query("select vorname, name as nachname, schuelerID as id from schueler where klasse = ? order by name, vorname", (err, result) => {
             for (let schueler of (<Schueler[]>result)) {
                 let found = false;
                 for (let einzelNote of parsedList) {
                     if (schueler.vorname == einzelNote.vorname && schueler.nachname == einzelNote.nachname) {
                         einzelNote.id = schueler.id;
-                        acceptedList.push(einzelNote);
+                        einzelNote.missing = false,
+                            body.push(einzelNote);
                         found = true;
                         break;
                     }
                 }
-                if (!found) {
-                    notFound.push(schueler);
-                }
+                if (!found)
+                    body.push({
+                        vorname: schueler.vorname,
+                        nachname: schueler.nachname,
+                        id: schueler.id,
+                        note: -1,
+                        missing: true
+                    });
             }
-            let invalids = validateNotenliste(acceptedList);
+          let invalid =  validateNotenliste(body).length > 0;
             res.send({
                 data: {
-                    accepted: acceptedList,
+                    body: body,
                     notFound: notFound,
-                    invalid: invalids,
-                    notenlisteOkStatus: invalids.length == 0
+                    notenlisteOkStatus: !invalid
                 }
             });
         }, [req.body.klasse]);
@@ -320,18 +325,21 @@ function validateNotenliste(liste: EinzelNote []) {
     let validNoten = [1, 1.3, 1.7, 2, 2.3, 2.7, 3, 3.3, 3.7, 4, 4.3, 4.7, 5, 5.3, 5.7, 6];
     let invalids = [];
     liste.forEach(value => {
-        if (!(validNoten.indexOf(value.note) > -1)) {
-            invalids.push(value);
-            (<any>value).invalid = true;
-        } else {
-            (<any>value).invalid = false;
-        }
+        if (!value.missing)
+            if (!(validNoten.indexOf(value.note) > -1)) {
+                invalids.push(value);
+                value.invalid = true;
+            } else {
+                value.invalid = false;
+            }
     });
     return invalids;
 }
 
 interface EinzelNote extends Schueler {
     note: number;
+    missing?: boolean;
+    invalid?: boolean;
 }
 
 interface Schueler {

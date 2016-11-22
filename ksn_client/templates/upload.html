@@ -67,10 +67,13 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr id="parsedGrades" *ngFor="let item of accepted" [class.invalid]="item.invalid">
+                            <tr id="parsedGrades" *ngFor="let item of parsedListe" [class.invalid]="item.invalid"
+                                [class.missing]="item.missing">
                                 <td>{{item.vorname}}</td>
                                 <td>{{ item.nachname}}</td>
-                                <td>{{item.note}}</td>
+                                <td>
+                                    <div *ngIf="item.note != -1">{{item.note}}</div>
+                                </td>
                             </tr>
                             </tbody>
                         </table>

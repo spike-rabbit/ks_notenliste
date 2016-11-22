@@ -56,7 +56,9 @@
         <tr *ngFor="let item of zeugnisliste.body">
             <td>{{item.schueler.name}}</td>
             <td style="padding-top: 1px; padding-bottom: 1px">{{item.schueler.vorname}}</td>
-            <td *ngFor="let note of item.noten" style="width: 76px">{{note}}</td>
+            <td *ngFor="let note of item.noten" style="width: 76px">
+                <div *ngIf="note != -1">{{note}}</div>
+            </td>
             <td>{{item.vorschlag | number : '1.0-1'}}</td>
         </tr>
     </table>
