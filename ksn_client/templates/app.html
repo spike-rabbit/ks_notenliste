@@ -39,12 +39,12 @@
     <!-- Add divs -->
     <div style="margin: 20px 20px 20px 20px ">
         <ksn-grades *ngIf="subjectGradeList && !subjectGradeList.iszeugnis"
-                    [fachnotenliste]="subjectGradeList" (showUpload)="showUploadPopup()"></ksn-grades>
+                    [fachnotenliste]="subjectGradeList" (showUpload)="showUploadPopup()">Laden...</ksn-grades>
         <ksn-gradesoverview *ngIf="subjectGradeList && subjectGradeList.iszeugnis"
-                            [fachnotenliste]="subjectGradeList"></ksn-gradesoverview>
+                            [fachnotenliste]="subjectGradeList">Laden...</ksn-gradesoverview>
         <ksn-upload *ngIf="showUpload" [klasse]="klasse"
                     [fachnotenListeID]="subjectGradeList.fachnotenlisteID"
-                    (hideUpload)="hideUploadPopup($event)"></ksn-upload>
+                    (hideUpload)="hideUploadPopup($event)">Laden...</ksn-upload>
         <div class="alert alert-info" *ngIf="!subjectGradeList">
             Keine Daten für die akutelle Auswahl gefunden!
         </div>
