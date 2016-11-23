@@ -62,7 +62,7 @@ export class AppComponent implements OnInit {
     }
 
     updateSubjectGradeList() {
-        if (!this.block.search("Zeugnis Block *") && this.bloecke.indexOf(parseInt(this.block)) >= 0) {
+        if (this.block.search("Zeugnis Block *") == -1 && this.bloecke.indexOf(parseInt(this.block)) >= 0) {
             this.gradeLoader.getFachnotenliste(this.klasse, this.fach, this.block).subscribe(res => {
                 this.subjectGradeList = res;
                 this.subjectGradeList.iszeugnis = false;
