@@ -3,7 +3,7 @@
         <thead>
         <tr>
             <th colspan="2" align="left">(Unter-)Fach</th>
-            <th *ngFor="let item of zeugnisliste.header" [attr.colspan]="item.listencount">
+            <th *ngFor="let item of zeugnisliste.header" [attr.colspan]="item.listencount" style="white-space: nowrap">
                 {{item.kuerzel + " - " + item.block}}
             </th>
         </tr>
@@ -59,7 +59,7 @@
             <td *ngFor="let note of item.noten" style="width: 76px">
                 <div *ngIf="note != -1">{{note}}</div>
             </td>
-            <td>{{item.vorschlag | number : '1.0-1'}}</td>
+            <td><div *ngIf="item.vorschlag">{{item.vorschlag | number : '1.0-1'}}</div></td>
         </tr>
     </table>
 </div>

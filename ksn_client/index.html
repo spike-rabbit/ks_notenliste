@@ -1,14 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Angular QuickStart</title>
+    <title>KS Notenliste</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <!-- 1. Load libraries -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" integrity="sha384-3ceskX3iaEnIogmQchP8opvBy3Mi7Ce34nWjpBIwVTHfGYWQS9jwHDVRnpKKHJg7" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.3.7/js/tether.min.js" integrity="sha384-XTs3FgkjiBgo8qjEjBk0tGmf3wPrWtA6coPfQDfFEY8AnYJwjalXCiosYRBIBZX8" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/js/bootstrap.min.js" integrity="sha384-BLiI7JTZm+JWlgKa0M0kGRpJbF2J8q+qreVrKBC47e3K6BW78kGLrCkeRX6I9RoK" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"
+            integrity="sha384-3ceskX3iaEnIogmQchP8opvBy3Mi7Ce34nWjpBIwVTHfGYWQS9jwHDVRnpKKHJg7"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.3.7/js/tether.min.js"
+            integrity="sha384-XTs3FgkjiBgo8qjEjBk0tGmf3wPrWtA6coPfQDfFEY8AnYJwjalXCiosYRBIBZX8"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/js/bootstrap.min.js"
+            integrity="sha384-BLiI7JTZm+JWlgKa0M0kGRpJbF2J8q+qreVrKBC47e3K6BW78kGLrCkeRX6I9RoK"
+            crossorigin="anonymous"></script>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="bootstrap3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
@@ -24,76 +30,13 @@
     <!-- 2. Configure SystemJS -->
     <script src="systemjs.config.js"></script>
     <script>
-        System.import('app').catch(function(err){ console.error(err); });
+        System.import('app').catch(function (err) {
+            console.error(err);
+        });
     </script>
 </head>
 <!-- 3. Display the application -->
 <body>
 <ksn-app>Laden...</ksn-app>
-<script type="text/javascript">
-
-    function updateTime() {
-        var date = new Date();
-        var tag = date.getDate();
-        var monatDesJahres = date.getMonth();
-        var jahr = date.getFullYear();
-        var monat = new Array("Januar", "Februar", "M&auml;rz", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember");
-
-        var datum = tag + ". " + monat[monatDesJahres] + " " + jahr;
-
-        document.getElementById('time').innerHTML = datum;
-        setTimeout(updateTime, 60000);
-    }
-
-    function updateInternG1(){
-        var gew = document.getElementById('gewichtung').value;
-        var wochenstd = 7;
-        var intGew = gew*wochenstd/100;
-
-        document.getElementById('intern1').innerHTML = intGew;
-        document.getElementById('wochenS').innerHTML = wochenstd;
-
-        setTimeout(updateInternG1, 4);
-    }
-
-    function updateInternG2(){
-        var gew = document.getElementById('gewichtung2').value;
-        var wochenstd = 7;
-        var intGew = gew*wochenstd/100;
-
-        document.getElementById('intern2').innerHTML = intGew;
-
-        setTimeout(updateInternG2, 4);
-    }
-
-
-    function openOverlay() {
-        document.getElementById("myOverlay").style.height = "100%";
-        document.getElementById("myOverlay").style.overflowY = "scroll";
-    }
-
-    function closeOverlay() {
-        document.getElementById("myOverlay").style.height = "0%";
-        document.getElementById("myOverlay").style.overflowY = "hidden";
-    }
-    function getDatum(){
-        document.getElementById('Datum').valueAsDate = new Date();
-    }
-
-    function resetOverlay() {
-        document.getElementById("Klausur").value = '';
-        document.getElementById("Lehrer").value = '';
-        document.getElementById("weight").value = '';
-        document.getElementById("Datum").value = '';
-        document.getElementById("rawGrades").value = '';
-
-        tbl=document.getElementById('Status');
-        while(tbl.rows.length>1)
-        {
-            tbl.deleteRow(tbl.rows.length-1);
-        }
-    }
-
-</script>
 </body>
 </html>

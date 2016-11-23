@@ -65,7 +65,9 @@
             <td *ngFor="let note of item.noten">
                 <div *ngIf="note != -1">{{note}}</div>
             </td>
-            <td>{{item.vorschlag | number : '1.0-1'}}</td>
+            <td>
+                <div *ngIf="item.vorschlag">{{item.vorschlag | number : '1.0-1'}}</div>
+            </td>
         </tr>
 
         <tr>
