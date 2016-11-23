@@ -27,7 +27,7 @@ export class BlockUebersichtComponent {
         this.showUpload.emit();
     }
 
-    onDelete(einzelnotenliste) {
+    onDelete(einzelnotenliste:any) {
         this.gradeService.deleteEinzelnotenliste(einzelnotenliste.einzelnotenlisteID).subscribe((res) => {
             if (res) {
                 console.log(this.einzelnotenliste);

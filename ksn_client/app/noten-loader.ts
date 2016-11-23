@@ -49,9 +49,9 @@ export class NotenLoaderService {
             .map(this.extractData).map(this.berechneVorschlaege).catch(this.handleError));
     }
 
-    berechneVorschlaege(liste) {
+    berechneVorschlaege(liste:any) {
         if (liste.header.length > 0) {
-            let gesamtGewicht = liste.header.map(value => value.gewichtung).reduce((prev, curr) => prev + curr);
+            let gesamtGewicht = liste.header.map((value:any) => value.gewichtung).reduce((prev:number, curr:number) => prev + curr);
             for (let schueler of liste.einzelnoten) {
                 let summe = 0;
                 let abzugsGewicht = 0;
@@ -92,7 +92,7 @@ export class NotenLoaderService {
                     bearbeiteterBereich += header.listencount;
                 }
                 if (liste.subheader.length > 0) {
-                    let gesamtGewicht = liste.subheader.filter(value => value).map(value => value.interneGewichtung).reduce((prev, curr) => prev + curr);
+                    let gesamtGewicht = liste.subheader.filter((value:any) => value).map((value:any) => value.interneGewichtung).reduce((prev:number, curr:number) => prev + curr);
                     for (let schueler of liste.body) {
                         let summe = 0;
                         let abzugsGewicht = 0;

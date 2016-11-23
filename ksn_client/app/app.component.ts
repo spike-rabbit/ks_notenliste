@@ -39,7 +39,7 @@ export class AppComponent implements OnInit {
     }
 
     updateFaecher() {
-        if (this.klassen.includes(this.klasse))
+        if (this.klassen.indexOf(this.klasse) >= 0)
             this.masterLoader.loadFaecher(this.klasse).subscribe(res => this.faecher = res);
         else
         {
@@ -49,7 +49,7 @@ export class AppComponent implements OnInit {
     }
 
     updateBloecke() {
-        if (this.faecher.includes(this.fach)) {
+        if (this.faecher.indexOf(this.fach) >= 0) {
             this.masterLoader.loadBloecke(this.klasse, this.fach).subscribe(res => this.bloecke = res);
             this.masterLoader.loadZeugnisse(this.klasse, this.fach).subscribe(res => this.zeugnisse = res);
         }
@@ -62,13 +62,13 @@ export class AppComponent implements OnInit {
     }
 
     updateSubjectGradeList() {
-        if (!this.block.startsWith("Zeugnis Block ") && this.bloecke.includes(parseInt(this.block))) {
+        if (!this.block.search("Zeugnis Block *") && this.bloecke.indexOf(parseInt(this.block)) >= 0) {
             this.gradeLoader.getFachnotenliste(this.klasse, this.fach, this.block).subscribe(res => {
                 this.subjectGradeList = res;
                 this.subjectGradeList.iszeugnis = false;
             });
         }
-        else if (this.zeugnisse.includes(parseInt(this.block.substr("Zeugnis Block ".length)))) {
+        else if (this.zeugnisse.indexOf(parseInt(this.block.substr("Zeugnis Block ".length))) >= 0) {
             this.gradeLoader.getFachnotenliste(this.klasse, this.fach, this.block.substr("Zeugnis Block ".length)).subscribe(res => {
                 this.subjectGradeList = res;
                 this.subjectGradeList.iszeugnis = true;
@@ -80,10 +80,6 @@ export class AppComponent implements OnInit {
         return false;
     }
 
-    isBlockValid() {
-        return !this.block.startsWith("Zeugnis Block ") && this.bloecke.includes(parseInt(this.block)) ||
-            this.zeugnisse.includes(parseInt(this.block.substr("Zeugnis Block ".length)));
-    }
 
     showUploadPopup() {
         this.showUpload = true;

@@ -22,20 +22,20 @@ export class StammdatenLoaderService {
         return this.http.get(this.listKLassenURL).map(this.extractData).catch(this.handleError);
     }
 
-    loadFaecher(klasse: string) {
+    loadFaecher(klasse: string) : Observable<string[]> {
         let params = new URLSearchParams();
         params.set("klasse", klasse);
         return this.http.get(this.listFaecherURL, {search: params}).map(this.extractData).catch(this.handleError);
     }
 
-    loadBloecke(klasse: string, fach: string) {
+    loadBloecke(klasse: string, fach: string) : Observable<number[]> {
         let params = new URLSearchParams();
         params.set("fach", fach);
         params.set("klasse", klasse);
         return this.http.get(this.listBloeckeURL, {search: params}).map(this.extractData).catch(this.handleError);
     }
 
-    loadZeugnisse(klasse: string, fach: string) {
+    loadZeugnisse(klasse: string, fach: string) : Observable<number[]> {
         let params = new URLSearchParams();
         params.set("fach", fach);
         params.set("klasse", klasse);
