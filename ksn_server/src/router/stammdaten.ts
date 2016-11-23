@@ -4,17 +4,12 @@
 import * as mysql from "mysql";
 import * as wrapper from "node-mysql-wrapper";
 import * as express from "express";
+let dbConf = require("../../database.config.json");
 
 
 class MasterData {
 
-    public ksnDB = wrapper.wrap(mysql.createConnection({
-        host: "intranet",
-        user: "FS141_maxi_koel",
-        password: "FS141_maxi_koel",
-        database: 'fs141_maximilian_koeller',
-        insecureAuth: true,
-    }));
+    public ksnDB = wrapper.wrap(mysql.createConnection(dbConf));
 
     public router: express.Router;
 
@@ -28,7 +23,6 @@ class MasterData {
         this.router.get("/listZeugnisse", listZeugnisse);
     }
 }
-
 
 
 function listKlassen(req: express.Request, res: express.Response): void {
@@ -64,7 +58,7 @@ function listBloecke(req: express.Request, res: express.Response): void {
             if (err) {
                 res.send(err);
             } else {
-                res.send({data : response.map(v => v.block)});
+                res.send({data: response.map(v => v.block)});
             }
         }, [req.query.fach, req.query.klasse])
     });
@@ -108,5 +102,6 @@ function listZeugnisse(req: express.Request, res: express.Response): void {
         }, [req.query.fach, req.query.klasse]);
     });
 }
+
 let masterData = new MasterData();
 export = masterData.router;

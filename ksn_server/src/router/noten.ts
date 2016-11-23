@@ -4,17 +4,12 @@
 import * as mysql from "mysql";
 import * as wrapper from "node-mysql-wrapper";
 import * as express from "express";
+let dbConf = require("../../database.config.json");
 
 
 class Grade {
 
-    public connection = mysql.createConnection({
-        host: "intranet",
-        user: "FS141_maxi_koel",
-        password: "FS141_maxi_koel",
-        database: 'fs141_maximilian_koeller',
-        insecureAuth: true,
-    });
+    public connection = mysql.createConnection(dbConf);
 
     public ksnDB = wrapper.wrap(this.connection);
 
@@ -89,7 +84,7 @@ function convertGrades(req: express.Request, res: express.Response): void {
                         missing: true
                     });
             }
-          let invalid =  validateNotenliste(body).length > 0;
+            let invalid = validateNotenliste(body).length > 0;
             res.send({
                 data: {
                     body: body,
