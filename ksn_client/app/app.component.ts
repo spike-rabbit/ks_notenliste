@@ -21,10 +21,8 @@ export class AppComponent implements OnInit {
     @Output()
     bloecke: number[] = [];
     @Output()
-    zeugnisse: number[];
+    zeugnisse: number[] = [];
     block: string;
-    @Output()
-    reload = 0;
 
     @Output()
     subjectGradeList: SubjectGradeList;
