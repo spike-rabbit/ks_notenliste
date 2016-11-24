@@ -41,3 +41,4 @@ jspm_packages
 
 .idea/workspace.xml
 /ksn_client/aot/
+/ksn_client/dist/

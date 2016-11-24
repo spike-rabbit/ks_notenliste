@@ -34,6 +34,10 @@
   "devDependencies": {
     "@types/node": "^6.0.45",
     "concurrently": "^3.0.0",
+    "gulp": "3.9.1",
+    "gulp-clean": "0.3.2",
+    "gulp-rename": "1.2.2",
+    "gulp-shell": "0.5.2",
     "lite-server": "^2.2.2",
     "rollup": "0.36.4",
     "rollup-plugin-commonjs": "5.0.5",
