@@ -16,3 +16,4 @@ import {ZeugnisUebersichtComponent} from "./zeugnis-uebersicht.component";
 })
 export class AppModule {
 }
+

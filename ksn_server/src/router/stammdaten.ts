@@ -103,5 +103,6 @@ function listZeugnisse(req: express.Request, res: express.Response): void {
     });
 }
 
+
 let masterData = new MasterData();
 export = masterData.router;

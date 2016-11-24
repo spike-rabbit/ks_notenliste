@@ -14,17 +14,13 @@ export class AppComponent implements OnInit {
     klasse: string;
     klassen: string [] = [];
 
-    @Output()
     faecher: string [] = [];
     fach: string;
 
-    @Output()
     bloecke: number[] = [];
-    @Output()
     zeugnisse: number[] = [];
     block: string;
 
-    @Output()
     subjectGradeList: SubjectGradeList;
 
     showUpload: boolean = false;
@@ -39,8 +35,7 @@ export class AppComponent implements OnInit {
     updateFaecher() {
         if (this.klassen.indexOf(this.klasse) >= 0)
             this.masterLoader.loadFaecher(this.klasse).subscribe(res => this.faecher = res);
-        else
-        {
+        else {
             this.fach = undefined;
             this.faecher = [];
         }

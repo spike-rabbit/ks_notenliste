@@ -7,7 +7,6 @@ import {NotenLoaderService} from "./noten-loader";
 @Component({
     selector: "ksn-gradesoverview",
     templateUrl: "../templates/zeugnis-uebersicht.html",
-    moduleId: module.id,
     inputs: ['fachnotenliste'],
     providers: [NotenLoaderService]
 })

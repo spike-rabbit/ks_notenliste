@@ -8,16 +8,17 @@ import "./rxjs-operators";
 import {SingleGrades} from "./Data/SingleGrades";
 import {DatePipe} from "@angular/common";
 
+declare var jQuery:any;
+
 @Component({
     selector: 'ksn-upload',
     templateUrl: '../templates/upload.html',
-    moduleId: module.id,
     providers: [NotenLoaderService],
     inputs: ['klasse'],
 })
 export class UploadComponent implements AfterViewInit {
     ngAfterViewInit(): void {
-        (<any>$('#uploadDate')).datepicker({
+        jQuery('#uploadDate').datepicker({
             format: "dd.mm.yyyy",
             autoclose: true,
             language: "de"
@@ -32,9 +33,7 @@ export class UploadComponent implements AfterViewInit {
     klasse: string;
     gewichtung: number;
     datum = new DatePipe("en").transform(Date.now(), "dd.MM.yyyy");
-    @Output()
     parsedListe: EinzelNote[] = [];
-    @Output()
     notenlisteOkStatus = false;
     @Input()
     fachnotenListeID: number;
