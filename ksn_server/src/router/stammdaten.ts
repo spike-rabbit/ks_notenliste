@@ -4,7 +4,7 @@
 import * as mysql from "mysql";
 import * as wrapper from "node-mysql-wrapper";
 import * as express from "express";
-let dbConf = require("../../database.config.json");
+let dbConf = require(process.env.DB_CONFIG);
 
 
 class MasterData {

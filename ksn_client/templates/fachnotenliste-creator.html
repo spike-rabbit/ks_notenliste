@@ -1,0 +1,42 @@
+<form class="form-group navbar-fixed-top" (ngSubmit)="onSubmit()">
+    <div id="fachnotenlisteCreatorOverlay" class=" overlay container-fluid">
+        <div class="">
+            <div class="container panel panel-default" style="width: 300px">
+                <div class="panel-heading row"><h3 class="h3">Fachnotenliste anlegen</h3></div>
+                <div class="panel-body">
+                    <div>
+                        <div class="form-group ">
+                            <label for="fnlc_fach">Unterrichtsfach</label>
+                            <input id="fnlc_fach" name="fnlc_fach" type="search" class="form-control"/>
+                        </div>
+                        <div class="form-group ">
+                            <label for="fnlc_klasse">Klasse</label>
+                            <input id="fnlc_klasse" name="fnlc_klasse" type="search" class="form-control"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="fnlc_block">Block</label>
+                            <input id="fnlc_block" name="fnlc_block" type="number" class="form-control"/>
+                        </div>
+                        <div class="form-group ">
+                            <label for="fnlc_stundenzahl">Stundenzahl</label>
+                            <input id="fnlc_stundenzahl" name="fnlc_stundenzahl" type="number" class="form-control"/>
+                        </div>
+                        <div class="form-group ">
+                            <label for="fnlc_lehrer">Lehrer</label>
+                            <input id="fnlc_lehrer" name="fnlc_lehrer" type="search" class="form-control"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="fnlc_isZeugnis">Zeugnisnoten anlegen</label>
+                            <input id="fnlc_isZeugnis" name="fnlc_isZeugnis" type="checkbox" class="checkbox"/>
+                        </div>
+                        <div class="form-group btn-group container">
+                            <button type="submit" class="btn btn-primary">Speichern</button>
+                            <button type="button" class="btn btn-default" (click)="onCancel()">Abbrechen</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

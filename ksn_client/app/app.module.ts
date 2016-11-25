@@ -9,9 +9,10 @@ import {FormsModule} from "@angular/forms";
 import {HttpModule, JsonpModule} from "@angular/http";
 import {BlockUebersichtComponent} from "./block-uebersicht";
 import {ZeugnisUebersichtComponent} from "./zeugnis-uebersicht.component";
+import {FachnotelisteCreatorComponent} from "./fachnotenliste-creator.component";
 @NgModule({
     imports: [BrowserModule, FormsModule, HttpModule, JsonpModule],
-    declarations: [AppComponent, UploadComponent, BlockUebersichtComponent, ZeugnisUebersichtComponent],
+    declarations: [AppComponent, UploadComponent, BlockUebersichtComponent, ZeugnisUebersichtComponent, FachnotelisteCreatorComponent],
     bootstrap: [AppComponent]
 })
 export class AppModule {

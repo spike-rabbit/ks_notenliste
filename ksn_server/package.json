@@ -11,8 +11,7 @@
     "express": "^4.14.0",
     "mysql": "^2.12.0",
     "node-mysql-wrapper": "^2.9.3",
-    "path": "^0.12.7",
-    "typings": "^2.0.0"
+    "path": "^0.12.7"
   },
   "devDependencies": {
     "@types/body-parser": "0.0.33",

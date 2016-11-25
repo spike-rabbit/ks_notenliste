@@ -1,9 +1,9 @@
 <div>
     <div class="navbar-inverse">
         <a class="navbar-brand" href="#">KS Notenliste</a>
-        <nav *ngIf="!showUpload" class="navbar navbar-static-top navbar-dark bg-inverse">
+        <nav class="navbar navbar-static-top navbar-dark bg-inverse">
             <div id="navbar" class="nav navbar-nav navbar-collapse">
-                <form class="navbar-form navbar-left" (ngSubmit)="updateSubjectGradeList()">
+                <form class="navbar-form navbar-left" (ngSubmit)="updateSubjectGradeList()" >
                     <div class="form-group">
                         <input type="search" list="Klasse" placeholder="Klasse" name="klasse" class="form-control"
                                (change)="updateFaecher()"
@@ -30,23 +30,27 @@
                         </datalist>
                     </div>
                     <div class="form-group">
-                        <button type="submit" class="btn btn-primary">Anzeigen</button>
+                        <button type="submit" class="btn btn-primary" >Anzeigen</button>
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-default" (click)="showFnlcPopup()">Fachnotenliste anlegen</button>
                     </div>
                 </form>
             </div>
         </nav>
     </div>
-    <!-- Add divs -->
     <div style="margin: 20px 20px 20px 20px ">
         <ksn-grades *ngIf="subjectGradeList && !subjectGradeList.iszeugnis"
                     [fachnotenliste]="subjectGradeList" (showUpload)="showUploadPopup()">Laden...</ksn-grades>
         <ksn-gradesoverview *ngIf="subjectGradeList && subjectGradeList.iszeugnis"
                             [fachnotenliste]="subjectGradeList">Laden...</ksn-gradesoverview>
-        <ksn-upload *ngIf="showUpload" [klasse]="klasse"
-                    [fachnotenListeID]="subjectGradeList.fachnotenlisteID"
-                    (hideUpload)="hideUploadPopup($event)">Laden...</ksn-upload>
         <div class="alert alert-info" *ngIf="!subjectGradeList">
             Keine Daten für die akutelle Auswahl gefunden!
         </div>
     </div>
+    <ksn-upload *ngIf="showUpload" [klasse]="klasse"
+                [fachnotenListeID]="subjectGradeList.fachnotenlisteID"
+                (hideUpload)="hideUploadPopup($event)">Laden...
+    </ksn-upload>
+    <ksn-fnlc *ngIf="showFnlc" (hideFnlc)="hideFnlcPopup()">Laden...</ksn-fnlc>
 </div>

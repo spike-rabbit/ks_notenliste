@@ -25,6 +25,8 @@ export class AppComponent implements OnInit {
 
     showUpload: boolean = false;
 
+    showFnlc = false;
+
     constructor(private masterLoader: StammdatenLoaderService, private gradeLoader: NotenLoaderService) {
     }
 
@@ -82,5 +84,13 @@ export class AppComponent implements OnInit {
         this.showUpload = false;
         if (reload)
             this.updateSubjectGradeList();
+    }
+
+    showFnlcPopup() {
+        this.showFnlc = true;
+    }
+
+    hideFnlcPopup() {
+        this.showFnlc = false;
     }
 }
