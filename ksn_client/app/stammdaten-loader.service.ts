@@ -13,6 +13,8 @@ export class StammdatenLoaderService {
     private listFaecherURL = "/stammdaten/listFaecher";
     private listBloeckeURL = "/stammdaten/listBloecke";
     private listZeugnisseURL = "/stammdaten/listZeugnisse";
+    private listLehrerURL = "/stammdaten/listLehrer";
+    private listAllFaecherURL = "/stammdaten/listAllFaecher";
 
 
     constructor(private http: Http) {
@@ -22,26 +24,33 @@ export class StammdatenLoaderService {
         return this.http.get(this.listKLassenURL).map(this.extractData).catch(this.handleError);
     }
 
-    loadFaecher(klasse: string) : Observable<string[]> {
+    loadAllFaecher(): Observable<any []> {
+        return this.http.get(this.listAllFaecherURL).map(this.extractData).catch(this.handleError);
+    }
+
+    loadFaecher(klasse: string): Observable<string[]> {
         let params = new URLSearchParams();
         params.set("klasse", klasse);
         return this.http.get(this.listFaecherURL, {search: params}).map(this.extractData).catch(this.handleError);
     }
 
-    loadBloecke(klasse: string, fach: string) : Observable<number[]> {
+    loadBloecke(klasse: string, fach: string): Observable<number[]> {
         let params = new URLSearchParams();
         params.set("fach", fach);
         params.set("klasse", klasse);
         return this.http.get(this.listBloeckeURL, {search: params}).map(this.extractData).catch(this.handleError);
     }
 
-    loadZeugnisse(klasse: string, fach: string) : Observable<number[]> {
+    loadZeugnisse(klasse: string, fach: string): Observable<number[]> {
         let params = new URLSearchParams();
         params.set("fach", fach);
         params.set("klasse", klasse);
         return this.http.get(this.listZeugnisseURL, {search: params}).map(this.extractData).catch(this.handleError);
     }
 
+    loadLehrer(): Observable<any []> {
+        return this.http.get(this.listLehrerURL).map(this.extractData).catch(this.handleError);
+    }
 
 
     private extractData(res: Response) {

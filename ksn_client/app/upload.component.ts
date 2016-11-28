@@ -3,7 +3,7 @@
  */
 import {Component, Input, Output, EventEmitter, AfterViewInit} from "@angular/core";
 import {GradeType} from "./Data/GradeType";
-import {NotenLoaderService} from "./noten-loader";
+import {NotenLoaderService} from "./noten-loader.service";
 import "./rxjs-operators";
 import {SingleGrades} from "./Data/SingleGrades";
 import {DatePipe} from "@angular/common";

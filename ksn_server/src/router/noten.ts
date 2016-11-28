@@ -19,11 +19,12 @@ class Grade {
         this.router = express.Router();
         this.router.get("/listFachnoten", listFachnoten);
         this.router.get("/getFachnotenliste", getFachnotenliste);
-        this.router.post("/convertNoten", convertGrades);
-        this.router.post("/saveNoten", saveGrades);
+        this.router.post("/convertNoten", convertNoten);
+        this.router.post("/saveNoten", saveNoten);
         this.router.get("/loadBlockNoten", loadBlockNoten);
         this.router.get("/loadZeugnisNoten", loadZeugnisNoten);
         this.router.get("/deleteEinzelnotenliste", deleteEinzelnotenliste);
+        this.router.post("/saveFachnotenliste", saveFachnotenliste);
     }
 }
 
@@ -42,7 +43,7 @@ function listFachnoten(req: express.Request, res: express.Response): void {
     });
 }
 
-function convertGrades(req: express.Request, res: express.Response): void {
+function convertNoten(req: express.Request, res: express.Response): void {
     let rawList = (<string> req.body.list);
     let rawRows = rawList.split('\n');
     let parsedList: EinzelNote[] = [];
@@ -267,7 +268,7 @@ function loadSchuelerZeugnisNoten(res: express.Response, block: number, fach: st
     });
 }
 
-function saveGrades(req: express.Request, res: express.Response): void {
+function saveNoten(req: express.Request, res: express.Response): void {
     let db = grade.ksnDB;
     let toSave = {
         fachnotenlisteID: req.body.data.fachNotenListe,
@@ -302,6 +303,24 @@ function saveSingelGrade(res: express.Response, remaining: any []) {
                 saveSingelGrade(res, remaining);
             }
         }, [note.id, note.einzelnotenlisteID, note.note.toFixed(1)]);
+    });
+}
+
+function saveFachnotenliste(req: express.Request, res: express.Response): void {
+    let db = grade.ksnDB;
+    db.ready(() => {
+        db.table("fachnotenliste").save({
+            unterrichtsfach: req.body.unterrichtsfach,
+            klasse: req.body.klasse,
+            block: req.body.block,
+            iszeugnis: req.body.isZeugnis ? -1 : 0,
+            stundenzahl: req.body.stundenzahl,
+            lehrer: req.body.lehrer
+        }).then(result => {
+            res.send({data: result});
+        }).catch(error => {
+            res.send({data: error});
+        });
     });
 }
 

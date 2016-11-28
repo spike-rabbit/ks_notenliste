@@ -1,6 +1,6 @@
 import {Component, Input, OnInit, Output} from "@angular/core";
 import {SubjectGradeList} from "./Data/SubjectGradeList";
-import {NotenLoaderService} from "./noten-loader";
+import {NotenLoaderService} from "./noten-loader.service";
 /**
  * Created by maximilian.koeller on 17.11.2016.
  */

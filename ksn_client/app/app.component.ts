@@ -3,7 +3,7 @@
  */
 import {Component, OnInit, Output} from "@angular/core";
 import {StammdatenLoaderService} from "./stammdaten-loader.service";
-import {NotenLoaderService} from "./noten-loader";
+import {NotenLoaderService} from "./noten-loader.service";
 import {SubjectGradeList} from "./Data/SubjectGradeList";
 @Component({
     selector: 'ksn-app',

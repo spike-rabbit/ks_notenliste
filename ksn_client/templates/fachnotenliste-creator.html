@@ -7,27 +7,36 @@
                     <div>
                         <div class="form-group ">
                             <label for="fnlc_fach">Unterrichtsfach</label>
-                            <input id="fnlc_fach" name="fnlc_fach" type="search" class="form-control"/>
+                            <input id="fnlc_fach" name="fnlc_fach" type="search" list="fnlc_fach_list" class="form-control" [(ngModel)]="unterrichtsfach"/>
+                            <datalist id="fnlc_fach_list">
+                                <option *ngFor="let item of unterrichtsfaecher" [value]="item.kuerzel">
+                            </datalist>
                         </div>
                         <div class="form-group ">
                             <label for="fnlc_klasse">Klasse</label>
-                            <input id="fnlc_klasse" name="fnlc_klasse" type="search" class="form-control"/>
+                            <input id="fnlc_klasse" name="fnlc_klasse" type="search" list="fnlc_klasse_list" class="form-control" [(ngModel)]="klasse"/>
+                            <datalist id="fnlc_klasse_list">
+                                <option *ngFor="let item of klassen" [value]="item">
+                            </datalist>
                         </div>
                         <div class="form-group">
                             <label for="fnlc_block">Block</label>
-                            <input id="fnlc_block" name="fnlc_block" type="number" class="form-control"/>
+                            <input id="fnlc_block" name="fnlc_block" type="number" class="form-control" [(ngModel)]="block"/>
                         </div>
                         <div class="form-group ">
                             <label for="fnlc_stundenzahl">Stundenzahl</label>
-                            <input id="fnlc_stundenzahl" name="fnlc_stundenzahl" type="number" class="form-control"/>
+                            <input id="fnlc_stundenzahl" name="fnlc_stundenzahl" type="number" class="form-control" [(ngModel)]="stundenzahl"/>
                         </div>
                         <div class="form-group ">
                             <label for="fnlc_lehrer">Lehrer</label>
-                            <input id="fnlc_lehrer" name="fnlc_lehrer" type="search" class="form-control"/>
+                            <input id="fnlc_lehrer" name="fnlc_lehrer" type="search" list="fnlc_lehrer_list" class="form-control" [(ngModel)]="lehrer"/>
+                            <datalist id="fnlc_lehrer_list">
+                                <option *ngFor="let item of lehrers" [value]="item.kuerzel"></option>
+                            </datalist>
                         </div>
                         <div class="form-group">
                             <label for="fnlc_isZeugnis">Zeugnisnoten anlegen</label>
-                            <input id="fnlc_isZeugnis" name="fnlc_isZeugnis" type="checkbox" class="checkbox"/>
+                            <input id="fnlc_isZeugnis" name="fnlc_isZeugnis" type="checkbox" class="checkbox" [(ngModel)]="isZeugnis"/>
                         </div>
                         <div class="form-group btn-group container">
                             <button type="submit" class="btn btn-primary">Speichern</button>

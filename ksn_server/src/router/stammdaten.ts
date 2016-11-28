@@ -21,6 +21,7 @@ class MasterData {
         this.router.get("/listSchueler", listSchueler);
         this.router.get("/listBloecke", listBloecke);
         this.router.get("/listZeugnisse", listZeugnisse);
+        this.router.get("/listAllFaecher", listAllFaecher);
     }
 }
 
@@ -71,7 +72,7 @@ function listLehrer(req: express.Request, res: express.Response): void {
             if (err) {
                 res.send(err);
             } else {
-                res.send(response);
+                res.send({data: response});
             }
         });
     });
@@ -100,6 +101,17 @@ function listZeugnisse(req: express.Request, res: express.Response): void {
                 res.send({data: response.map(v => v.block)});
             }
         }, [req.query.fach, req.query.klasse]);
+    });
+}
+
+function listAllFaecher(req: express.Request, res: express.Response): void {
+    let db = masterData.ksnDB;
+    db.ready(() => {
+        db.table("unterrichtsfach").findAll().then(val => {
+            res.send({data: val});
+        }).error(reason => {
+            res.send({error: reason});
+        });
     });
 }
 

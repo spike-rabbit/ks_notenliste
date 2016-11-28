@@ -14,7 +14,8 @@ export class NotenLoaderService {
     private getFachnotenlisteURL = "/noten/getFachnotenliste";
     private getBlockNotenURL = "/noten/loadBlockNoten";
     private loadZeugnisURL = "/noten/loadZeugnisNoten";
-    private deleteEinzelnotenlisteURL = "/noten/deleteEinzelnotenliste"
+    private deleteEinzelnotenlisteURL = "/noten/deleteEinzelnotenliste";
+    private saveFachnotenlisteURL = "/noten/saveFachnotenliste";
 
     constructor(private http: Http) {
     }
@@ -108,6 +109,10 @@ export class NotenLoaderService {
                 }
                 return liste;
             }).catch(this.handleError));
+    }
+
+    saveFachnotenlist(flist : any) {
+        return this.http.post(this.saveFachnotenlisteURL, flist).map(res => res.json()).catch(this.handleError);
     }
 
     deleteEinzelnotenliste(einzelnotenlisteID: number): Observable<boolean> {
