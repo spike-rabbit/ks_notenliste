@@ -56,10 +56,10 @@
                             <thead>
                             <tr>
                                 <th>
-                                    Vorname
+                                    Nachname
                                 </th>
                                 <th>
-                                    Nachname
+                                    Vorname
                                 </th>
                                 <th>
                                     Note
@@ -67,12 +67,12 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr id="parsedGrades" *ngFor="let item of parsedListe" [class.invalid]="item.invalid"
+                            <tr id="parsedGrades" *ngFor="let item of parsedListe; let i = index" [class.invalid]="item.invalid"
                                 [class.missing]="item.missing">
+                                <td>{{item.nachname}}</td>
                                 <td>{{item.vorname}}</td>
-                                <td>{{ item.nachname}}</td>
                                 <td>
-                                    <div *ngIf="item.note != -1">{{item.note}}</div>
+                                    <input type="text" name="note{{i}}" [(ngModel)]="item.note">
                                 </td>
                             </tr>
                             </tbody>

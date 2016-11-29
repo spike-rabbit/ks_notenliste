@@ -4,6 +4,7 @@ import {Observable} from "rxjs/Observable";
 import {SingleGrades} from "./Data/SingleGrades";
 import {SubjectGradeList} from "./Data/SubjectGradeList";
 import {NoteListenZeile} from "./Data/NoteListenZeile";
+import {isNumber} from "util";
 /**
  * Created by maximilian.koeller on 15.11.2016.
  */
@@ -28,6 +29,11 @@ export class NotenLoaderService {
     }
 
     saveNoten(singleGrades: SingleGrades) {
+        singleGrades.noten.forEach(value => {
+            if (!isNumber(value.note)) {
+                value.note = parseFloat((<any>value.note).replace(',', '.'));
+            }
+        });
         return this.http.post(this.saveNotenURL, {
             data: singleGrades
         }).map(this.extractData).catch(this.handleError);
@@ -50,9 +56,9 @@ export class NotenLoaderService {
             .map(this.extractData).map(this.berechneVorschlaege).catch(this.handleError));
     }
 
-    berechneVorschlaege(liste:any) {
+    berechneVorschlaege(liste: any) {
         if (liste.header.length > 0) {
-            let gesamtGewicht = liste.header.map((value:any) => value.gewichtung).reduce((prev:number, curr:number) => prev + curr);
+            let gesamtGewicht = liste.header.map((value: any) => value.gewichtung).reduce((prev: number, curr: number) => prev + curr);
             for (let schueler of liste.einzelnoten) {
                 let summe = 0;
                 let abzugsGewicht = 0;
@@ -93,7 +99,7 @@ export class NotenLoaderService {
                     bearbeiteterBereich += header.listencount;
                 }
                 if (liste.subheader.length > 0) {
-                    let gesamtGewicht = liste.subheader.filter((value:any) => value).map((value:any) => value.interneGewichtung).reduce((prev:number, curr:number) => prev + curr);
+                    let gesamtGewicht = liste.subheader.filter((value: any) => value).map((value: any) => value.interneGewichtung).reduce((prev: number, curr: number) => prev + curr);
                     for (let schueler of liste.body) {
                         let summe = 0;
                         let abzugsGewicht = 0;
@@ -111,7 +117,7 @@ export class NotenLoaderService {
             }).catch(this.handleError));
     }
 
-    saveFachnotenlist(flist : any) {
+    saveFachnotenlist(flist: any) {
         return this.http.post(this.saveFachnotenlisteURL, flist).map(res => res.json()).catch(this.handleError);
     }
 

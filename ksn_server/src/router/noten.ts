@@ -296,13 +296,14 @@ function saveSingelGrade(res: express.Response, remaining: any []) {
     let db = grade.ksnDB;
     db.ready(() => {
         let note = remaining.pop();
+        note.note = note.note.replace(',', '.');
         db.query("insert into einzelnote value(?,?,?)", (err, result) => {
             if (remaining.length == 0) {
                 res.send({data: "done"});
             } else {
                 saveSingelGrade(res, remaining);
             }
-        }, [note.id, note.einzelnotenlisteID, note.note.toFixed(1)]);
+        }, [note.id, note.einzelnotenlisteID, note.note]);
     });
 }
 
