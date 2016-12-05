@@ -4,7 +4,6 @@ import {Observable} from "rxjs/Observable";
 import {SingleGrades} from "./Data/SingleGrades";
 import {SubjectGradeList} from "./Data/SubjectGradeList";
 import {NoteListenZeile} from "./Data/NoteListenZeile";
-import {isNumber} from "util";
 /**
  * Created by maximilian.koeller on 15.11.2016.
  */
@@ -30,7 +29,7 @@ export class NotenLoaderService {
 
     saveNoten(singleGrades: SingleGrades) {
         singleGrades.noten.forEach(value => {
-            if (!isNumber(value.note)) {
+            if (value.note && typeof value.note != 'number') {
                 value.note = parseFloat((<any>value.note).replace(',', '.'));
             }
         });

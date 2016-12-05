@@ -93,4 +93,10 @@ export class AppComponent implements OnInit {
     hideFnlcPopup() {
         this.showFnlc = false;
     }
+
+    resetSelectValues() {
+        this.klasse = null;
+        this.block = null;
+        this.fach = null;
+    }
 }

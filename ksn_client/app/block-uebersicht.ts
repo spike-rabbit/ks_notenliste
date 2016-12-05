@@ -13,7 +13,6 @@ import {NotenLoaderService} from "./noten-loader.service";
 export class BlockUebersichtComponent {
 
     private _fachnotenliste: SubjectGradeList;
-    @Output()
     einzelnotenliste: any;
     @Output()
     showUpload = new EventEmitter<void>();
@@ -26,18 +25,19 @@ export class BlockUebersichtComponent {
         this.showUpload.emit();
     }
 
-    onDelete(einzelnotenliste:any) {
-        this.gradeService.deleteEinzelnotenliste(einzelnotenliste.einzelnotenlisteID).subscribe((res) => {
-            if (res) {
-                console.log(this.einzelnotenliste);
-                let index = this.einzelnotenliste.header.lastIndexOf(einzelnotenliste);
-                this.einzelnotenliste.header.splice(index, 1);
-                for (let schueler of this.einzelnotenliste.einzelnoten) {
-                    schueler.noten.splice(index, 1);
+    onDelete(einzelnotenliste: any) {
+        if (window.confirm("Sind sie sich Sicher?"))
+            this.gradeService.deleteEinzelnotenliste(einzelnotenliste.einzelnotenlisteID).subscribe((res) => {
+                if (res) {
+                    console.log(this.einzelnotenliste);
+                    let index = this.einzelnotenliste.header.lastIndexOf(einzelnotenliste);
+                    this.einzelnotenliste.header.splice(index, 1);
+                    for (let schueler of this.einzelnotenliste.einzelnoten) {
+                        schueler.noten.splice(index, 1);
+                    }
                 }
-            }
-            this.gradeService.berechneVorschlaege(this.einzelnotenliste);
-        });
+                this.gradeService.berechneVorschlaege(this.einzelnotenliste);
+            });
     }
 
     get fachnotenliste(): SubjectGradeList {

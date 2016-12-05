@@ -1,35 +1,28 @@
 /**
  * Created by maximilian.koeller on 15.11.2016.
  */
-import {Component, Input, Output, EventEmitter, AfterViewInit} from "@angular/core";
+import {Component, Input, Output, EventEmitter, AfterViewInit, OnInit} from "@angular/core";
 import {GradeType} from "./Data/GradeType";
 import {NotenLoaderService} from "./noten-loader.service";
 import "./rxjs-operators";
 import {SingleGrades} from "./Data/SingleGrades";
 import {DatePipe} from "@angular/common";
 
-declare var jQuery:any;
+declare var jQuery: any;
 
 @Component({
     selector: 'ksn-upload',
     templateUrl: '../templates/upload.html',
-    providers: [NotenLoaderService],
-    inputs: ['klasse'],
+    providers: [NotenLoaderService]
 })
 export class UploadComponent implements AfterViewInit {
-    ngAfterViewInit(): void {
-        jQuery('#uploadDate').datepicker({
-            format: "dd.mm.yyyy",
-            autoclose: true,
-            language: "de"
-        });
-    }
 
 
     constructor(private uploadService: NotenLoaderService) {
     }
 
     gradeType: GradeType;
+    @Input()
     klasse: string;
     gewichtung: number;
     datum = new DatePipe("en").transform(Date.now(), "dd.MM.yyyy");
@@ -39,6 +32,16 @@ export class UploadComponent implements AfterViewInit {
     fachnotenListeID: number;
     @Output()
     hideUpload = new EventEmitter<boolean>();
+
+
+    ngAfterViewInit(): void {
+        jQuery('#uploadDate').datepicker({
+            format: "dd.mm.yyyy",
+            autoclose: true,
+            language: "de",
+            todayHighlight: true
+        });
+    }
 
     public convertGradeList(list: string) {
         list.replace(',', '.');
@@ -60,6 +63,7 @@ export class UploadComponent implements AfterViewInit {
         this.uploadService.saveNoten(singleGrade).subscribe(res => {
             this.hideUpload.emit(true);
         });
+        return false;
     }
 
     onCancel() {

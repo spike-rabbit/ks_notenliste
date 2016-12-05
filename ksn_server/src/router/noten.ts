@@ -54,7 +54,8 @@ function convertNoten(req: express.Request, res: express.Response): void {
                 nachname: rawColumn[0],
                 vorname: rawColumn[1],
                 id: 0,
-                note: parseFloat(rawColumn[2].replace(',', '.'))
+                note: parseFloat(rawColumn[2].replace(',', '.')),
+                missing: false
             });
         }
     }
@@ -70,8 +71,8 @@ function convertNoten(req: express.Request, res: express.Response): void {
                 for (let einzelNote of parsedList) {
                     if (schueler.vorname == einzelNote.vorname && schueler.nachname == einzelNote.nachname) {
                         einzelNote.id = schueler.id;
-                        einzelNote.missing = false,
-                            body.push(einzelNote);
+                        einzelNote.missing = false;
+                        body.push(einzelNote);
                         found = true;
                         break;
                     }
@@ -81,7 +82,6 @@ function convertNoten(req: express.Request, res: express.Response): void {
                         vorname: schueler.vorname,
                         nachname: schueler.nachname,
                         id: schueler.id,
-                        note: -1,
                         missing: true
                     });
             }
@@ -104,14 +104,6 @@ function getFachnotenliste(req: express.Request, res: express.Response): void {
         db.query("select fachnotenlisteID, unterrichtsfach, klasse, block, stundenzahl, lehrer from fachnotenliste where unterrichtsfach = ? and klasse = ? and block = ?", ((error, result) => {
             res.send({data: result[0]});
         }), [req.query.fach, req.query.klasse, req.query.block]);
-
-        // db.table("fachnotenliste").findSingle({
-        //     unterrichtsfach: req.query.fach,
-        //     klasse: req.query.klasse,
-        //     block:req.query.block
-        // }).then(result => {
-        //     res.send({data: result});
-        // });
     });
 }
 
@@ -296,14 +288,19 @@ function saveSingelGrade(res: express.Response, remaining: any []) {
     let db = grade.ksnDB;
     db.ready(() => {
         let note = remaining.pop();
-        note.note = note.note.replace(',', '.');
-        db.query("insert into einzelnote value(?,?,?)", (err, result) => {
-            if (remaining.length == 0) {
-                res.send({data: "done"});
-            } else {
-                saveSingelGrade(res, remaining);
-            }
-        }, [note.id, note.einzelnotenlisteID, note.note]);
+        if (note.note) {
+            if (typeof note.note != 'number')
+                note.note = note.note.replace(',', '.');
+            db.query("insert into einzelnote value(?,?,?)", (err, result) => {
+                if (remaining.length == 0) {
+                    res.send({data: "done"});
+                } else {
+                    saveSingelGrade(res, remaining);
+                }
+            }, [note.id, note.einzelnotenlisteID, note.note]);
+        } else {
+            saveSingelGrade(res, remaining);
+        }
     });
 }
 
@@ -340,7 +337,7 @@ function validateNotenliste(liste: EinzelNote []) {
     let validNoten = [1, 1.3, 1.7, 2, 2.3, 2.7, 3, 3.3, 3.7, 4, 4.3, 4.7, 5, 5.3, 5.7, 6];
     let invalids = [];
     liste.forEach(value => {
-        if (!value.missing)
+        if (value.note)
             if (!(validNoten.indexOf(value.note) > -1)) {
                 invalids.push(value);
                 value.invalid = true;
@@ -352,8 +349,8 @@ function validateNotenliste(liste: EinzelNote []) {
 }
 
 interface EinzelNote extends Schueler {
-    note: number;
-    missing?: boolean;
+    note?: number;
+    missing: boolean;
     invalid?: boolean;
 }
 
