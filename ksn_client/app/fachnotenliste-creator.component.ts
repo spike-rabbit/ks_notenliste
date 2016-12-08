@@ -15,9 +15,9 @@ export class FachnotelisteCreatorComponent implements OnInit {
     @Output()
     hideFnlc = new EventEmitter<void>();
 
-    private unterrichtsfaecher = [];
-    private klassen = [];
-    private lehrers = [];
+    private unterrichtsfaecher :any[] = [];
+    private klassen :any[] = [];
+    private lehrers :any[] = [];
 
     private unterrichtsfach: string;
     private klasse: string;

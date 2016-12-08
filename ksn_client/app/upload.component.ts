@@ -40,6 +40,7 @@ export class UploadComponent implements AfterViewInit {
             autoclose: true,
             language: "de",
             todayHighlight: true
+            ,
         });
     }
 
