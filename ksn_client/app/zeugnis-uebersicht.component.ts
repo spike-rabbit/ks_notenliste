@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, Output} from "@angular/core";
+import {Component, Output} from "@angular/core";
 import {SubjectGradeList} from "./Data/SubjectGradeList";
 import {NotenLoaderService} from "./noten-loader.service";
 /**

@@ -7,7 +7,7 @@ import {NotenLoaderService} from "./noten-loader.service";
 
 @Component({
     selector: 'ksn-fnlc',
-    templateUrl: 'templates/fachnotenliste-creator.html',
+    templateUrl: '../templates/fachnotenliste-creator.html',
     providers: [StammdatenLoaderService, NotenLoaderService]
 })
 export class FachnotelisteCreatorComponent implements OnInit {
@@ -15,16 +15,16 @@ export class FachnotelisteCreatorComponent implements OnInit {
     @Output()
     hideFnlc = new EventEmitter<void>();
 
-    private unterrichtsfaecher :any[] = [];
-    private klassen :any[] = [];
-    private lehrers :any[] = [];
+    unterrichtsfaecher: any[] = [];
+    klassen: any[] = [];
+    lehrers: any[] = [];
 
-    private unterrichtsfach: string;
-    private klasse: string;
-    private block: number;
-    private stundenzahl: number;
-    private lehrer: string;
-    private isZeugnis: boolean;
+    unterrichtsfach: string;
+    klasse: string;
+    block: number;
+    stundenzahl: number;
+    lehrer: string;
+    isZeugnis: boolean;
 
 
     constructor(private stammdatenService: StammdatenLoaderService, private notenService: NotenLoaderService) {

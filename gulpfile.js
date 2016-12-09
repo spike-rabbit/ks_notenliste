@@ -10,7 +10,7 @@ var install = require('gulp-install');
 
 gulp.task('compile-client', function () {
     exec('"ksn_client/node_modules/.bin/ngc" -p ksn_client/tsconfig-aot.json', function (err, stdout, stderr) {
-        // console.log(stdout);
+        console.log(stdout);
         console.log(stderr);
         console.log(err);
     });
@@ -18,7 +18,7 @@ gulp.task('compile-client', function () {
 
 gulp.task('shake-client', ['compile-client'], function () {
     exec('"ksn_client/node_modules/.bin/rollup" -c ksn_client/rollup-config.js', function (err, stdout, stderr) {
-        // console.log(stdout);
+        console.log(stdout);
         console.log(stderr);
         console.log(err);
     });
